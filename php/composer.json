@@ -1,0 +1,15 @@
+{
+    "require": {
+        "klein/klein": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/"
+        }
+    },
+        "classmap": [
+            "App/Controller",
+            "App/Model",
+            "App/Calls"
+        ]
+}

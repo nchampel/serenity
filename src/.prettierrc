@@ -1,0 +1,9 @@
+{
+    "tabWidth": 4,
+    "[javascript]": {
+        "editor.formatOnSave": true
+    },
+    "[php]": {
+        "editor.formatOnSave": true
+    }
+}

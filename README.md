@@ -68,3 +68,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+13/03/22
+
+Début du projet, création des pages Earth et Moon avec images en background
+
+18/03/22
+
+Mise en place du controller test pour tenter les routes avec klein et les obtenir à partir du frontend
+énergie en bdd et ajout d'énergie supplémentaire à partir d'un bouton
+
+19/03/22
+
+mise en ligne du projet

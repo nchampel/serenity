@@ -1,12 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import Moon from './pages/Moon';
+import SideBar from './component/SideBar';
+import Earth from './pages/Earth';
+
+// const image = {
+//   'earth': '../assets/terre.jpg',
+//   'moon': './lune.jpg',
+// };
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <SideBar />
+      <Routes>
+        <Route exact path="/" element={<App />} />
+        <Route path="/lune" element={<Moon /* image={image.moon} */ />} />
+        <Route path="/terre" element={<Earth />} />
+      </Routes>
+      
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
