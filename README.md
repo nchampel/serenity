@@ -81,3 +81,11 @@ Mise en place du controller test pour tenter les routes avec klein et les obteni
 19/03/22
 
 mise en ligne du projet
+tâche cron ajoutant de l'énergie toutes les minutes fonctionnelle
+énergie se modifiant dans le même ordre de grandeur toutes les 10 secondes
+
+20/03/22
+
+design un peu plus joli
+sauvegarde du lieu spatial où on s'esr déconnecté
+amélioration du code (App qui récupère les données en bdd et les distribue aux components)

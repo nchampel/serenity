@@ -1,35 +1,31 @@
 <?php
 
-namespace App\CronTasks;
+namespace App\Calls;
 
-use App\Models\ResourcesModel;
+use App\Models\PlayerModel;
 
-include_once('../Models/ResourcesModel.php');
+include_once('../Models/PlayerModel.php');
 
 header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Authorization, Accept, Access-Control-Request-Method");
+header("Content-Type: text/html; charset=utf-8");
 
+// $test = file_get_contents("http://");
+// echo $test;
+// $Data = json_decode($request->body(), true);
+// $energy = filter_var($Data['energy'], FILTER_SANITIZE_STRING);
 try {
-    $ResourceModel = new ResourcesModel();
-    $incrementEnergy = $ResourceModel::incrementEnergy();
+    $ResourceModel = new PlayerModel();
+    $fetchPlace = $ResourceModel::fetchPlace();
 
-    // var_dump($incrementEnergy['status']);
-    // echo (' test');
-
-    if ($incrementEnergy['status']) {
+    if ($fetchPlace['status']) {
         $Response['status'] = 200;
-        // $Response['data'] = $fetchEnergy['data'];
-        $Response['message'] = 'Energie incrémentée avec succès.';
+        $Response['data'] = $fetchPlace['data'];
+        $Response['message'] = 'Energie récupérée avec succès.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);
 
         // return /*$Response*/;
-    } else if ($incrementEnergy['status'] == 201) {
-        $Response['status'] = 200;
-        $Response['message'] = 'Stock d\'énergie au maximum';
-
-        // $response->code(400)->json($Response);
-        echo (json_encode($Response));
-        // return;
     } else {
         $Response['status'] = 400;
         $Response['data'] = [];

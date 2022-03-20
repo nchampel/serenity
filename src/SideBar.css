@@ -1,0 +1,20 @@
+nav {
+    display: flex;
+    flex-direction: column;
+    background-color: #282c34;
+    width: 300px;
+    text-align: center;
+    font-size: 20px;
+    justify-content: center;
+    height: 900px;
+}
+
+.link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 50px;
+}
+
+.link:hover {
+    background-color: #3c3f46;
+}

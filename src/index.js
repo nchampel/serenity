@@ -12,15 +12,16 @@ import Earth from './pages/Earth';
 //   'earth': '../assets/terre.jpg',
 //   'moon': './lune.jpg',
 // };
+// image={image.moon}
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <SideBar />
+      {/* <SideBar /> */}
       <Routes>
-        <Route exact path="/" element={<App />} />
-        <Route path="/lune" element={<Moon /* image={image.moon} */ />} />
-        <Route path="/terre" element={<Earth />} />
+        <Route exact path="*" element={<App />} />
+        {/* <Route path="/lune" element={<Moon />} />
+        <Route path="/terre" element={<Earth />} /> */}
       </Routes>
       
     </Router>

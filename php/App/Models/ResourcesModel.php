@@ -53,9 +53,18 @@ class ResourcesModel extends MySQL
     {
         $energyDB = self::fetchEnergy();
         $energy = $energyDB['data']['energy'];
-        $updatedEnergy = (int) $energy + 100;
-        // var_dump((int) $updatedEnergy);
-        // die();
-        return self::updateEnergy($updatedEnergy);
+        if ($energy < 200000) {
+            $updatedEnergy = (int) $energy + 120;
+            if ($updatedEnergy > 200000) {
+                $updatedEnergy = 200000;
+            }
+            // var_dump((int) $updatedEnergy);
+            // die();
+            return self::updateEnergy($updatedEnergy);
+        } else {
+            return [
+                'status' => '201'
+            ];
+        }
     }
 }
