@@ -3,9 +3,10 @@ import image from "../assets/lune.jpg"
 import { apiRef } from "../api/apiRef"
 // import useMounted from 'react-use-mounted';
 import Infos from "../component/Infos";
+import PropTypes from 'prop-types';
 
 function Moon(props) {
-    const {stockage, energy, isLoading} = props;
+    const {stockage, energy, isLoading, generator, regeneration} = props;
     // const mounted = useMounted();
     // const { image } = props;
     const [energyLocal, setEnergy] = useState(energy);
@@ -41,10 +42,10 @@ function Moon(props) {
     useEffect(() => {
         const timer = setInterval(() => {
             // console.log(energy);
-            if (energyLocal < 200000) {
-                let updatedEnergy = parseInt(energyLocal, 10) + 20;
-                if (updatedEnergy > 200000){
-                    updatedEnergy = 200000;
+            if (energyLocal < stockage) {
+                let updatedEnergy = parseInt(energyLocal, 10) + regeneration;
+                if (updatedEnergy > stockage){
+                    updatedEnergy = stockage;
                 }
                 setEnergy(updatedEnergy);
             }
@@ -67,8 +68,8 @@ function Moon(props) {
             <div style={{ backgroundImage: `url(${image})`, backgroundRepeat: 'no-repeat', height: '900px', color: 'white'}}>
                 Lune 
                 <Infos
-                    // stockage={stockage}
-                    // generator={generator}
+                    stockage={stockage}
+                    generator={parseInt(generator, 10)}
                     energy={energyLocal}
                 />
                 {/* <button onClick={handleEnergyAdding}>Ajouter de l'énergie</button> */}
@@ -77,4 +78,11 @@ function Moon(props) {
         </div>
     );
 }
+Moon.propTypes = {
+    energy: PropTypes.number.isRequired,
+    generator: PropTypes.number.isRequired,
+    stockage: PropTypes.number.isRequired,
+    isLoading: PropTypes.bool,
+    regeneration: PropTypes.number.isRequired
+};
 export default Moon

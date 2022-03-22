@@ -3,12 +3,14 @@ import { apiRef } from "../api/apiRef"
 // import useMounted from 'react-use-mounted';
 import { useCallback, useEffect, useState } from "react";
 import Infos from "../component/Infos";
+import PropTypes from 'prop-types';
 
 function Earth(props) {
     //  const mounted = useMounted();
-     const {stockage, energy, isLoading} = props;
+     const {stockage, energy, isLoading, generator, regeneration} = props;
     // const { image } = props;
     const [energyLocal, setEnergy] = useState(energy);
+    console.log(typeof regeneration);
     // const [isLoading, setIsLoading] = useState(true);
     // console.log('test');
     // const getData = useCallback(async () => {
@@ -41,10 +43,10 @@ function Earth(props) {
     useEffect(() => {
         const timer = setInterval(() => {
             // console.log(energy);
-            if (energyLocal < 200000) {
-                let updatedEnergy = parseInt(energyLocal, 10) + 20;
-                if (updatedEnergy > 200000){
-                    updatedEnergy = 200000;
+            if (energyLocal < stockage) {
+                let updatedEnergy = parseInt(energyLocal, 10) + regeneration;
+                if (updatedEnergy > stockage){
+                    updatedEnergy = stockage;
                 }
                 setEnergy(updatedEnergy);
             }
@@ -64,8 +66,8 @@ function Earth(props) {
         <div style={{ backgroundImage: `url(${image})`, backgroundRepeat: 'no-repeat', height: '900px', color: 'white'}}>
             Terre                
             <Infos
-            // stockage={stockage}
-            // generator={generator}
+            stockage={stockage}
+            generator={parseInt(generator, 10)}
             energy={energyLocal}
             />
             <button>Augmenter la génération d'énergie</button>
@@ -74,4 +76,11 @@ function Earth(props) {
         </div>
     );
 }
+Earth.propTypes = {
+    energy: PropTypes.number.isRequired,
+    generator: PropTypes.number.isRequired,
+    stockage: PropTypes.number.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    regeneration: PropTypes.number.isRequired
+};
 export default Earth

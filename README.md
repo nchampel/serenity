@@ -87,5 +87,13 @@ tâche cron ajoutant de l'énergie toutes les minutes fonctionnelle
 20/03/22
 
 design un peu plus joli
-sauvegarde du lieu spatial où on s'esr déconnecté
+sauvegarde du lieu spatial où on s'est déconnecté
 amélioration du code (App qui récupère les données en bdd et les distribue aux components)
+
+21/03/22
+
+ajout du stockage et du niveau de regénération d'énergie
+
+22/03/22
+
+mise en bdd du stockage et du niveau de regénération d'énergie et récupération et redistribution au component react Home
