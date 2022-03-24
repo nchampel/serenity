@@ -97,3 +97,7 @@ ajout du stockage et du niveau de regénération d'énergie
 22/03/22
 
 mise en bdd du stockage et du niveau de regénération d'énergie et récupération et redistribution au component react Home
+
+24/03/22
+
+ajout du bouton augementation du niveau de regénération

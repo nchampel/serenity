@@ -4,6 +4,7 @@ import { apiRef } from "../api/apiRef"
 import { useCallback, useEffect, useState } from "react";
 import Infos from "../component/Infos";
 import PropTypes from 'prop-types';
+import '../App.css';
 
 function Earth(props) {
     //  const mounted = useMounted();
@@ -61,7 +62,7 @@ function Earth(props) {
     return (
         <div>
         {isLoading ? (
-                `Chargement`
+                <div className='loading'>Chargement</div>
             ) : (
         <div style={{ backgroundImage: `url(${image})`, backgroundRepeat: 'no-repeat', height: '900px', color: 'white'}}>
             Terre                

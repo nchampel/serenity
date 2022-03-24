@@ -4,6 +4,7 @@ import { apiRef } from "../api/apiRef"
 // import useMounted from 'react-use-mounted';
 import Infos from "../component/Infos";
 import PropTypes from 'prop-types';
+import '../App.css';
 
 function Moon(props) {
     const {stockage, energy, isLoading, generator, regeneration} = props;
@@ -63,7 +64,7 @@ function Moon(props) {
     return (
         <div>
             {isLoading ? (
-                `Chargement`
+                <div className='loading'>Chargement</div>
             ) : (
             <div style={{ backgroundImage: `url(${image})`, backgroundRepeat: 'no-repeat', height: '900px', color: 'white'}}>
                 Lune 

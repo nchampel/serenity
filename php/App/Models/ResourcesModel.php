@@ -27,6 +27,7 @@ class ResourcesModel extends MySQL
             'data' => $result
         ];
     }
+
     public static function updateEnergy($energy)
     {
         $rqt = "UPDATE resources SET energy = :energy ";

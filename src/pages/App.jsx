@@ -28,7 +28,7 @@ function App() {
   //   'energy_regeneration_level': {1: 20, 2: 100}
   // }
   // const stockage = 'passé';
-  const getInfos = useCallback(async (isLoading, regenerationEnergyLevel, regenerationEnergy) => {
+  const getInfos = useCallback(async (isLoading, regenerationEnergyLevel, regenerationEnergy, stockageEnergy) => {
         try {
             setIsLoading(true);
             isLoading = true;
@@ -45,13 +45,14 @@ function App() {
             
             if (mounted.current) {
                 isLoading = false;
-                setEnergy(dataEnergy.energy);
+                setEnergy(parseInt(dataEnergy.energy));
                 setStockageEnergyLevel(parseInt(dataLevels.energy_capacity_level, 10));
                 setRegenerationEnergyLevel(parseInt(dataLevels.energy_regeneration_level, 10));
                 regenerationEnergyLevel = parseInt(dataLevels.energy_regeneration_level, 10);
-                setStockageEnergy(dataEnergyCapacity.data.quantity);
-                setRegenerationEnergy(dataEnergyRegeneration.data.quantity);
+                setStockageEnergy(parseInt(dataEnergyCapacity.data.quantity));
+                setRegenerationEnergy(parseInt(dataEnergyRegeneration.data.quantity));
                 regenerationEnergy = parseInt(dataEnergyRegeneration.data.quantity, 10);
+                stockageEnergy = parseInt(dataEnergyCapacity.data.quantity, 10);
                 
                 switch(dataPlace.place){
                   case 'earth':
@@ -73,7 +74,51 @@ function App() {
             console.error(err);
         }
             
-    }, [mounted]);
+    }, [mounted, regenerationEnergyLevel]);
+
+      const addLevelRegenerationEnergy = useCallback(async () => {
+        try {
+
+            // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
+            await apiRef.addLevel(process.env.REACT_APP_URL + 'App/Calls/addLevel.php', 'energy_regeneration_level');
+            // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
+            // console.log(typeof dataLevels.energy_regeneration_level);
+
+            // await console.log(regenerationEnergyLevel);
+            // const dataEquipment = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, dataLevels.energy_regeneration_level);
+            
+            // if (mounted.current) {
+            //     isLoading = false;
+            //     setEnergy(parseInt(dataEnergy.energy));
+            //     setStockageEnergyLevel(parseInt(dataLevels.energy_capacity_level, 10));
+            //     setRegenerationEnergyLevel(parseInt(dataLevels.energy_regeneration_level, 10));
+            //     regenerationEnergyLevel = parseInt(dataLevels.energy_regeneration_level, 10);
+            //     setStockageEnergy(parseInt(dataEnergyCapacity.data.quantity));
+            //     setRegenerationEnergy(parseInt(dataEnergyRegeneration.data.quantity));
+            //     regenerationEnergy = parseInt(dataEnergyRegeneration.data.quantity, 10);
+            //     stockageEnergy = parseInt(dataEnergyCapacity.data.quantity, 10);
+                
+            //     switch(dataPlace.place){
+            //       case 'earth':
+            //         setHome(<Earth energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
+            //         break;
+            //       case 'moon':
+            //         setHome(<Moon energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
+            //         break;
+            //       default:
+            //         setHome(null);
+            //         break;
+            //     }
+                
+            //     setIsLoading(false);
+            // }
+            
+            
+        } catch (err) {
+            console.error(err);
+        }
+            
+    }, []);
 
     useEffect(() => {
         getInfos();
@@ -93,9 +138,13 @@ function App() {
     //   // setRegenerationEnergyLevel(regenerationEnergyLevel);
     // }, [regenerationEnergyLevel]);
 
-    const add = () => {
+    const handleAddingLevelRegenerationEnergy = () => {
       setRegenerationEnergyLevel(regenerationEnergyLevel + 1);
+      addLevelRegenerationEnergy();
     };
+    useEffect(() => {
+      console.log(regenerationEnergyLevel);
+    }, [regenerationEnergyLevel]);
     // console.log(regenerationEnergyLevel);
    
     //   const getPlace = useCallback(async () => {
@@ -139,11 +188,11 @@ function App() {
       <header className="App-header">
         Bienvenue sur Serenity, le jeu d'exploration spatiale !
       </header>
-      <button onClick={add}>Augmenter</button>
+      <button onClick={handleAddingLevelRegenerationEnergy}>Augmenter régénération énergie</button>
     </div>
     {/* {isOnEarth && <Earth />} */}
     {isLoading ? (
-      `Chargement`
+      <div className='loading'>Chargement</div>
     ) : (
       <Routes> 
           <Route path="/" element={home} />
