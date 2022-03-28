@@ -8,7 +8,7 @@ class LevelsModel extends MySQL
 {
     public static function fetchLevels()
     {
-        $rqt = "SELECT energy_regeneration_level, energy_capacity_level FROM equipment_levels";
+        $rqt = "SELECT energy_regeneration_level, energy_capacity_level FROM equipment_levels WHERE player_id = 1";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {

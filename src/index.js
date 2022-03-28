@@ -4,9 +4,7 @@ import './index.css';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Moon from './pages/Moon';
 import SideBar from './component/SideBar';
-import Earth from './pages/Earth';
 
 // const image = {
 //   'earth': '../assets/terre.jpg',

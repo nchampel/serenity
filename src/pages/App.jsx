@@ -1,8 +1,6 @@
 import '../App.css';
 import SideBar from '../component/SideBar';
 import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from 'react-router-dom'
-import Moon from './Moon';
-import Earth from './Earth';
 import { useEffect, useState, useCallback } from 'react';
 import { apiRef } from "../api/apiRef"
 import useMounted from 'react-use-mounted';
@@ -23,6 +21,7 @@ function App() {
   const [stockageEnergyLevel, setStockageEnergyLevel] = useState(1);
   const [regenerationEnergyLevel, setRegenerationEnergyLevel] = useState(1);
   const [regenerationEnergy, setRegenerationEnergy] = useState(20);
+  const [regenerationNextEnergy, setNextRegenerationEnergy] = useState(0);
   const [place, setPlace] = useState('');
   const navigate = useNavigate();
   const path = useLocation();
@@ -33,15 +32,18 @@ function App() {
   //   'energy_regeneration_level': {1: 20, 2: 100}
   // }
   // const stockage = 'passé';
-  const getInfos = useCallback(async (isLoading, regenerationEnergyLevel, regenerationEnergy, stockageEnergy) => {
+  const getInfos = useCallback(async (/*isLoading, regenerationEnergyLevel, regenerationEnergy, stockageEnergy*/) => {
         try {
             setIsLoading(true);
-            isLoading = true;
+            // isLoading = true;
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             const dataEnergy = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getEnergy.php');
             const dataPlace = await apiRef.getPlace(process.env.REACT_APP_URL + 'App/Calls/getPlace.php');
             const dataLevels = await apiRef.getLevels(process.env.REACT_APP_URL + 'App/Calls/getLevels.php');
+            // const nextLevelEnergy = dataLevels.energy_regeneration_level + 1;
+            // console.log(nextLevelEnergy);
             const dataEnergyRegeneration = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_regeneration_level, 'energy_regeneration');
+            const dataNextEnergyRegeneration = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', parseInt(dataLevels.energy_regeneration_level, 10) + 1, 'energy_regeneration');
             const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
             // console.log(typeof dataLevels.energy_regeneration_level);
 
@@ -49,15 +51,16 @@ function App() {
             // const dataEquipment = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, dataLevels.energy_regeneration_level);
             
             if (mounted.current) {
-                isLoading = false;
-                setEnergy(parseInt(dataEnergy.energy));
+                // isLoading = false;
+                setEnergy(parseInt(dataEnergy.energy, 10));
                 setStockageEnergyLevel(parseInt(dataLevels.energy_capacity_level, 10));
                 setRegenerationEnergyLevel(parseInt(dataLevels.energy_regeneration_level, 10));
-                regenerationEnergyLevel = parseInt(dataLevels.energy_regeneration_level, 10);
+                // regenerationEnergyLevel = parseInt(dataLevels.energy_regeneration_level, 10);
                 setStockageEnergy(parseInt(dataEnergyCapacity.data.quantity));
                 setRegenerationEnergy(parseInt(dataEnergyRegeneration.data.quantity));
-                regenerationEnergy = parseInt(dataEnergyRegeneration.data.quantity, 10);
-                stockageEnergy = parseInt(dataEnergyCapacity.data.quantity, 10);
+                setNextRegenerationEnergy(dataNextEnergyRegeneration.data.quantity);
+                // regenerationEnergy = parseInt(dataEnergyRegeneration.data.quantity, 10);
+                // stockageEnergy = parseInt(dataEnergyCapacity.data.quantity, 10);
                 setPlace(dataPlace.place);
                 
                 switch(dataPlace.place){
@@ -191,6 +194,7 @@ function App() {
     //     getPlace();
     // }, [getPlace]);
     // console.log(home);
+    console.log(regenerationNextEnergy);
   return (
     <>
     
@@ -230,6 +234,7 @@ function App() {
             stockage={stockageEnergy}
             isLoading={isLoading}
             regeneration={regenerationEnergy}
+            nextRegeneration={regenerationNextEnergy}
             generator={regenerationEnergyLevel}
             setEnergy={setEnergy}
             setPlace={setPlace}
@@ -240,6 +245,7 @@ function App() {
             stockage={stockageEnergy}
             isLoading={isLoading}
             regeneration={regenerationEnergy}
+            nextRegeneration={regenerationNextEnergy}
             generator={regenerationEnergyLevel}
             setEnergy={setEnergy}
             setPlace={setPlace}

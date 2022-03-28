@@ -3,6 +3,8 @@
 namespace App\Models;
 
 include_once('MySQL.php');
+include_once('LevelsModel.php');
+include_once('EquipmentModel.php');
 
 class ResourcesModel extends MySQL
 {
@@ -54,10 +56,21 @@ class ResourcesModel extends MySQL
     {
         $energyDB = self::fetchEnergy();
         $energy = $energyDB['data']['energy'];
-        if ($energy < 200000) {
-            $updatedEnergy = (int) $energy + 120;
-            if ($updatedEnergy > 200000) {
-                $updatedEnergy = 200000;
+        $levelModel = new LevelsModel();
+        $levels = $levelModel::fetchLevels();
+        $levelEnergyRegeneration = $levels['data']['energy_regeneration_level'];
+        $levelEnergyCapacity = $levels['data']['energy_capacity_level'];
+        $EquipmentModel = new EquipmentModel();
+        $limitEnergyData = $EquipmentModel::fetchEquipment($levelEnergyCapacity, 'energy_capacity');
+        $limitEnergy = $limitEnergyData['data']['quantity'];
+        $regenerationEnergyData = $EquipmentModel::fetchEquipment($levelEnergyRegeneration, 'energy_regeneration');
+        $regenerationEnergy = $regenerationEnergyData['data']['quantity'];
+        // var_dump($limitEnergy);
+        // die();
+        if ($energy < $limitEnergy) {
+            $updatedEnergy = (int) $energy + (int) $regenerationEnergy;
+            if ($updatedEnergy > $limitEnergy) {
+                $updatedEnergy = $limitEnergy;
             }
             // var_dump((int) $updatedEnergy);
             // die();

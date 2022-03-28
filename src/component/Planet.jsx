@@ -1,6 +1,6 @@
 // import image from "../assets/terre.jpg"
 import { apiRef } from "../api/apiRef"
-// import useMounted from 'react-use-mounted';
+import useMounted from 'react-use-mounted';
 import { useCallback, useEffect, useState } from "react";
 import Infos from "./Infos";
 import PropTypes from 'prop-types';
@@ -8,28 +8,27 @@ import '../App.css';
 import { Box } from "@mui/material";
 
 function Planet(props) {
-    //  const mounted = useMounted();
-     const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace, place } = props;
+     const mounted = useMounted();
+     const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace, place, nextRegeneration } = props;
     // const { image } = props;
     // const [energyLocal, setEnergy] = useState(energy);
     // console.log(typeof regeneration);
     // const [isLoading, setIsLoading] = useState(true);
     // console.log('test');
-    // const getData = useCallback(async () => {
-    //     try {
-    //         // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
-    //         const data = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getEnergy.php');
-    //         if (mounted.current) {
-    //             setEnergy(data.energy);
-    //         }
-    //         setIsLoading(false);
+    const getData = useCallback(async () => {
+        try {
+            // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
+            const data = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getEnergy.php');
+            if (mounted.current) {
+                setEnergy(data.energy);
+            }
             
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
+        } catch (err) {
+            console.error(err);
+        }
             
-    // }, [mounted]);
-    const image = '../assets/terre.jpg';
+    }, [mounted]);
+    // const image = '../assets/terre.jpg';
     // const url = require(image);
     let url = '';
 
@@ -82,15 +81,16 @@ function Planet(props) {
 
     useEffect(() => {
         const timer = setInterval(() => {
-            console.log(energy);
-            if (energy < stockage) {
-                let updatedEnergy = parseInt(energy, 10) + regeneration;
-                if (updatedEnergy > stockage){
-                    updatedEnergy = stockage;
-                }
-                setEnergy(updatedEnergy);
-            }
-        }, 10000);
+            // console.log(energy);
+            // if (energy < stockage) {
+            //     let updatedEnergy = parseInt(energy, 10) + regeneration;
+            //     if (updatedEnergy > stockage){
+            //         updatedEnergy = stockage;
+            //     }
+            //     setEnergy(updatedEnergy);
+            // }
+            getData();
+        }, 60000);
         
         return () => {
             // Each time a new useEffect is executed, the previous useEffect will be cleaned up
@@ -111,6 +111,8 @@ function Planet(props) {
             stockage={stockage}
             generator={parseInt(generator, 10)}
             energy={energy}
+            regeneration={regeneration}
+            nextRegeneration={nextRegeneration}
             />
             <button>Augmenter la génération d'énergie</button>
             </Box>

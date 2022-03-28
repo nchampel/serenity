@@ -27,7 +27,7 @@ try {
     if ($equipment['status']) {
         $Response['status'] = 200;
         $Response['data'] = $equipment['data'];
-        $Response['message'] = 'Energie mise à jour avec succès.';
+        $Response['message'] = 'Quantité récupérée avec succès.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);
 

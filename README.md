@@ -113,3 +113,5 @@ sauvegarde emplacement en bdd
 28/03/2022
 
 création du component Planet
+ajout automatique d'énergie à partir de la bdd pour les niveaux de régénération et de capacité de stockage
+récupération en bdd toutes les minutes de l'énergie
