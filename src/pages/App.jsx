@@ -1,11 +1,13 @@
 import '../App.css';
 import SideBar from '../component/SideBar';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import Moon from './Moon';
 import Earth from './Earth';
 import { useEffect, useState, useCallback } from 'react';
 import { apiRef } from "../api/apiRef"
 import useMounted from 'react-use-mounted';
+import Planet from '../component/Planet';
+// import {useNavigation} from '@react-navigation/native';
 
 // const place = 'test';
 
@@ -21,6 +23,9 @@ function App() {
   const [stockageEnergyLevel, setStockageEnergyLevel] = useState(1);
   const [regenerationEnergyLevel, setRegenerationEnergyLevel] = useState(1);
   const [regenerationEnergy, setRegenerationEnergy] = useState(20);
+  const [place, setPlace] = useState('');
+  const navigate = useNavigate();
+  const path = useLocation();
   // const stockage = {
   //   'energy_capacity_level': {1: 200000, 2: 400000}
   // };
@@ -53,16 +58,26 @@ function App() {
                 setRegenerationEnergy(parseInt(dataEnergyRegeneration.data.quantity));
                 regenerationEnergy = parseInt(dataEnergyRegeneration.data.quantity, 10);
                 stockageEnergy = parseInt(dataEnergyCapacity.data.quantity, 10);
+                setPlace(dataPlace.place);
                 
                 switch(dataPlace.place){
                   case 'earth':
-                    setHome(<Earth energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
+                    // setHome(<Earth energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
+                    navigate("/terre", { replace: true });
                     break;
                   case 'moon':
-                    setHome(<Moon energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
+                    navigate("/lune", { replace: true });
+                    // setHome(<Moon
+                    //   energy={parseInt(dataEnergy.energy, 10)}
+                    //   stockage={stockageEnergy}
+                    //   isLoading={isLoading}
+                    //   regeneration={regenerationEnergy}
+                    //   generator={regenerationEnergyLevel}
+                    //   setEnergy={setEnergy}/>);
                     break;
                   default:
-                    setHome(null);
+                    navigate("/", { replace: true });
+                    // setHome(null);
                     break;
                 }
                 
@@ -178,11 +193,16 @@ function App() {
     // console.log(home);
   return (
     <>
+    
     <div style={{display: 'flex'}}>
-    <SideBar 
+      {isLoading ? (
+      ''
+    ) : (
+    <SideBar path={path.pathname}
     // isOnMoon={isOnMoon}
     // isOnEarth={isOnEarth}
     />
+    )}
     <div>
     <div className="App">
       <header className="App-header">
@@ -195,9 +215,36 @@ function App() {
       <div className='loading'>Chargement</div>
     ) : (
       <Routes> 
-          <Route path="/" element={home} />
-          <Route path="/lune" element={<Moon energy={parseInt(energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />} />
-        <Route path="/terre" element={<Earth energy={parseInt(energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />} />
+          {/* <Route path="/" element={home} /> */}
+          {/* <Route path="/lune" element={<Moon
+            energy={parseInt(energy, 10)}
+            stockage={stockageEnergy}
+            isLoading={isLoading}
+            regeneration={regenerationEnergy}
+            generator={regenerationEnergyLevel}
+            setEnergy={setEnergy}
+            setPlace={setPlace}/>}
+          /> */}
+          <Route path="/lune" element={<Planet
+            energy={parseInt(energy, 10)}
+            stockage={stockageEnergy}
+            isLoading={isLoading}
+            regeneration={regenerationEnergy}
+            generator={regenerationEnergyLevel}
+            setEnergy={setEnergy}
+            setPlace={setPlace}
+            place='moon' />}
+          />
+          <Route path="/terre" element={<Planet
+            energy={parseInt(energy, 10)}
+            stockage={stockageEnergy}
+            isLoading={isLoading}
+            regeneration={regenerationEnergy}
+            generator={regenerationEnergyLevel}
+            setEnergy={setEnergy}
+            setPlace={setPlace}
+            place='earth' />}
+          />
         </Routes>
     )}
     

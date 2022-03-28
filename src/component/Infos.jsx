@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
 
 const Infos = (props) => {
     const { energy, generator, stockage} = props;
     return (
-        <div>
+    <Box>
             Energie : {String(energy).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} / {String(stockage).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
             <br />
             Niveau du générateur : {generator}
-        </div>
+        </Box>
     );
 };
 

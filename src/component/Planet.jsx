@@ -1,15 +1,15 @@
-import image from "../assets/terre.jpg"
+// import image from "../assets/terre.jpg"
 import { apiRef } from "../api/apiRef"
 // import useMounted from 'react-use-mounted';
 import { useCallback, useEffect, useState } from "react";
-import Infos from "../component/Infos";
+import Infos from "./Infos";
 import PropTypes from 'prop-types';
 import '../App.css';
 import { Box } from "@mui/material";
 
-function Earth(props) {
+function Planet(props) {
     //  const mounted = useMounted();
-     const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace } = props;
+     const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace, place } = props;
     // const { image } = props;
     // const [energyLocal, setEnergy] = useState(energy);
     // console.log(typeof regeneration);
@@ -29,9 +29,22 @@ function Earth(props) {
     //     }
             
     // }, [mounted]);
-    useEffect(() => {
-        setPlace('earth');
-    }, []);
+    const image = '../assets/terre.jpg';
+    // const url = require(image);
+    let url = '';
+
+    switch (place) {
+        case 'earth':
+            url = require('../assets/terre.jpg');
+            break;
+        case 'moon':
+            url = require('../assets/lune.jpg');
+            break;
+        default:
+            url = require('../assets/terre.jpg');
+            break;
+
+    }
 
     // const handleEnergyAdding = (() => {
     //     // console.log(energy);
@@ -41,6 +54,31 @@ function Earth(props) {
     //     apiRef.updateEnergy(process.env.REACT_APP_URL + 'App/Calls/updateEnergy.php', updatedEnergy);
     //     getData();
     // });
+
+    const names = {
+        'earth': 'Terre',
+        'moon': 'Lune'
+    }
+
+    const savePlace = useCallback(async (place) => {
+        try {
+            // console.log(place);
+            // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
+            await apiRef.savePlace(process.env.REACT_APP_URL + 'App/Calls/savePlace.php', place);
+            
+            
+            
+        } catch (err) {
+            console.error(err);
+        }
+            
+    }, []);
+    useEffect(() => {
+        setPlace(place);
+        savePlace(place);
+    }, []);
+
+    // let name = '';
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -60,14 +98,15 @@ function Earth(props) {
             clearInterval(timer);
         };
     }, [energy]);
-    return (
+    // console.log(`url('${require('../assets/terre.jpg')}')`);
+        return (
         <Box>
         {isLoading ? (
                 <div className='loading'>Chargement</div>
             ) : (
-        <Box style={{ backgroundImage: `url(${image})`, backgroundRepeat: 'no-repeat', height: '800px', color: 'white'}}>
+        <Box style={{ backgroundImage: `url('${url}')`, backgroundRepeat: 'no-repeat', height: '800px', color: 'white'}}>
             <Box ml={2} pt={1}>
-            Terre                
+            {names[place]}               
             <Infos
             stockage={stockage}
             generator={parseInt(generator, 10)}
@@ -80,11 +119,11 @@ function Earth(props) {
         </Box>
     );
 }
-Earth.propTypes = {
+Planet.propTypes = {
     energy: PropTypes.number.isRequired,
     generator: PropTypes.number.isRequired,
     stockage: PropTypes.number.isRequired,
     isLoading: PropTypes.bool.isRequired,
     regeneration: PropTypes.number.isRequired
 };
-export default Earth
+export default Planet

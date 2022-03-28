@@ -8,7 +8,7 @@ class ResourcesModel extends MySQL
 {
     public static function fetchEnergy()
     {
-        $rqt = "SELECT energy FROM resources";
+        $rqt = "SELECT energy FROM resources WHERE player_id = 1";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {
@@ -30,7 +30,7 @@ class ResourcesModel extends MySQL
 
     public static function updateEnergy($energy)
     {
-        $rqt = "UPDATE resources SET energy = :energy ";
+        $rqt = "UPDATE resources SET energy = :energy WHERE player_id = 1";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {

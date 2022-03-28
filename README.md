@@ -100,4 +100,16 @@ mise en bdd du stockage et du niveau de regénération d'énergie et récupérat
 
 24/03/22
 
-ajout du bouton augementation du niveau de regénération
+ajout du bouton augmentation du niveau de regénération
+
+25/03/2022
+
+étoffage de la bdd pour la régénération et le stockage des niveaux d'énergie
+
+27/03/2022
+
+sauvegarde emplacement en bdd
+
+28/03/2022
+
+création du component Planet

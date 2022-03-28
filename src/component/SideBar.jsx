@@ -10,7 +10,8 @@ import '../SideBar.css';
 //     }
 // `;
 
-function SideBar() {
+function SideBar(props) {
+    const { path } = props;
     // let {isOnEarth, isOnMoon} = props;
 
     // console.log(isOnEarth);
@@ -25,9 +26,12 @@ function SideBar() {
     return (
         <nav>
             {/* <Link className="link" to="/">Accueil</Link> */}
+            {path !== '/terre' && (
             <Link className="link" to="/terre" /*onClick={handleDisplayEarth}*/>Terre</Link>
+            )}
+            {path !== '/lune' && (
             <Link className="link" to="/lune" /*onClick={handleDisplayMoon}*/>Lune</Link>
-            
+            )}
         </nav>
     );
 }

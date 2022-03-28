@@ -19,7 +19,7 @@ class MySQL
      */
     public function __construct()
     {
-        include('db.php');
+        include('../../inc/db.php');
         self::$oPDO = new \PDO($url, $userDB, $pass);
         self::$oPDO->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         self::$oPDO->query("SET NAMES 'utf8'");

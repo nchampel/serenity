@@ -25,4 +25,6 @@ yarn-error.log*
 
 /php/App/Models/db.php
 /php/App/Routes
+/php/App/inc
+/php/inc
 /test_and_old
