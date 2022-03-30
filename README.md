@@ -115,3 +115,14 @@ sauvegarde emplacement en bdd
 création du component Planet
 ajout automatique d'énergie à partir de la bdd pour les niveaux de régénération et de capacité de stockage
 récupération en bdd toutes les minutes de l'énergie
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ne pas oublier de mettre le .htaccess dans le dossier www (avec static, index.html etc.)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+29/03/2022
+
+ajout toast (message flash)
+amélioration design
+affichage ressources nécessaires pour augmenter niveau de régénération
+début d'implémentation d'utilisation d'énergie pour se déplacer de planète en planète

@@ -52,6 +52,37 @@ class ResourcesModel extends MySQL
         ];
     }
 
+    public static function saveEnergyAfterTravel($travel)
+    {
+        $energyData = self::fetchEnergy();
+        $energyTravelData = self::getEnergyTravel($travel);
+        $energy = (int) $energyData['data']['energy'];
+        $energyTravel = (int) $energyTravelData['data']['transport_energy'];
+        if ($energy >= $energyTravel) {
+            $updatedEnergy = $energy - $energyTravel;
+            // var_dump($updatedEnergy);
+            // die();
+            $rqt = "UPDATE resources SET energy = :updatedEnergy WHERE player_id = 1";
+            //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+            //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+            try {
+                $statement = Parent::getInstance()->prepare($rqt);
+                $statement->bindParam(':updatedEnergy', $updatedEnergy);
+                //On l'execute
+                $statement->execute();
+                // $result = $statement->fetch(\PDO::FETCH_ASSOC);
+            } catch (\Exception $exception) {
+                echo $exception->getMessage();
+            }
+            // var_dump($result);
+            // die();
+            return [
+                'status' => '200',
+                'data' => 'Energie de voyage utilisée'
+            ];
+        }
+    }
+
     public static function incrementEnergy()
     {
         $energyDB = self::fetchEnergy();
@@ -80,5 +111,29 @@ class ResourcesModel extends MySQL
                 'status' => '201'
             ];
         }
+    }
+
+    public static function getEnergyTravel($travel)
+    {
+        // var_dump($travel);
+        // die();
+        $rqt = "SELECT transport_energy FROM energy_travel_planets WHERE travel = :travel";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            $statement->bindParam(':travel', $travel);
+            //On l'execute
+            $statement->execute();
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        return [
+            'status' => '200',
+            'data' => $result
+        ];
     }
 }

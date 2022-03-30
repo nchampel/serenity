@@ -1,10 +1,12 @@
 import '../App.css';
+import '../index.css';
 import SideBar from '../component/SideBar';
 import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState, useCallback } from 'react';
 import { apiRef } from "../api/apiRef"
 import useMounted from 'react-use-mounted';
 import Planet from '../component/Planet';
+import { Toaster } from 'react-hot-toast';
 // import {useNavigation} from '@react-navigation/native';
 
 // const place = 'test';
@@ -22,6 +24,7 @@ function App() {
   const [regenerationEnergyLevel, setRegenerationEnergyLevel] = useState(1);
   const [regenerationEnergy, setRegenerationEnergy] = useState(20);
   const [regenerationNextEnergy, setNextRegenerationEnergy] = useState(0);
+  const [crystalEnergyRegeneration, setCrystalEnergyRegeneration] = useState(0);
   const [place, setPlace] = useState('');
   const navigate = useNavigate();
   const path = useLocation();
@@ -59,17 +62,18 @@ function App() {
                 setStockageEnergy(parseInt(dataEnergyCapacity.data.quantity));
                 setRegenerationEnergy(parseInt(dataEnergyRegeneration.data.quantity));
                 setNextRegenerationEnergy(dataNextEnergyRegeneration.data.quantity);
+                setCrystalEnergyRegeneration(dataEnergyRegeneration.data.crystal);
                 // regenerationEnergy = parseInt(dataEnergyRegeneration.data.quantity, 10);
                 // stockageEnergy = parseInt(dataEnergyCapacity.data.quantity, 10);
                 setPlace(dataPlace.place);
                 
                 switch(dataPlace.place){
-                  case 'earth':
+                  case 'terre':
                     // setHome(<Earth energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
                     navigate("/terre", { replace: true });
                     break;
-                  case 'moon':
-                    navigate("/lune", { replace: true });
+                  case 'mars':
+                    navigate("/mars", { replace: true });
                     // setHome(<Moon
                     //   energy={parseInt(dataEnergy.energy, 10)}
                     //   stockage={stockageEnergy}
@@ -160,9 +164,9 @@ function App() {
       setRegenerationEnergyLevel(regenerationEnergyLevel + 1);
       addLevelRegenerationEnergy();
     };
-    useEffect(() => {
-      console.log(regenerationEnergyLevel);
-    }, [regenerationEnergyLevel]);
+    // useEffect(() => {
+    //   console.log(crystalEnergyRegeneration);
+    // }, [crystalEnergyRegeneration]);
     // console.log(regenerationEnergyLevel);
    
     //   const getPlace = useCallback(async () => {
@@ -194,15 +198,15 @@ function App() {
     //     getPlace();
     // }, [getPlace]);
     // console.log(home);
-    console.log(regenerationNextEnergy);
+    // console.log(crystalEnergyRegeneration);
   return (
     <>
-    
+    <Toaster />
     <div style={{display: 'flex'}}>
       {isLoading ? (
       ''
     ) : (
-    <SideBar path={path.pathname}
+    <SideBar path={path.pathname} place={place} energy={energy} setEnergy={setEnergy}
     // isOnMoon={isOnMoon}
     // isOnEarth={isOnEarth}
     />
@@ -212,7 +216,10 @@ function App() {
       <header className="App-header">
         Bienvenue sur Serenity, le jeu d'exploration spatiale !
       </header>
-      <button onClick={handleAddingLevelRegenerationEnergy}>Augmenter régénération énergie</button>
+      {regenerationEnergyLevel < 12 && (
+        <button onClick={handleAddingLevelRegenerationEnergy}>Augmenter la régénération de l'énergie ({String(crystalEnergyRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</button>
+      )}
+      
     </div>
     {/* {isOnEarth && <Earth />} */}
     {isLoading ? (
@@ -229,7 +236,7 @@ function App() {
             setEnergy={setEnergy}
             setPlace={setPlace}/>}
           /> */}
-          <Route path="/lune" element={<Planet
+          <Route path="/mars" element={<Planet
             energy={parseInt(energy, 10)}
             stockage={stockageEnergy}
             isLoading={isLoading}
@@ -238,7 +245,7 @@ function App() {
             generator={regenerationEnergyLevel}
             setEnergy={setEnergy}
             setPlace={setPlace}
-            place='moon' />}
+            place='mars' />}
           />
           <Route path="/terre" element={<Planet
             energy={parseInt(energy, 10)}
@@ -249,7 +256,7 @@ function App() {
             generator={regenerationEnergyLevel}
             setEnergy={setEnergy}
             setPlace={setPlace}
-            place='earth' />}
+            place='terre' />}
           />
         </Routes>
     )}

@@ -6,13 +6,15 @@ nav {
     text-align: center;
     font-size: 20px;
     justify-content: center;
-    height: 900px;
+    height: 935px;
+    border-right: 1px solid white;
 }
 
 .link {
     color: white;
     text-decoration: none;
     padding: 10px 50px;
+    cursor: pointer;
 }
 
 .link:hover {

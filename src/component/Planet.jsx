@@ -5,7 +5,9 @@ import { useCallback, useEffect, useState } from "react";
 import Infos from "./Infos";
 import PropTypes from 'prop-types';
 import '../App.css';
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import toast from 'react-hot-toast';
+import { fontSize, textAlign } from "@mui/system";
 
 function Planet(props) {
      const mounted = useMounted();
@@ -34,13 +36,13 @@ function Planet(props) {
 
     switch (place) {
         case 'earth':
-            url = require('../assets/terre.jpg');
+            url = require('../assets/terre1.jpg');
             break;
-        case 'moon':
-            url = require('../assets/lune.jpg');
+        case 'mars':
+            url = require('../assets/mars.jpg');
             break;
         default:
-            url = require('../assets/terre.jpg');
+            url = require('../assets/terre1.jpg');
             break;
 
     }
@@ -56,7 +58,8 @@ function Planet(props) {
 
     const names = {
         'earth': 'Terre',
-        'moon': 'Lune'
+        // 'moon': 'Lune'
+        'mars': 'Mars'
     }
 
     const savePlace = useCallback(async (place) => {
@@ -73,13 +76,16 @@ function Planet(props) {
             
     }, []);
     useEffect(() => {
+        // console.log(place);
         setPlace(place);
         savePlace(place);
-    }, []);
+    }, [place]);
+    console.log(energy);
 
     // let name = '';
 
     useEffect(() => {
+        getData();
         const timer = setInterval(() => {
             // console.log(energy);
             // if (energy < stockage) {
@@ -98,15 +104,20 @@ function Planet(props) {
             clearInterval(timer);
         };
     }, [energy]);
+
     // console.log(`url('${require('../assets/terre.jpg')}')`);
+
         return (
         <Box>
         {isLoading ? (
                 <div className='loading'>Chargement</div>
             ) : (
-        <Box style={{ backgroundImage: `url('${url}')`, backgroundRepeat: 'no-repeat', height: '800px', color: 'white'}}>
-            <Box ml={2} pt={1}>
-            {names[place]}               
+        <Box style={{ backgroundImage: `url('${url}')`, backgroundRepeat: 'no-repeat', height: '800px', color: 'white', backgroundPosition: 'center'}}>
+            <Box ml={2}>
+                <Typography style={{fontSize: 36, textAlign: 'center'}}>
+                    {names[place]}
+                </Typography>
+                           
             <Infos
             stockage={stockage}
             generator={parseInt(generator, 10)}
@@ -114,7 +125,7 @@ function Planet(props) {
             regeneration={regeneration}
             nextRegeneration={nextRegeneration}
             />
-            <button>Augmenter la génération d'énergie</button>
+            {/* <button>Augmenter la génération d'énergie</button> */}
             </Box>
         </Box>
         )}

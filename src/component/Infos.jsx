@@ -9,7 +9,14 @@ const Infos = (props) => {
             <br />
             Energie : +{String(regeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h
             <br />
-            (Suivant : +{String(nextRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h)
+            {generator < 12 ? (
+                `(Suivant : +${String(nextRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h)`
+            ) : (
+                `Niveau maximal de régénération d'énergie`
+            )}
+            <br />
+            <br />
+            Cristaux : {String(0).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
         </Box>
     );
 };

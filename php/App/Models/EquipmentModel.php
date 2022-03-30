@@ -8,7 +8,7 @@ class EquipmentModel extends MySQL
 {
     public static function fetchEquipment($level, $type)
     {
-        $rqt = "SELECT quantity FROM equipment WHERE type = :type AND level = :level";
+        $rqt = "SELECT quantity, crystal FROM equipment WHERE type = :type AND level = :level";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {
