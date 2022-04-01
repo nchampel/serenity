@@ -113,6 +113,59 @@ class ResourcesModel extends MySQL
         }
     }
 
+    public static function incrementCrystal($quantity, $limit, $planet)
+    {
+        $crystalDB = self::fetchCristalPlanet($planet);
+        $crystal = $crystalDB['data']['crystal'];
+        // $levelModel = new LevelsModel();
+        // $levels = $levelModel::fetchLevels();
+        // $levelEnergyRegeneration = $levels['data']['energy_regeneration_level'];
+        // $levelEnergyCapacity = $levels['data']['energy_capacity_level'];
+        // $EquipmentModel = new EquipmentModel();
+        // $limitEnergyData = $EquipmentModel::fetchEquipment($levelEnergyCapacity, 'energy_capacity');
+        // $limitEnergy = $limitEnergyData['data']['quantity'];
+        // $regenerationEnergyData = $EquipmentModel::fetchEquipment($levelEnergyRegeneration, 'energy_regeneration');
+        // $regenerationEnergy = $regenerationEnergyData['data']['quantity'];
+        // var_dump($limitEnergy);
+        // die();
+        if ($crystal < $limit) {
+            $updatedCrystal = (int) $crystal + (int) $quantity;
+            if ($updatedCrystal > $limit) {
+                $updatedCrystal = $limit;
+            }
+            // var_dump((int) $updatedEnergy);
+            // die();
+            return self::updateCrystal($updatedCrystal, $planet);
+        } else {
+            return [
+                'status' => '201'
+            ];
+        }
+    }
+
+    public static function updateCrystal($crystal, $planet)
+    {
+        $rqt = "UPDATE crystal_planets_levels SET crystal = :crystal WHERE player_id = 1 AND planet = :planet";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            $statement->bindParam(':crystal', $crystal);
+            $statement->bindParam(':planet', $planet);
+            //On l'execute
+            $statement->execute();
+            // $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        return [
+            'status' => '200',
+            'data' => 'Cristal mis à jour'
+        ];
+    }
+
     public static function getEnergyTravel($travel)
     {
         // var_dump($travel);
@@ -123,6 +176,78 @@ class ResourcesModel extends MySQL
         try {
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':travel', $travel);
+            //On l'execute
+            $statement->execute();
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        return [
+            'status' => '200',
+            'data' => $result
+        ];
+    }
+
+    public static function fetchCristalPlanet($planet)
+    {
+        // var_dump($travel);
+        // die();
+        $rqt = "SELECT crystal FROM crystal_planets_levels WHERE planet = :planet AND player_id = 1";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            $statement->bindParam(':planet', $planet);
+            //On l'execute
+            $statement->execute();
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        return [
+            'status' => '200',
+            'data' => $result
+        ];
+    }
+
+    public static function fetchGenerationCristalPlanet($level)
+    {
+        // var_dump($travel);
+        // die();
+        $rqt = "SELECT crystal_generation FROM crystal_informations WHERE level = :level";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            $statement->bindParam(':level', $level);
+            //On l'execute
+            $statement->execute();
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        return [
+            'status' => '200',
+            'data' => $result
+        ];
+    }
+
+    public static function fetchStockageCristalPlanet($level)
+    {
+        // var_dump($travel);
+        // die();
+        $rqt = "SELECT crystal_stockage FROM crystal_informations WHERE level = :level";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            $statement->bindParam(':level', $level);
             //On l'execute
             $statement->execute();
             $result = $statement->fetch(\PDO::FETCH_ASSOC);

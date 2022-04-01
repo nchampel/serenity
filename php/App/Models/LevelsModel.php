@@ -55,4 +55,28 @@ class LevelsModel extends MySQL
             'data' => 'Niveau augmenté'
         ];
     }
+
+    public static function fetchCrystalLevels($planet)
+    {
+        // print_r($levelType);
+        // die();
+        $rqt = "SELECT crystal_level, crystal_stockage_level FROM crystal_planets_levels WHERE player_id = 1 AND planet = :planet";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            $statement->bindParam(':planet', $planet);
+            //On l'execute
+            $statement->execute();
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        return [
+            'status' => '200',
+            'data' => $result
+        ];
+    }
 }

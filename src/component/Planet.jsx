@@ -8,10 +8,11 @@ import '../App.css';
 import { Box, Typography } from "@mui/material";
 import toast from 'react-hot-toast';
 import { fontSize, textAlign } from "@mui/system";
+import Board from "./Board";
 
 function Planet(props) {
      const mounted = useMounted();
-     const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace, place, nextRegeneration } = props;
+     const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace, place, nextRegeneration, regenerationEnergyLevel, setRegenerationEnergyLevel, crystalEnergyRegeneration } = props;
     // const { image } = props;
     // const [energyLocal, setEnergy] = useState(energy);
     // console.log(typeof regeneration);
@@ -41,6 +42,18 @@ function Planet(props) {
         case 'mars':
             url = require('../assets/mars.jpg');
             break;
+        case 'jupiter':
+            url = require('../assets/jupiter.jpg');
+            break;
+        case 'saturne':
+            url = require('../assets/saturne.jpg');
+            break;
+        case 'uranus':
+            url = require('../assets/uranus.png');
+            break;
+        case 'neptune':
+            url = require('../assets/neptune.png');
+            break;
         default:
             url = require('../assets/terre1.jpg');
             break;
@@ -55,12 +68,6 @@ function Planet(props) {
     //     apiRef.updateEnergy(process.env.REACT_APP_URL + 'App/Calls/updateEnergy.php', updatedEnergy);
     //     getData();
     // });
-
-    const names = {
-        'earth': 'Terre',
-        // 'moon': 'Lune'
-        'mars': 'Mars'
-    }
 
     const savePlace = useCallback(async (place) => {
         try {
@@ -80,7 +87,7 @@ function Planet(props) {
         setPlace(place);
         savePlace(place);
     }, [place]);
-    console.log(energy);
+    // console.log(energy);
 
     // let name = '';
 
@@ -112,22 +119,34 @@ function Planet(props) {
         {isLoading ? (
                 <div className='loading'>Chargement</div>
             ) : (
-        <Box style={{ backgroundImage: `url('${url}')`, backgroundRepeat: 'no-repeat', height: '800px', color: 'white', backgroundPosition: 'center'}}>
-            <Box ml={2}>
-                <Typography style={{fontSize: 36, textAlign: 'center'}}>
-                    {names[place]}
+                <>
+                <Typography style={{fontSize: 36, color: 'white', textAlign: 'center'}}>
+                    {place[0].toUpperCase() + place.slice(1)}
                 </Typography>
+        <Box style={{ backgroundImage: `url('${url}')`, backgroundRepeat: 'no-repeat', height: '800px', color: 'white', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px'}}>
+            {/* <Box ml={2} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> */}
+                
                            
-            <Infos
-            stockage={stockage}
-            generator={parseInt(generator, 10)}
-            energy={energy}
-            regeneration={regeneration}
-            nextRegeneration={nextRegeneration}
-            />
+                <Infos
+                    stockage={stockage}
+                    generator={parseInt(generator, 10)}
+                    energy={energy}
+                    regeneration={regeneration}
+                    nextRegeneration={nextRegeneration}
+                    // style={{ display: 'inline' }}
+                />
+
+                
+
+                <Board
+                    regenerationEnergyLevel={regenerationEnergyLevel}
+                    setRegenerationEnergyLevel={setRegenerationEnergyLevel}
+                    crystalEnergyRegeneration={crystalEnergyRegeneration}
+                />
             {/* <button>Augmenter la génération d'énergie</button> */}
-            </Box>
+            {/* </Box> */}
         </Box>
+        </>
         )}
         </Box>
     );

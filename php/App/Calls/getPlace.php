@@ -21,7 +21,7 @@ try {
     if ($fetchPlace['status']) {
         $Response['status'] = 200;
         $Response['data'] = $fetchPlace['data'];
-        $Response['message'] = 'Energie récupérée avec succès.';
+        $Response['message'] = 'Emplacement récupéré avec succès.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);
 

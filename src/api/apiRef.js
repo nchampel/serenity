@@ -203,7 +203,7 @@ class ApiRef {
         const json = await response.json();
         // await console.log(json);
 
-        return json;
+        return json.data;
     }
 
     async saveEnergyAfterTravel(url = '', travel) {

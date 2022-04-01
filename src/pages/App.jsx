@@ -7,6 +7,7 @@ import { apiRef } from "../api/apiRef"
 import useMounted from 'react-use-mounted';
 import Planet from '../component/Planet';
 import { Toaster } from 'react-hot-toast';
+import { Button } from "@mui/material";
 // import {useNavigation} from '@react-navigation/native';
 
 // const place = 'test';
@@ -82,6 +83,18 @@ function App() {
                     //   generator={regenerationEnergyLevel}
                     //   setEnergy={setEnergy}/>);
                     break;
+                  case 'jupiter':
+                    navigate("/jupiter", { replace: true });
+                    break;
+                  case 'saturne':
+                    navigate("/saturne", { replace: true });
+                    break;
+                  case 'uranus':
+                    navigate("/uranus", { replace: true });
+                    break;
+                  case 'neptune':
+                    navigate("/neptune", { replace: true });
+                    break;
                   default:
                     navigate("/", { replace: true });
                     // setHome(null);
@@ -105,36 +118,6 @@ function App() {
             await apiRef.addLevel(process.env.REACT_APP_URL + 'App/Calls/addLevel.php', 'energy_regeneration_level');
             // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
             // console.log(typeof dataLevels.energy_regeneration_level);
-
-            // await console.log(regenerationEnergyLevel);
-            // const dataEquipment = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, dataLevels.energy_regeneration_level);
-            
-            // if (mounted.current) {
-            //     isLoading = false;
-            //     setEnergy(parseInt(dataEnergy.energy));
-            //     setStockageEnergyLevel(parseInt(dataLevels.energy_capacity_level, 10));
-            //     setRegenerationEnergyLevel(parseInt(dataLevels.energy_regeneration_level, 10));
-            //     regenerationEnergyLevel = parseInt(dataLevels.energy_regeneration_level, 10);
-            //     setStockageEnergy(parseInt(dataEnergyCapacity.data.quantity));
-            //     setRegenerationEnergy(parseInt(dataEnergyRegeneration.data.quantity));
-            //     regenerationEnergy = parseInt(dataEnergyRegeneration.data.quantity, 10);
-            //     stockageEnergy = parseInt(dataEnergyCapacity.data.quantity, 10);
-                
-            //     switch(dataPlace.place){
-            //       case 'earth':
-            //         setHome(<Earth energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
-            //         break;
-            //       case 'moon':
-            //         setHome(<Moon energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
-            //         break;
-            //       default:
-            //         setHome(null);
-            //         break;
-            //     }
-                
-            //     setIsLoading(false);
-            // }
-            
             
         } catch (err) {
             console.error(err);
@@ -216,10 +199,6 @@ function App() {
       <header className="App-header">
         Bienvenue sur Serenity, le jeu d'exploration spatiale !
       </header>
-      {regenerationEnergyLevel < 12 && (
-        <button onClick={handleAddingLevelRegenerationEnergy}>Augmenter la régénération de l'énergie ({String(crystalEnergyRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</button>
-      )}
-      
     </div>
     {/* {isOnEarth && <Earth />} */}
     {isLoading ? (
@@ -245,6 +224,9 @@ function App() {
             generator={regenerationEnergyLevel}
             setEnergy={setEnergy}
             setPlace={setPlace}
+            regenerationEnergyLevel={regenerationEnergyLevel}
+            setRegenerationEnergyLevel={setRegenerationEnergyLevel}
+            crystalEnergyRegeneration={crystalEnergyRegeneration}
             place='mars' />}
           />
           <Route path="/terre" element={<Planet
@@ -256,7 +238,66 @@ function App() {
             generator={regenerationEnergyLevel}
             setEnergy={setEnergy}
             setPlace={setPlace}
+            regenerationEnergyLevel={regenerationEnergyLevel}
+            setRegenerationEnergyLevel={setRegenerationEnergyLevel}
+            crystalEnergyRegeneration={crystalEnergyRegeneration}
             place='terre' />}
+          />
+          <Route path="/jupiter" element={<Planet
+            energy={parseInt(energy, 10)}
+            stockage={stockageEnergy}
+            isLoading={isLoading}
+            regeneration={regenerationEnergy}
+            nextRegeneration={regenerationNextEnergy}
+            generator={regenerationEnergyLevel}
+            setEnergy={setEnergy}
+            setPlace={setPlace}
+            regenerationEnergyLevel={regenerationEnergyLevel}
+            setRegenerationEnergyLevel={setRegenerationEnergyLevel}
+            crystalEnergyRegeneration={crystalEnergyRegeneration}
+            place='jupiter' />}
+          />
+          <Route path="/saturne" element={<Planet
+            energy={parseInt(energy, 10)}
+            stockage={stockageEnergy}
+            isLoading={isLoading}
+            regeneration={regenerationEnergy}
+            nextRegeneration={regenerationNextEnergy}
+            generator={regenerationEnergyLevel}
+            setEnergy={setEnergy}
+            setPlace={setPlace}
+            regenerationEnergyLevel={regenerationEnergyLevel}
+            setRegenerationEnergyLevel={setRegenerationEnergyLevel}
+            crystalEnergyRegeneration={crystalEnergyRegeneration}
+            place='saturne' />}
+          />
+          <Route path="/uranus" element={<Planet
+            energy={parseInt(energy, 10)}
+            stockage={stockageEnergy}
+            isLoading={isLoading}
+            regeneration={regenerationEnergy}
+            nextRegeneration={regenerationNextEnergy}
+            generator={regenerationEnergyLevel}
+            setEnergy={setEnergy}
+            setPlace={setPlace}
+            regenerationEnergyLevel={regenerationEnergyLevel}
+            setRegenerationEnergyLevel={setRegenerationEnergyLevel}
+            crystalEnergyRegeneration={crystalEnergyRegeneration}
+            place='uranus' />}
+          />
+          <Route path="/neptune" element={<Planet
+            energy={parseInt(energy, 10)}
+            stockage={stockageEnergy}
+            isLoading={isLoading}
+            regeneration={regenerationEnergy}
+            nextRegeneration={regenerationNextEnergy}
+            generator={regenerationEnergyLevel}
+            setEnergy={setEnergy}
+            setPlace={setPlace}
+            regenerationEnergyLevel={regenerationEnergyLevel}
+            setRegenerationEnergyLevel={setRegenerationEnergyLevel}
+            crystalEnergyRegeneration={crystalEnergyRegeneration}
+            place='neptune' />}
           />
         </Routes>
     )}

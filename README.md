@@ -126,3 +126,18 @@ ajout toast (message flash)
 amélioration design
 affichage ressources nécessaires pour augmenter niveau de régénération
 début d'implémentation d'utilisation d'énergie pour se déplacer de planète en planète
+
+30/03/2022
+
+implémentation d'utilisation d'énergie pour se déplacer de planète en planète fini
+ajout de tables en bdd
+
+31/03/2022
+
+design du bouton augmenter régénération énergie
+
+01/04/2022
+
+correction bug énergie figée au premier voyage après un refresh
+début implémentation du cristal sur les planètes
+tâche cron fonctionelle pour le cristal
