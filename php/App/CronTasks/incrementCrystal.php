@@ -20,9 +20,9 @@ foreach ($planets as $planet) {
         $levelStockage = $infos['data']['crystal_stockage_level'];
 
         $ResourceModel = new ResourcesModel();
-        $stockageDB = $ResourceModel::fetchStockageCristalPlanet($levelStockage);
+        $stockageDB = $ResourceModel::fetchStockageCrystalPlanet($levelStockage);
         $stockage = $stockageDB['data']['crystal_stockage'];
-        $quantityDB = $ResourceModel::fetchGenerationCristalPlanet($level);
+        $quantityDB = $ResourceModel::fetchGenerationCrystalPlanet($level);
         $quantity = $quantityDB['data']['crystal_generation'];
         $incrementCrystal = $ResourceModel::incrementCrystal($quantity, $stockage, $planet);
 

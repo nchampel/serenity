@@ -141,3 +141,7 @@ design du bouton augmenter régénération énergie
 correction bug énergie figée au premier voyage après un refresh
 début implémentation du cristal sur les planètes
 tâche cron fonctionelle pour le cristal
+
+02/04/2022
+
+récupération du cristal et stockage sur la Terre fonctionnel

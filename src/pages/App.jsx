@@ -20,7 +20,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   // const [isLoadingLocal, setIsLoadingLocal] = useState(true);
   const [home, setHome] = useState(null);
-  const [stockageEnergy, setStockageEnergy] = useState(200000);
+  const [stockageEnergy, setStockageEnergy] = useState(40000);
+  const [stockageCrystal, setStockageCrystal] = useState(40000);
   const [stockageEnergyLevel, setStockageEnergyLevel] = useState(1);
   const [regenerationEnergyLevel, setRegenerationEnergyLevel] = useState(1);
   const [regenerationEnergy, setRegenerationEnergy] = useState(20);
@@ -49,6 +50,7 @@ function App() {
             const dataEnergyRegeneration = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_regeneration_level, 'energy_regeneration');
             const dataNextEnergyRegeneration = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', parseInt(dataLevels.energy_regeneration_level, 10) + 1, 'energy_regeneration');
             const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
+            const dataCrystalCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.crystal_capacity_level, 'crystal_capacity');
             // console.log(typeof dataLevels.energy_regeneration_level);
 
             // await console.log(regenerationEnergyLevel);
@@ -60,10 +62,11 @@ function App() {
                 setStockageEnergyLevel(parseInt(dataLevels.energy_capacity_level, 10));
                 setRegenerationEnergyLevel(parseInt(dataLevels.energy_regeneration_level, 10));
                 // regenerationEnergyLevel = parseInt(dataLevels.energy_regeneration_level, 10);
-                setStockageEnergy(parseInt(dataEnergyCapacity.data.quantity));
-                setRegenerationEnergy(parseInt(dataEnergyRegeneration.data.quantity));
-                setNextRegenerationEnergy(dataNextEnergyRegeneration.data.quantity);
-                setCrystalEnergyRegeneration(dataEnergyRegeneration.data.crystal);
+                setStockageEnergy(parseInt(dataEnergyCapacity.quantity));
+                setStockageCrystal(parseInt(dataCrystalCapacity.quantity));
+                setRegenerationEnergy(parseInt(dataEnergyRegeneration.quantity));
+                setNextRegenerationEnergy(dataNextEnergyRegeneration.quantity);
+                setCrystalEnergyRegeneration(dataEnergyRegeneration.crystal);
                 // regenerationEnergy = parseInt(dataEnergyRegeneration.data.quantity, 10);
                 // stockageEnergy = parseInt(dataEnergyCapacity.data.quantity, 10);
                 setPlace(dataPlace.place);
@@ -227,6 +230,7 @@ function App() {
             regenerationEnergyLevel={regenerationEnergyLevel}
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
+            stockageCrystal={stockageCrystal}
             place='mars' />}
           />
           <Route path="/terre" element={<Planet
@@ -241,6 +245,7 @@ function App() {
             regenerationEnergyLevel={regenerationEnergyLevel}
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
+            stockageCrystal={stockageCrystal}
             place='terre' />}
           />
           <Route path="/jupiter" element={<Planet
@@ -255,6 +260,7 @@ function App() {
             regenerationEnergyLevel={regenerationEnergyLevel}
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
+            stockageCrystal={stockageCrystal}
             place='jupiter' />}
           />
           <Route path="/saturne" element={<Planet
@@ -269,6 +275,7 @@ function App() {
             regenerationEnergyLevel={regenerationEnergyLevel}
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
+            stockageCrystal={stockageCrystal}
             place='saturne' />}
           />
           <Route path="/uranus" element={<Planet
@@ -283,6 +290,7 @@ function App() {
             regenerationEnergyLevel={regenerationEnergyLevel}
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
+            stockageCrystal={stockageCrystal}
             place='uranus' />}
           />
           <Route path="/neptune" element={<Planet
@@ -297,6 +305,7 @@ function App() {
             regenerationEnergyLevel={regenerationEnergyLevel}
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
+            stockageCrystal={stockageCrystal}
             place='neptune' />}
           />
         </Routes>

@@ -12,8 +12,13 @@ import Board from "./Board";
 
 function Planet(props) {
      const mounted = useMounted();
-     const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace, place, nextRegeneration, regenerationEnergyLevel, setRegenerationEnergyLevel, crystalEnergyRegeneration } = props;
-    // const { image } = props;
+     const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace, place, nextRegeneration, regenerationEnergyLevel,
+        setRegenerationEnergyLevel, crystalEnergyRegeneration, stockageCrystal } = props;
+    const [stockCrystal, setStockCrystal] = useState(0);
+    const [stockCrystalPlanet, setStockCrystalPlanet] = useState(0);
+    const [stockageCrystalPlanet, setStockageCrystalPlanet] = useState(0);
+    const [stockCrystalStarship, setStockCrystalStarship] = useState(0);
+     // const { image } = props;
     // const [energyLocal, setEnergy] = useState(energy);
     // console.log(typeof regeneration);
     // const [isLoading, setIsLoading] = useState(true);
@@ -21,16 +26,28 @@ function Planet(props) {
     const getData = useCallback(async () => {
         try {
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
-            const data = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getEnergy.php');
+            const dataEnergy = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getEnergy.php');
+            // cristal sur Terre
+            const dataCrystal = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystal.php', 'terre');
+            // cristal sur vaisseau
+            const dataCrystalStarship = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getCrystalStarship.php');
+            // cristal sur planète autre que Terre
+            const dataCrystalPlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystal.php', place);
+            //stockage cristal sur planète
+            const dataStockagePlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystalStockage.php', place);
             if (mounted.current) {
-                setEnergy(data.energy);
+                setEnergy(dataEnergy.energy);
+                setStockCrystal(dataCrystal.crystal);
+                setStockCrystalPlanet(dataCrystalPlanet.crystal);
+                setStockageCrystalPlanet(dataStockagePlanet.crystal_stockage);
+                setStockCrystalStarship(dataCrystalStarship.crystal);
             }
             
         } catch (err) {
             console.error(err);
         }
             
-    }, [mounted]);
+    }, [mounted, place]);
     // const image = '../assets/terre.jpg';
     // const url = require(image);
     let url = '';
@@ -133,6 +150,13 @@ function Planet(props) {
                     energy={energy}
                     regeneration={regeneration}
                     nextRegeneration={nextRegeneration}
+                    place={place}
+                    stockCrystal={stockCrystal}
+                    stockageCrystal={stockageCrystal}
+                    stockCrystalPlanet={stockCrystalPlanet}
+                    stockageCrystalPlanet={stockageCrystalPlanet}
+                    stockCrystalStarship={stockCrystalStarship}
+                    getData={getData}
                     // style={{ display: 'inline' }}
                 />
 
@@ -142,6 +166,7 @@ function Planet(props) {
                     regenerationEnergyLevel={regenerationEnergyLevel}
                     setRegenerationEnergyLevel={setRegenerationEnergyLevel}
                     crystalEnergyRegeneration={crystalEnergyRegeneration}
+                    place={place}
                 />
             {/* <button>Augmenter la génération d'énergie</button> */}
             {/* </Box> */}

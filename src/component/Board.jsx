@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { apiRef } from "../api/apiRef";
 
 function Board(props) {
-    const { regenerationEnergyLevel, setRegenerationEnergyLevel, crystalEnergyRegeneration } = props;
+    const { regenerationEnergyLevel, setRegenerationEnergyLevel, crystalEnergyRegeneration, place } = props;
 
     const addLevelRegenerationEnergy = useCallback(async () => {
             try {
@@ -27,7 +27,7 @@ function Board(props) {
     return (
         <>
         <Box>
-        {regenerationEnergyLevel < 12 && (
+        {regenerationEnergyLevel < 12 && place === 'terre' && (
         <>
         {/* <button onClick={handleAddingLevelRegenerationEnergy}>Augmenter la régénération de l'énergie ({String(crystalEnergyRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</button> */}
         <Button variant="outlined" onClick={handleAddingLevelRegenerationEnergy} sx={{ color: 'orange', display: 'block', margin: 'auto', marginBottom: '10px', width: '500px'}}>Augmenter la régénération de l'énergie ({String(crystalEnergyRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</Button>

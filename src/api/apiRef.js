@@ -71,7 +71,7 @@ class ApiRef {
         return Promise.resolve(json.data);
     }
 
-        async getLevels(url = ''/*, data = {}*/) {
+    async getLevels(url = ''/*, data = {}*/) {
   // Default options are marked with *
         const response = await fetch(url, {
             method: 'GET', // *GET, POST, PUT, DELETE, etc.
@@ -119,7 +119,7 @@ class ApiRef {
         const json = await response.json();
         // await console.log(json);
 
-        return json;
+        return json.data;
     }
 
     async addLevel(url = '', type) {
@@ -232,6 +232,85 @@ class ApiRef {
         // await console.log(json);
 
         return json;
+    }
+
+    async getCrystal(url = '', planet) {
+        // const data = {};
+        // data.level = level;
+        // data.type = type;
+        let formData = new FormData();
+        formData.append("planet", planet);
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+            // 'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            // body: JSON.stringify(data) // body data type must match "Content-Type" header
+            body: formData
+        });
+    //   return response.json(); // parses JSON response into native JavaScript objects
+        // console.log(response);
+        const json = await response.json();
+        // await console.log(json);
+
+        return json.data;
+    }
+
+    async takeCrystal(url = '', place) {
+        // const data = {};
+        // data.level = level;
+        // data.type = type;
+        // console.log('test');
+        let formData = new FormData();
+        formData.append("place", place);
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+            // 'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            // body: JSON.stringify(data) // body data type must match "Content-Type" header
+            body: formData
+        });
+    //   return response.json(); // parses JSON response into native JavaScript objects
+        // console.log(await response.json());
+        const json = await response.json();
+        // await console.log(json);
+
+        return json;
+    }
+
+    async discardCrystal(url = ''/*, data = {}*/) {
+  // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            // body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+    //   return response.json(); // parses JSON response into native JavaScript objects
+        // console.log(response);
+        const json = await response.json();
+
+        return Promise.resolve(json.data);
     }
 }
 
