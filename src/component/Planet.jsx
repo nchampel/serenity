@@ -14,7 +14,8 @@ function Planet(props) {
     //  const mounted = useMounted();
      const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace, place, nextRegeneration, regenerationEnergyLevel,
         setRegenerationEnergyLevel, crystalEnergyRegeneration, stockageCrystal, stockCrystal, stockCrystalPlanet, stockageCrystalPlanet, stockCrystalStarship,
-    getData } = props;
+    getData, stockageEnergyLevel, crystalStockageStarship, setStockageEnergyLevel, setWeaponLevel, weaponLevel, crystalLifePoints, crystalWeapon, energyInfos,
+    setEnergyInfos } = props;
 
      // const { image } = props;
     // const [energyLocal, setEnergy] = useState(energy);
@@ -102,11 +103,11 @@ function Planet(props) {
                 
                            
                 <Infos
-                    stockage={stockage}
-                    generator={parseInt(generator, 10)}
-                    energy={energy}
-                    regeneration={regeneration}
-                    nextRegeneration={nextRegeneration}
+                    // stockage={stockage}
+                    // generator={parseInt(generator, 10)}
+                    energyInfos={energyInfos}
+                    // regeneration={regeneration}
+                    // nextRegeneration={nextRegeneration}
                     place={place}
                     stockCrystal={stockCrystal}
                     stockageCrystal={stockageCrystal}
@@ -121,10 +122,19 @@ function Planet(props) {
 
                 <Board
                     regenerationEnergyLevel={regenerationEnergyLevel}
-                    setRegenerationEnergyLevel={setRegenerationEnergyLevel}
-                    crystalEnergyRegeneration={crystalEnergyRegeneration}
+                    // setRegenerationEnergyLevel={setRegenerationEnergyLevel}
+                    setStockageEnergyLevel={setStockageEnergyLevel}
+                    setWeaponLevel={setWeaponLevel}
+                    // crystalEnergyRegeneration={crystalEnergyRegeneration}
                     place={place}
                     stockCrystal={stockCrystal}
+                    stockageEnergyLevel={stockageEnergyLevel}
+                    weaponLevel={weaponLevel}
+                    crystalLifePoints={crystalLifePoints}
+                    // crystalStockageStarship={crystalStockageStarship}
+                    crystalWeapon={crystalWeapon}
+                    energyInfos={energyInfos}
+                    setEnergyInfos={setEnergyInfos}
                 />
             {/* <button>Augmenter la génération d'énergie</button> */}
             {/* </Box> */}
@@ -135,10 +145,12 @@ function Planet(props) {
     );
 }
 Planet.propTypes = {
-    energy: PropTypes.number.isRequired,
-    generator: PropTypes.number.isRequired,
-    stockage: PropTypes.number.isRequired,
+    // energy: PropTypes.number.isRequired,
+    // generator: PropTypes.number.isRequired,
+    // stockage: PropTypes.number.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    regeneration: PropTypes.number.isRequired
+    // regeneration: PropTypes.number.isRequired,
+    // setRegenerationEnergyLevel: PropTypes.func,
+    // setStockageEnergyLevel: PropTypes.func
 };
 export default Planet

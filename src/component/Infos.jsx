@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 
 const Infos = (props) => {
     const { energy, generator, stockage, regeneration, nextRegeneration, place, stockCrystal, stockageCrystal, stockCrystalPlanet,
-        stockageCrystalPlanet, stockCrystalStarship, getData, nextCrystalStockageStarship } = props;
+        stockageCrystalPlanet, stockCrystalStarship, getData, nextCrystalStockageStarship, energyInfos } = props;
     const takeCrystalCallback = useCallback(async (place) => {
         try {
             // console.log(place);
@@ -55,12 +55,12 @@ const Infos = (props) => {
         <Box sx={{ fontWeight: 'bold', fontSize: '18px'}}>Sur le vaisseau</Box>
         <Box sx={{ ml: 2}}>
             <br />
-            Énergie : {String(energy).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} / {String(stockage).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
+            Énergie : {String(energyInfos.energy).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} / {String(energyInfos.stockageEnergy).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
             <br />
-            Énergie : +{String(regeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h
+            Énergie : +{String(energyInfos.regenerationEnergy * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h
             <br />
-            {generator < 12 ? (
-                `(Suivant : +${String(nextRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h)`
+            {energyInfos.regenerationEnergyLevel < 12 ? (
+                `(Suivant : +${String(energyInfos.nextRegenerationEnergy * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h)`
             ) : (
                 `Niveau maximal de régénération d'énergie`
             )}
@@ -94,9 +94,9 @@ const Infos = (props) => {
 };
 
 Infos.propTypes = {
-    energy: PropTypes.number.isRequired,
-    generator: PropTypes.number.isRequired,
-    stockage: PropTypes.number.isRequired
+    // energy: PropTypes.number.isRequired,
+    // generator: PropTypes.number.isRequired,
+    // stockage: PropTypes.number.isRequired
 };
 
 export default Infos

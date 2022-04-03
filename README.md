@@ -145,3 +145,6 @@ tâche cron fonctionelle pour le cristal
 02/04/2022
 
 récupération du cristal et stockage sur la Terre fonctionnel
+bouton ajout de niveau régénération énergie et décompte cristaux fonctionnel
+
+03/04/2022

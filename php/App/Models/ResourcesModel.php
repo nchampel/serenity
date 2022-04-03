@@ -135,7 +135,7 @@ class ResourcesModel extends MySQL
             }
             // var_dump((int) $updatedEnergy);
             // die();
-            return self::updateCrystal($updatedCrystal, $planet);
+            return self::updateCrystalPlanet($updatedCrystal, $planet);
         } else {
             return [
                 'status' => '201'
@@ -143,7 +143,7 @@ class ResourcesModel extends MySQL
         }
     }
 
-    public static function updateCrystal($crystal, $planet)
+    public static function updateCrystalPlanet($crystal, $planet)
     {
         $rqt = "UPDATE crystal_planets_levels SET crystal = :crystal WHERE player_id = 1 AND planet = :planet";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";

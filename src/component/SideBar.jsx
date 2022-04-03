@@ -14,12 +14,11 @@ import useMounted from 'react-use-mounted';
 // `;
 
 function SideBar(props) {
-    const { path, place, energy, setEnergy, getData, getCrystalInfos } = props;
+    const { path, place, energy, setEnergy, getData, getCrystalInfos, energyInfos, setEnergyInfos } = props;
     const navigate = useNavigate();
     const mounted = useMounted();
     const [energyTravel, setEnergyTravel] = useState(0);
     // let {isOnEarth, isOnMoon} = props;
-
     // console.log(isOnEarth);
     // const handleDisplayEarth = () => {
     //     isOnEarth = true;
@@ -38,7 +37,9 @@ function SideBar(props) {
             // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
             // console.log(typeof dataLevels.energy_regeneration_level);
             
-            setEnergy(parseInt(dataEnergy.energy, 10));
+            // setEnergy(parseInt(dataEnergy.energy, 10));
+
+            setEnergyInfos({...energyInfos, energy: parseInt(dataEnergy.energy, 10)});
             
         } catch (err) {
             console.error(err);
@@ -66,7 +67,7 @@ function SideBar(props) {
 
           const saveEnergyAfterTravel = useCallback(async (travel) => {
         try {
-            console.log(travel);
+            // console.log(travel);
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             await apiRef.saveEnergyAfterTravel(process.env.REACT_APP_URL + 'App/Calls/saveEnergyAfterTravel.php', travel);
             // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
@@ -87,8 +88,8 @@ function SideBar(props) {
         const travel = departure + '-' + arrival;
         getEnergyTravel(travel).then(energyTravelResponse => { 
             // console.log(energyTravelResponse);
-            if (energy >= energyTravelResponse) {
-                const energyUpdated = energy - energyTravel;
+            if (energyInfos.energy >= energyTravelResponse) {
+                // const energyUpdated = energy - energyTravel;
                 // setEnergy(energyUpdated);
                 // console.log(energy);
                 
@@ -111,6 +112,10 @@ function SideBar(props) {
                     // console.log(energyTravel);
                 
     };
+    // const planets = ['terre', 'mars', 'jupiter', 'saturne', 'uranus', 'neptune'];
+    // {planets.map((planet) =>  {if (path !== '/terre') 
+    //         return <div className="link" onClick={() => substractEnergyTravel(place, 'terre')}/*onClick={handleDisplayEarth}*/>Terre1</div>
+    //         })} 
     return (
         <nav>
             {/* <Link className="link" to="/">Accueil</Link> */}

@@ -43,7 +43,7 @@ try {
         // sauvegarder le cristal dans le vaisseau
         $updateStarship = $ResourceModel::updateCrystalStarship($updatedCrystal);
         // mettre le stock de cristal à zéro sur la planète
-        $updatePlanet = $ResourceModel::updateCrystal(0, $place);
+        $updatePlanet = $ResourceModel::updateCrystalPlanet(0, $place);
         $isTransferExecuted = true;
     }
     // print_r($updateStarship);

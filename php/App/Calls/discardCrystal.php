@@ -35,7 +35,7 @@ try {
     // mettre le stock de cristal du vaisseau à 0
     $updateStarship = $ResourceModel::updateCrystalStarship(0);
     // sauvegarder le stock de cristal sur Terre
-    $updatePlanet = $ResourceModel::updateCrystal($updatedCrystal, 'terre');
+    $updatePlanet = $ResourceModel::updateCrystalPlanet($updatedCrystal, 'terre');
 
     // print_r($updateStarship);
     // print_r($updatePlanet);
