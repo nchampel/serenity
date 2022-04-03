@@ -122,7 +122,7 @@ class ApiRef {
         return json.data;
     }
 
-    async addLevel(url = '', type) {
+    async addLevelStarship(url = '', type) {
         // const data = {};
         // data.level = level;
         // data.type = type;

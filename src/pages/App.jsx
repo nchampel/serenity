@@ -37,6 +37,13 @@ function App() {
   //   'energy_regeneration_level': {1: 20, 2: 100}
   // }
   // const stockage = 'passé';
+
+    const [stockCrystal, setStockCrystal] = useState(0);
+    const [stockCrystalPlanet, setStockCrystalPlanet] = useState(0);
+    const [stockageCrystalPlanet, setStockageCrystalPlanet] = useState(0);
+    const [stockCrystalStarship, setStockCrystalStarship] = useState(0);
+    // const [nextCrystalStockageStarship setNextCrystalStockageStarship] = useState(0);
+
   const getInfos = useCallback(async (/*isLoading, regenerationEnergyLevel, regenerationEnergy, stockageEnergy*/) => {
         try {
             setIsLoading(true);
@@ -118,9 +125,61 @@ function App() {
         try {
 
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
-            await apiRef.addLevel(process.env.REACT_APP_URL + 'App/Calls/addLevel.php', 'energy_regeneration_level');
+            await apiRef.addLevelStarship(process.env.REACT_APP_URL + 'App/Calls/addLevelStarship.php', 'energy_regeneration_level');
             // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
             // console.log(typeof dataLevels.energy_regeneration_level);
+            
+        } catch (err) {
+            console.error(err);
+        }
+            
+    }, []);
+
+    const getData = useCallback(async () => {
+        try {
+            // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
+            const dataEnergy = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getEnergy.php');
+            // cristal sur Terre
+            const dataCrystal = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystal.php', 'terre');
+            // cristal sur vaisseau
+            const dataCrystalStarship = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getCrystalStarship.php');
+            // cristal sur planète autre que Terre
+            const dataCrystalPlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystal.php', place);
+            //stockage cristal sur planète
+            const dataStockagePlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystalStockage.php', place);
+            if (mounted.current) {
+                setEnergy(dataEnergy.energy);
+                setStockCrystal(dataCrystal.crystal);
+                setStockCrystalPlanet(dataCrystalPlanet.crystal);
+                setStockageCrystalPlanet(dataStockagePlanet.crystal_stockage);
+                setStockCrystalStarship(dataCrystalStarship.crystal);
+            }
+            
+        } catch (err) {
+            console.error(err);
+        }
+            
+    }, [mounted, place]);
+
+    const getCrystalInfos = useCallback(async () => {
+        try {
+            // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
+            const dataEnergy = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getEnergy.php');
+            // cristal sur Terre
+            const dataCrystal = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystal.php', 'terre');
+            // cristal sur vaisseau
+            const dataCrystalStarship = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getCrystalStarship.php');
+            // cristal sur planète autre que Terre
+            const dataCrystalPlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystal.php', place);
+            //stockage cristal sur planète
+            const dataStockagePlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystalStockage.php', place);
+
+            setEnergy(dataEnergy.energy);
+            setStockCrystal(dataCrystal.crystal);
+            setStockCrystalPlanet(dataCrystalPlanet.crystal);
+            setStockageCrystalPlanet(dataStockagePlanet.crystal_stockage);
+            setStockCrystalStarship(dataCrystalStarship.crystal);
+
             
         } catch (err) {
             console.error(err);
@@ -131,6 +190,27 @@ function App() {
     useEffect(() => {
         getInfos();
     }, [getInfos]);
+
+        useEffect(() => {
+        getData();
+        const timer = setInterval(() => {
+            // console.log(energy);
+            // if (energy < stockage) {
+            //     let updatedEnergy = parseInt(energy, 10) + regeneration;
+            //     if (updatedEnergy > stockage){
+            //         updatedEnergy = stockage;
+            //     }
+            //     setEnergy(updatedEnergy);
+            // }
+            getData();
+        }, 60000);
+        
+        return () => {
+            // Each time a new useEffect is executed, the previous useEffect will be cleaned up
+            // This function will be called to clear the previous setInterval timer
+            clearInterval(timer);
+        };
+    }, [energy]);
 
     // useEffect(() => {
     //     getInfos();
@@ -146,10 +226,10 @@ function App() {
     //   // setRegenerationEnergyLevel(regenerationEnergyLevel);
     // }, [regenerationEnergyLevel]);
 
-    const handleAddingLevelRegenerationEnergy = () => {
-      setRegenerationEnergyLevel(regenerationEnergyLevel + 1);
-      addLevelRegenerationEnergy();
-    };
+    // const handleAddingLevelRegenerationEnergy = () => {
+    //   setRegenerationEnergyLevel(regenerationEnergyLevel + 1);
+    //   addLevelRegenerationEnergy();
+    // };
     // useEffect(() => {
     //   console.log(crystalEnergyRegeneration);
     // }, [crystalEnergyRegeneration]);
@@ -192,7 +272,7 @@ function App() {
       {isLoading ? (
       ''
     ) : (
-    <SideBar path={path.pathname} place={place} energy={energy} setEnergy={setEnergy}
+    <SideBar path={path.pathname} place={place} energy={energy} setEnergy={setEnergy} getData={getData} getCrystalInfos ={getCrystalInfos }
     // isOnMoon={isOnMoon}
     // isOnEarth={isOnEarth}
     />
@@ -231,6 +311,11 @@ function App() {
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
             stockageCrystal={stockageCrystal}
+            stockCrystal={stockCrystal}
+            stockCrystalPlanet={stockCrystalPlanet}
+            stockageCrystalPlanet={stockageCrystalPlanet}
+            stockCrystalStarship={stockCrystalStarship}
+            getData={getData}
             place='mars' />}
           />
           <Route path="/terre" element={<Planet
@@ -246,6 +331,11 @@ function App() {
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
             stockageCrystal={stockageCrystal}
+                        stockCrystal={stockCrystal}
+            stockCrystalPlanet={stockCrystalPlanet}
+            stockageCrystalPlanet={stockageCrystalPlanet}
+            stockCrystalStarship={stockCrystalStarship}
+            getData={getData}
             place='terre' />}
           />
           <Route path="/jupiter" element={<Planet
@@ -261,6 +351,11 @@ function App() {
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
             stockageCrystal={stockageCrystal}
+                        stockCrystal={stockCrystal}
+            stockCrystalPlanet={stockCrystalPlanet}
+            stockageCrystalPlanet={stockageCrystalPlanet}
+            stockCrystalStarship={stockCrystalStarship}
+            getData={getData}
             place='jupiter' />}
           />
           <Route path="/saturne" element={<Planet
@@ -276,6 +371,11 @@ function App() {
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
             stockageCrystal={stockageCrystal}
+                        stockCrystal={stockCrystal}
+            stockCrystalPlanet={stockCrystalPlanet}
+            stockageCrystalPlanet={stockageCrystalPlanet}
+            stockCrystalStarship={stockCrystalStarship}
+            getData={getData}
             place='saturne' />}
           />
           <Route path="/uranus" element={<Planet
@@ -291,6 +391,11 @@ function App() {
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
             stockageCrystal={stockageCrystal}
+                        stockCrystal={stockCrystal}
+            stockCrystalPlanet={stockCrystalPlanet}
+            stockageCrystalPlanet={stockageCrystalPlanet}
+            stockCrystalStarship={stockCrystalStarship}
+            getData={getData}
             place='uranus' />}
           />
           <Route path="/neptune" element={<Planet
@@ -306,6 +411,11 @@ function App() {
             setRegenerationEnergyLevel={setRegenerationEnergyLevel}
             crystalEnergyRegeneration={crystalEnergyRegeneration}
             stockageCrystal={stockageCrystal}
+                        stockCrystal={stockCrystal}
+            stockCrystalPlanet={stockCrystalPlanet}
+            stockageCrystalPlanet={stockageCrystalPlanet}
+            stockCrystalStarship={stockCrystalStarship}
+            getData={getData}
             place='neptune' />}
           />
         </Routes>

@@ -14,7 +14,7 @@ import useMounted from 'react-use-mounted';
 // `;
 
 function SideBar(props) {
-    const { path, place, energy, setEnergy } = props;
+    const { path, place, energy, setEnergy, getData, getCrystalInfos } = props;
     const navigate = useNavigate();
     const mounted = useMounted();
     const [energyTravel, setEnergyTravel] = useState(0);
@@ -97,6 +97,8 @@ function SideBar(props) {
                 // pour mettre à jour l'énergie, le setenergy ici ne fonctionne pas après le refresh de la page, mais les fois d'après oui
                 getEnergy();
                 navigate(linkArrival, { replace: true });
+                // getData();
+                getCrystalInfos();
             } else {
                 const linkDeparture = "/" + departure;
                 toast.error('Pas assez d\'énergie pour aller sur ' + arrival[0].toUpperCase() + arrival.slice(1) + ' (' + energyTravelResponse + ' énergie nécessaire)', {duration: 10000});

@@ -18,9 +18,11 @@ header("Content-Type: text/html; charset=utf-8");
 // $Data = json_decode($request->body(), true);
 // $energy = filter_var($Data['energy'], FILTER_SANITIZE_STRING);
 $type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
+$planet = filter_var($_POST['planet'], FILTER_SANITIZE_STRING);
 try {
     $LevelModel = new LevelsModel();
-    $updatedLevel = $LevelModel::updateLevel($type);
+    // la fonction ajoute un niveau et met à jour le champ
+    $updatedLevel = $LevelModel::updateLevelPlanet($type, $planet);
 
     if ($updatedLevel['status']) {
         $Response['status'] = 200;

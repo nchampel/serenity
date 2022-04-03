@@ -88,7 +88,7 @@ class ResourcesModel extends MySQL
         $energyDB = self::fetchEnergy();
         $energy = $energyDB['data']['energy'];
         $levelModel = new LevelsModel();
-        $levels = $levelModel::fetchLevels();
+        $levels = $levelModel::fetchLevelsStarship();
         $levelEnergyRegeneration = $levels['data']['energy_regeneration_level'];
         $levelEnergyCapacity = $levels['data']['energy_capacity_level'];
         $EquipmentModel = new EquipmentModel();
@@ -118,7 +118,7 @@ class ResourcesModel extends MySQL
         $crystalDB = self::fetchCrystalPlanet($planet);
         $crystal = $crystalDB['data']['crystal'];
         // $levelModel = new LevelsModel();
-        // $levels = $levelModel::fetchLevels();
+        // $levels = $levelModel::fetchLevelsStarship();
         // $levelEnergyRegeneration = $levels['data']['energy_regeneration_level'];
         // $levelEnergyCapacity = $levels['data']['energy_capacity_level'];
         // $EquipmentModel = new EquipmentModel();

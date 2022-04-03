@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 
 const Infos = (props) => {
     const { energy, generator, stockage, regeneration, nextRegeneration, place, stockCrystal, stockageCrystal, stockCrystalPlanet,
-        stockageCrystalPlanet, stockCrystalStarship, getData } = props;
+        stockageCrystalPlanet, stockCrystalStarship, getData, nextCrystalStockageStarship } = props;
     const takeCrystalCallback = useCallback(async (place) => {
         try {
             // console.log(place);
@@ -52,6 +52,9 @@ const Infos = (props) => {
     };
     return (
     <Box>
+        <Box sx={{ fontWeight: 'bold', fontSize: '18px'}}>Sur le vaisseau</Box>
+        <Box sx={{ ml: 2}}>
+            <br />
             Énergie : {String(energy).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} / {String(stockage).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
             <br />
             Énergie : +{String(regeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h
@@ -65,20 +68,27 @@ const Infos = (props) => {
             <br />
             Cristaux : {String(stockCrystalStarship).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} / {String(stockageCrystal).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
             <br />
+            (Suivant : {String(nextCrystalStockageStarship).replace(/(.)(?=(\d{3})+$)/g,'$1 ')})
+            <br />
+            <br />
+            <br />
+        </Box>
+        <Box sx={{ fontWeight: 'bold', fontSize: '18px'}}>Sur la planète</Box>
+        <Box sx={{ ml: 2}}>
             <br />
             {place === 'terre' && (
                 <>
-                Cristaux en stock : {stockCrystal}
+                Cristaux en stock : {String(stockCrystal).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
                 <Button variant="outlined" onClick={() => discardCrystal()} sx={{ color: 'orange', display: 'block', margin: 'auto', marginTop: '10px', width: '230px'}}>Décharger le cristal</Button>
                 </>
             )}
             {place !== 'terre' && (
                 <>
-                Cristaux en stock sur la planète : {String(stockCrystalPlanet).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} / {String(stockageCrystalPlanet).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
+                Cristaux en stock : {String(stockCrystalPlanet).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} / {String(stockageCrystalPlanet).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
                 <Button variant="outlined" onClick={() => takeCrystal(place)} sx={{ color: 'orange', display: 'block', margin: 'auto', marginTop: '10px', width: '230px'}}>Récupérer le cristal</Button>
                 </>
             )}
-            
+        </Box>
     </Box>
     );
 };

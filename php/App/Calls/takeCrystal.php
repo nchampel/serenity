@@ -34,7 +34,7 @@ try {
     $updatedCrystal = $crystal + $crystalStarship;
     // on récupère la limite de stockage de cristal du vaisseau
     $levelModel = new LevelsModel();
-    $levelDB = $levelModel::fetchLevels();
+    $levelDB = $levelModel::fetchLevelsStarship();
     $level = $levelDB['data']['crystal_capacity_level'];
     $EquipmentModel = new EquipmentModel();
     $limitCrystalData = $EquipmentModel::fetchEquipment($level, 'crystal_capacity');

@@ -10,18 +10,27 @@ header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Authorization, Accept, Access-Control-Request-Method");
 header("Content-Type: text/html; charset=utf-8");
 
-try {
-    $levelsModel = new LevelsModel();
-    $fetchLevels = $levelsModel::fetchLevelsStarship();
+// var_dump($_POST);
 
-    if ($fetchLevels['status']) {
+// $request = $_POST['type'];
+// $test = file_get_contents("http://");
+// echo $test;
+// $Data = json_decode($request->body(), true);
+// $energy = filter_var($Data['energy'], FILTER_SANITIZE_STRING);
+$type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
+try {
+    $LevelModel = new LevelsModel();
+    // la fonction ajoute un niveau et met à jour le champ
+    $updatedLevel = $LevelModel::updateLevelStarship($type);
+
+    if ($updatedLevel['status']) {
         $Response['status'] = 200;
-        $Response['data'] = $fetchLevels['data'];
-        $Response['message'] = 'Niveaux récupérés avec succès.';
+        $Response['data'] = $updatedLevel['data'];
+        $Response['message'] = 'Niveau mis à jour avec succès.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);
 
-        // return /*$Response*/;
+        // return    /*$Response*/;
     } else {
         $Response['status'] = 400;
         $Response['data'] = [];
