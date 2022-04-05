@@ -15,13 +15,13 @@ function Planet(props) {
      const {stockage, energy, isLoading, generator, regeneration, setEnergy, setPlace, place, nextRegeneration, regenerationEnergyLevel,
         setRegenerationEnergyLevel, crystalEnergyRegeneration, stockageCrystal, stockCrystal, stockCrystalPlanet, stockageCrystalPlanet, stockCrystalStarship,
     getData, stockageEnergyLevel, crystalStockageStarship, setStockageEnergyLevel, setWeaponLevel, weaponLevel, crystalLifePoints, crystalWeapon, energyInfos,
-    setEnergyInfos } = props;
+    setEnergyInfos, starship, planet } = props;
 
      // const { image } = props;
     // const [energyLocal, setEnergy] = useState(energy);
     // console.log(typeof regeneration);
     // const [isLoading, setIsLoading] = useState(true);
-    // console.log('test');
+    // console.log(place);
     
 
 
@@ -30,7 +30,7 @@ function Planet(props) {
     let url = '';
 
     switch (place) {
-        case 'earth':
+        case 'terre':
             url = require('../assets/terre1.jpg');
             break;
         case 'mars':
@@ -115,6 +115,8 @@ function Planet(props) {
                     stockageCrystalPlanet={stockageCrystalPlanet}
                     stockCrystalStarship={stockCrystalStarship}
                     getData={getData}
+                    starship={starship}
+                    planet={planet}
                     // style={{ display: 'inline' }}
                 />
 
@@ -135,6 +137,8 @@ function Planet(props) {
                     crystalWeapon={crystalWeapon}
                     energyInfos={energyInfos}
                     setEnergyInfos={setEnergyInfos}
+                    starship={starship}
+                    planet={planet}
                 />
             {/* <button>Augmenter la génération d'énergie</button> */}
             {/* </Box> */}

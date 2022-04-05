@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 
 const Infos = (props) => {
     const { energy, generator, stockage, regeneration, nextRegeneration, place, stockCrystal, stockageCrystal, stockCrystalPlanet,
-        stockageCrystalPlanet, stockCrystalStarship, getData, nextCrystalStockageStarship, energyInfos } = props;
+        stockageCrystalPlanet, stockCrystalStarship, getData, nextCrystalStockageStarship, energyInfos, starship, planet } = props;
     const takeCrystalCallback = useCallback(async (place) => {
         try {
             // console.log(place);
@@ -50,6 +50,7 @@ const Infos = (props) => {
         const discardCrystal = (place) => {
         discardCrystalCallback(place);
     };
+    console.log(planet);
     return (
     <Box>
         <Box sx={{ fontWeight: 'bold', fontSize: '18px'}}>Sur le vaisseau</Box>
@@ -60,7 +61,7 @@ const Infos = (props) => {
             Énergie : +{String(energyInfos.regenerationEnergy * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h
             <br />
             {energyInfos.regenerationEnergyLevel < 12 ? (
-                `(Suivant : +${String(energyInfos.nextRegenerationEnergy * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h)`
+                `(Suivant : +${String(energyInfos.nextRegenerationEnergy * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h - )`
             ) : (
                 `Niveau maximal de régénération d'énergie`
             )}
@@ -68,12 +69,14 @@ const Infos = (props) => {
             <br />
             Cristaux : {String(stockCrystalStarship).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} / {String(stockageCrystal).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
             <br />
-            (Suivant : {String(nextCrystalStockageStarship).replace(/(.)(?=(\d{3})+$)/g,'$1 ')})
+            (Suivant : {String(starship.nextStockageCrystalStarship).replace(/(.)(?=(\d{3})+$)/g,'$1 ')})
             <br />
             <br />
             <br />
         </Box>
-        <Box sx={{ fontWeight: 'bold', fontSize: '18px'}}>Sur la planète</Box>
+        <Box sx={{ fontWeight: 'bold', fontSize: '18px'}}>
+            Sur la planète
+        </Box>
         <Box sx={{ ml: 2}}>
             <br />
             {place === 'terre' && (
@@ -85,9 +88,14 @@ const Infos = (props) => {
             {place !== 'terre' && (
                 <>
                 Cristaux en stock : {String(stockCrystalPlanet).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} / {String(stockageCrystalPlanet).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}
+                <br />
+                Cristaux : +{String(planet.generationCrystal * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h
+                <br />
+                (Suivant : +{String(planet.nextGenerationCrystal * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')}/h - )
                 <Button variant="outlined" onClick={() => takeCrystal(place)} sx={{ color: 'orange', display: 'block', margin: 'auto', marginTop: '10px', width: '230px'}}>Récupérer le cristal</Button>
                 </>
             )}
+            <Button variant="contained" onClick={() => takeCrystal(place)} sx={{ backgroundColor: 'green', color: 'yellow', display: 'block', margin: 'auto', marginTop: '10px', width: '230px'}}>Prendre 500 000 cristaux</Button>
         </Box>
     </Box>
     );

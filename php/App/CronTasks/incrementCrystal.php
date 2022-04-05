@@ -3,10 +3,12 @@
 namespace App\CronTasks;
 
 use App\Models\LevelsModel;
+use App\Models\PlanetsModel;
 use App\Models\ResourcesModel;
 
 include_once('../Models/LevelsModel.php');
 include_once('../Models/ResourcesModel.php');
+include_once('../Models/PlanetsModel.php');
 
 header('Access-Control-Allow-Origin: *');
 
@@ -20,10 +22,15 @@ foreach ($planets as $planet) {
         $levelStockage = $infos['data']['crystal_stockage_level'];
 
         $ResourceModel = new ResourcesModel();
-        $stockageDB = $ResourceModel::fetchStockageCrystalPlanet($levelStockage);
-        $stockage = $stockageDB['data']['crystal_stockage'];
-        $quantityDB = $ResourceModel::fetchGenerationCrystalPlanet($level);
-        $quantity = $quantityDB['data']['crystal_generation'];
+        // $stockageDB = $ResourceModel::fetchStockageCrystalPlanet($levelStockage);
+        // $stockage = $stockageDB['data']['crystal_stockage'];
+        // $quantityDB = $ResourceModel::fetchGenerationCrystalPlanet($level);
+        // $quantity = $quantityDB['data']['crystal_generation'];
+        $PlanetsModel = new PlanetsModel();
+        $stockageDB = $PlanetsModel::fetchInfos($levelStockage, 'crystal_stockage');
+        $stockage = $stockageDB['data']['quantity'];
+        $quantityDB = $PlanetsModel::fetchInfos($level, 'crystal_generation');
+        $quantity = $quantityDB['data']['quantity'];
         $incrementCrystal = $ResourceModel::incrementCrystal($quantity, $stockage, $planet);
 
         // var_dump($incrementCrystal['status']);

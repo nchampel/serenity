@@ -7,7 +7,7 @@ import { apiRef } from "../api/apiRef"
 import useMounted from 'react-use-mounted';
 import Planet from '../component/Planet';
 import { Toaster } from 'react-hot-toast';
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 // import {useNavigation} from '@react-navigation/native';
 
 // const place = 'test';
@@ -50,11 +50,19 @@ function App() {
     lifePointsLevel: 1,
     stockageCrystal: 0,
     stockCrystalStarship: 0,
-    place: ''
+    place: '',
+    nextStockageCrystalStarship: 0
   });
   const [planet, setPlanet] = useState({
     stockCrystalPlanet: 0,
-    stockageCrystalPlanet: 0
+    stockageCrystalPlanet: 0,
+    stockageCrystalPlanetLevel: 1,
+    generationCrystalLevel: 1,
+    generationCrystal: 1,
+    nextGenerationCrystal: 2,
+    generationCrystalNeeded: 0,
+    stockageCrystalNeeded: 0,
+    nextStockageCrystal: 0
   });
   // const stockage = {
   //   'energy_capacity_level': {1: 200000, 2: 400000}
@@ -86,9 +94,10 @@ function App() {
             const dataNextEnergyRegeneration = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', parseInt(dataLevels.energy_regeneration_level, 10) + 1, 'energy_regeneration');
             const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
             const dataCrystalCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.crystal_capacity_level, 'crystal_capacity');
+            const dataNextCrystalCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', parseInt(dataLevels.crystal_capacity_level, 10) + 1, 'crystal_capacity');
             const dataWeaponCrystal = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.weapon_level, 'weapon_power');
             const dataLifePointsCrystal = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.life_points_level, 'life_points');
-            // console.log(typeof dataLevels.energy_regeneration_level);
+            // console.log(dataNextCrystalCapacity);
 
             // await console.log(regenerationEnergyLevel);
             // const dataEquipment = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, dataLevels.energy_regeneration_level);
@@ -129,7 +138,8 @@ function App() {
                   crystalLifePoints: parseInt(dataLifePointsCrystal.crystal, 10),
                   crystalWeapon: parseInt(dataWeaponCrystal.crystal, 10),
                   stockageCrystal: parseInt(dataCrystalCapacity.quantity, 10),
-                  place: dataPlace.place
+                  place: dataPlace.place,
+                  nextStockageCrystalStarship: parseInt(dataNextCrystalCapacity.quantity, 10),
                 });
                 
                 switch(dataPlace.place){
@@ -192,20 +202,28 @@ function App() {
     const getData = useCallback(async (energyInfos) => {
         try {
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
+            const dataPlace = await apiRef.getPlace(process.env.REACT_APP_URL + 'App/Calls/getPlace.php');
             const dataEnergy = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getEnergy.php');
-            // cristal sur Terre
+            // // cristal sur Terre
             const dataCrystal = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystal.php', 'terre');
-            // cristal sur vaisseau
+            // // cristal sur vaisseau
             const dataCrystalStarship = await apiRef.getData(process.env.REACT_APP_URL + 'App/Calls/getCrystalStarship.php');
-            // cristal sur planète autre que Terre
-            const dataCrystalPlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystal.php', place);
-            //stockage cristal sur planète
-            const dataStockagePlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystalStockagePlanet.php', place);
-            if (mounted.current) {
+            // // cristal sur planète autre que Terre
+            const dataCrystalPlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystal.php', dataPlace.place);
+            // //stockage cristal sur planète
+            const dataStockagePlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystalStockagePlanet.php', dataPlace.place);
+            
+            const dataLevelsPlanet = await apiRef.getLevelsPlanet(process.env.REACT_APP_URL + 'App/Calls/getLevelsPlanet.php', dataPlace.place);
+
+            const dataGenerationCrystalPlanet = await apiRef.getInfosPlanet(process.env.REACT_APP_URL + 'App/Calls/getCrystalPlanetInfos.php', dataPlace.place, 'crystal_generation');
+            const dataNextGenerationCrystalPlanet = await apiRef.getInfosPlanet(process.env.REACT_APP_URL + 'App/Calls/getNextCrystalPlanetInfos.php', dataPlace.place, 'crystal_generation');
+            // console.log(dataGenerationCrystalPlanet);
+            // if (mounted.current) {
                 // setEnergy(dataEnergy.energy);
+                // console.log(dataCrystalPlanet.crystal);
                 setStockCrystal(parseInt(dataCrystal.crystal, 10));
                 setStockCrystalPlanet(dataCrystalPlanet.crystal);
-                setStockageCrystalPlanet(dataStockagePlanet.crystal_stockage);
+                setStockageCrystalPlanet(dataStockagePlanet.quantity);
                 setStockCrystalStarship(dataCrystalStarship.crystal);
                 // console.log(energyInfos);
                 setEnergyInfos({
@@ -215,19 +233,27 @@ function App() {
                 setStarship({
                   ...starship,
                   stockCrystalStarship: parseInt(dataCrystalStarship.crystal, 10),
+                  // nextStockageCrystalStarship: 
                 });
                 setPlanet({
                   ...planet,
                   stockCrystalPlanet: parseInt(dataCrystalPlanet.crystal, 10),
-                  stockageCrystalPlanet: parseInt(dataStockagePlanet.crystal_stockage, 10),
+                  stockageCrystalPlanet: parseInt(dataStockagePlanet.quantity, 10),
+                  stockageCrystalPlanetLevel: parseInt(dataLevelsPlanet.crystal_stockage_level, 10),
+                  generationCrystalLevel: parseInt(dataLevelsPlanet.crystal_level, 10),
+                  generationCrystal: parseInt(dataGenerationCrystalPlanet.quantity, 10),
+                  nextGenerationCrystal: parseInt(dataNextGenerationCrystalPlanet.quantity, 10),
+                  generationCrystalNeeded: parseInt(dataGenerationCrystalPlanet.crystal, 10),
+                  // nextStockageCrystal: parseInt(dataNextGenerationCrystalPlanet.quantity, 10),
+                  // stockageCrystalNeeded: 
                 });
-            }
+            // }
             
         } catch (err) {
             console.error(err);
         }
             
-    }, [mounted, place]);
+    }, [/*mounted,*/ place]);
 
     const getCrystalInfos = useCallback(async () => {
         try {
@@ -243,6 +269,7 @@ function App() {
             const dataStockagePlanet = await apiRef.getCrystal(process.env.REACT_APP_URL + 'App/Calls/getCrystalStockagePlanet.php', place);
 
             // setEnergy(dataEnergy.energy);
+            // console.log(dataCrystalPlanet.crystal);
             setStockCrystal(parseInt(dataCrystal.crystal, 10));
             setStockCrystalPlanet(dataCrystalPlanet.crystal);
             setStockageCrystalPlanet(dataStockagePlanet.crystal_stockage);
@@ -346,6 +373,7 @@ function App() {
     // }, [getPlace]);
     // console.log(home);
     // console.log(crystalEnergyRegeneration);
+    // console.log(planet);
     const planets = ['terre', 'mars', 'jupiter', 'saturne', 'uranus', 'neptune'];
     return (
     <>
@@ -355,7 +383,7 @@ function App() {
       ''
     ) : (
     <SideBar path={path.pathname}
-    place={starship.place}
+    place={place}
     getData={getData}
     getCrystalInfos={getCrystalInfos}
     energyInfos={energyInfos}
@@ -367,7 +395,9 @@ function App() {
     <div>
     <div className="App">
       <header className="App-header">
-        Bienvenue sur Serenity, le jeu d'exploration spatiale !
+        <span style={{letterSpacing: '50px', fontWeight: 'lighter', fontSize: '36px'}}>SERENITY</span>
+        <br />
+        Bienvenue sur le jeu d'exploration spatiale !
       </header>
     </div>
     {/* {isOnEarth && <Earth />} */}
@@ -385,7 +415,7 @@ function App() {
             setEnergy={setEnergy}
             setPlace={setPlace}/>}
           /> */}
-          {planets.map((planet) => <Route path={`/${planet}`} key={planet} element={<Planet
+          {planets.map((planetItem) => <Route path={`/${planetItem}`} key={planetItem} element={<Planet
             // energy={parseInt(energy, 10)}
             // stockage={stockageEnergy}
             isLoading={isLoading}
@@ -412,9 +442,11 @@ function App() {
             lifePointsLevel={lifePointsLevel}
             crystalLifePoints={crystalLifePoints}
             crystalWeapon={crystalWeapon}
-            place={planet}
+            place={planetItem}
             energyInfos={energyInfos}
             setEnergyInfos={setEnergyInfos}
+            starship={starship}
+            planet={planet}
              />}
           />)}
           {/* <Route path="/mars" element={<Planet

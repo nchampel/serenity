@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 function Board(props) {
     const { regenerationEnergyLevel, setRegenerationEnergyLevel, crystalEnergyRegeneration, place, stockCrystal, crystalStockageStarship, stockageEnergyLevel,
-    setStockageEnergyLevel, crystalWeapon, weaponLevel, setWeaponLevel, energyInfos, setEnergyInfos } = props;
+    setStockageEnergyLevel, crystalWeapon, weaponLevel, setWeaponLevel, energyInfos, setEnergyInfos, starship, planet } = props;
 
     const addLevelStarship = useCallback(async (type) => {
             try {
@@ -60,7 +60,8 @@ function Board(props) {
             case 'energy_capacity_level':
                 // console.log(stockCrystal);
                 // console.log(crystalEnergyRegeneration);
-                if (parseInt(stockCrystal, 10) >= parseInt(crystalStockageStarship, 10)) {
+                // if (parseInt(stockCrystal, 10) >= parseInt(crystalStockageStarship, 10)) {
+                    if (parseInt(stockCrystal, 10) >= parseInt(starship.stockageCrystal, 10)) {
                     // console.log(stockageEnergyLevel);
                     // console.log(stockageEnergyLevel + 1);
                     // setStockageEnergyLevel(stockageEnergyLevel + 1);
@@ -147,17 +148,17 @@ function Board(props) {
         {/* <Button variant="outlined" onClick={handleAddingLevelRegenerationEnergy} sx={{ color: 'orange', display: 'block', margin: 'auto', marginBottom: '10px', width: '500px' }}>Augmenter la puissance des armes ({String(crystalEnergyRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</Button> */}
         </>
       )}
-      {weaponLevel < 12 && place === 'terre' && (
+      {starship.weaponLevel < 12 && place === 'terre' && (
         <>
         {/* <button onClick={handleAddingLevelRegenerationEnergy}>Augmenter la régénération de l'énergie ({String(crystalEnergyRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</button> */}
         <Button variant="outlined" onClick={() => {handleAddingLevelStarship('weapon_level')}} sx={{ color: 'orange', display: 'block', margin: 'auto', marginBottom: '10px', width: '500px'}}>Augmenter la puissance des armes ({String(crystalWeapon).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</Button>
         {/* <Button variant="outlined" onClick={handleAddingLevelRegenerationEnergy} sx={{ color: 'orange', display: 'block', margin: 'auto', marginBottom: '10px', width: '500px' }}>Augmenter la puissance des armes ({String(crystalEnergyRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</Button> */}
         </>
       )}
-      {regenerationEnergyLevel < 12 && place !== 'terre' && (
-        <Button variant="outlined" onClick={() => {addLevelPlanet('crystal_level')}} sx={{ color: 'orange', display: 'block', margin: 'auto', marginBottom: '10px', width: '500px'}}>Augmenter la génération de cristaux ({String(crystalEnergyRegeneration).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</Button>
+      {planet.generationCrystalLevel < 12 && place !== 'terre' && (
+        <Button variant="outlined" onClick={() => {addLevelPlanet('crystal_level')}} sx={{ color: 'orange', display: 'block', margin: 'auto', marginBottom: '10px', width: '500px'}}>Augmenter la génération de cristaux ({String(planet.generationCrystalNeeded).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</Button>
       )}
-        {regenerationEnergyLevel < 12 && place !== 'terre' && (
+        {planet.stockageCrystalPlanetLevel < 12 && place !== 'terre' && (
         <Button variant="outlined" onClick={() => {handleAddingLevelPlanet('crystal_stockage_level')}} sx={{ color: 'orange', display: 'block', margin: 'auto', marginBottom: '10px', width: '500px'}}>Augmenter le stockage des cristaux ({String(crystalEnergyRegeneration).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</Button>
       )}
       </Box>

@@ -148,3 +148,9 @@ récupération du cristal et stockage sur la Terre fonctionnel
 bouton ajout de niveau régénération énergie et décompte cristaux fonctionnel
 
 03/04/2022
+
+amélioration du code (passage objet starship, energyInfos et planet)
+
+04-05/04/2022
+
+continuation amélioration du code, ajout d'infos sur l'interface

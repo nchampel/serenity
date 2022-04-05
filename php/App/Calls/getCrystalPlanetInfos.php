@@ -2,11 +2,13 @@
 
 namespace App\Calls;
 
+use App\Models\LevelsModel;
 use App\Models\PlanetsModel;
-use App\Models\ResourcesModel;
 
-include_once('../Models/ResourcesModel.php');
+include_once('../Models/LevelsModel.php');
 include_once('../Models/PlanetsModel.php');
+
+// include_once('../Models/EquipmentModel.php');
 
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Authorization, Accept, Access-Control-Request-Method");
@@ -14,28 +16,31 @@ header("Content-Type: text/html; charset=utf-8");
 
 // var_dump($_POST);
 
-// $request = $_POST['energy'];
+// $request = $_POST['level'];
+// $request = $_POST['type'];
 // $test = file_get_contents("http://");
 // echo $test;
 // $Data = json_decode($request->body(), true);
+// $energy = filter_var($Data['energy'], FILTER_SANITIZE_STRING);
 $planet = filter_var($_POST['planet'], FILTER_SANITIZE_STRING);
-// $energy = filter_var($_POST['energy'], FILTER_SANITIZE_STRING);
+$type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
 try {
-    $ResourceModel = new ResourcesModel();
-    $fetchStockage = $ResourceModel::fetchCrystalPlanet($planet);
-    $level = $fetchStockage['data']['crystal_stockage_level'];
+    $levelsModel = new LevelsModel();
+    $fetchLevels = $levelsModel::fetchLevelsPlanet($planet);
+    $level = $fetchLevels['data']['crystal_level'];
     $PlanetModel = new PlanetsModel();
-    $stockage = $PlanetModel::fetchInfos($level, 'crystal_stockage');
-    // $stockage = $stockageDB['data']['quantity'];
+    $infos = $PlanetModel::fetchInfos($level, $type);
+    // var_dump($infos);
+    // die();
 
-    if ($stockage['status']) {
+    if ($infos['status']) {
         $Response['status'] = 200;
-        $Response['data'] = $stockage['data'];
-        $Response['message'] = 'Stockage du cristal récupéré avec succès.';
+        $Response['data'] = $infos['data'];
+        $Response['message'] = 'Infos récupérées avec succès.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);
 
-        // return /*$Response*/;
+        // return    /*$Response*/;
     } else {
         $Response['status'] = 400;
         $Response['data'] = [];
