@@ -154,3 +154,16 @@ amélioration du code (passage objet starship, energyInfos et planet)
 04-05/04/2022
 
 continuation amélioration du code, ajout d'infos sur l'interface
+
+06/04/2022
+
+continuation amélioration du code
+
+07/04/2022
+
+boutons génération cristal et stockage cristal des planètes fonctionnels
+ajout modale et datagrid
+
+08/04/2022
+
+remplissage données dans datagrid

@@ -29,3 +29,5 @@ yarn-error.log*
 /php/App/inc
 /php/inc
 /test_and_old
+
+/apteed_crm

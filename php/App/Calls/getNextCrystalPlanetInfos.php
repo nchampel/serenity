@@ -25,9 +25,18 @@ header("Content-Type: text/html; charset=utf-8");
 $planet = filter_var($_POST['planet'], FILTER_SANITIZE_STRING);
 $type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
 try {
+    switch ($type) {
+
+        case 'crystal_generation':
+            $planetType = 'crystal_level';
+            break;
+        case 'crystal_stockage':
+            $planetType = 'crystal_stockage_level';
+            break;
+    }
     $levelsModel = new LevelsModel();
     $fetchLevels = $levelsModel::fetchLevelsPlanet($planet);
-    $level = $fetchLevels['data']['crystal_level'];
+    $level = $fetchLevels['data'][$planetType];
     $PlanetModel = new PlanetsModel();
     $infos = $PlanetModel::fetchInfos($level + 1, $type);
     // var_dump($infos);

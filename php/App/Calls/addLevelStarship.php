@@ -73,7 +73,7 @@ try {
     } else if (!$isEnoughCrystal) {
         $Response['status'] = 201;
         $Response['data'] = 'Pas assez de cristal';
-        $Response['message'] = 'Pas assez de cristal sur Terre améliorer le vaisseau.';
+        $Response['message'] = 'Pas assez de cristal sur Terre pour améliorer le vaisseau.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);
 

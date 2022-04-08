@@ -22,30 +22,18 @@ header("Content-Type: text/html; charset=utf-8");
 // echo $test;
 // $Data = json_decode($request->body(), true);
 // $energy = filter_var($Data['energy'], FILTER_SANITIZE_STRING);
-$planet = filter_var($_POST['planet'], FILTER_SANITIZE_STRING);
-$type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
+$galaxy = filter_var($_POST['galaxy'], FILTER_SANITIZE_STRING);
 try {
-    switch ($type) {
 
-        case 'crystal_generation':
-            $planetType = 'crystal_level';
-            break;
-        case 'crystal_stockage':
-            $planetType = 'crystal_stockage_level';
-            break;
-    }
-    $levelsModel = new LevelsModel();
-    $fetchLevels = $levelsModel::fetchLevelsPlanet($planet);
-    $level = $fetchLevels['data'][$planetType];
     $PlanetModel = new PlanetsModel();
-    $infos = $PlanetModel::fetchInfos($level, $type);
+    $infos = $PlanetModel::getDataPlanetsGalaxy($galaxy);
     // var_dump($infos);
     // die();
 
     if ($infos['status']) {
         $Response['status'] = 200;
         $Response['data'] = $infos['data'];
-        $Response['message'] = 'Infos récupérées avec succès.';
+        $Response['message'] = 'Infos des planètes de la galaxie récupérées avec succès.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);
 
