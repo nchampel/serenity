@@ -208,12 +208,13 @@ class ApiRef {
         return json.data;
     }
 
-    async savePlace(url = '', place) {
+    async savePosition(url = '', place, galaxy) {
         // const data = {};
         // data.level = level;
         // data.type = type;
         let formData = new FormData();
         formData.append("place", place);
+        formData.append("galaxy", galaxy);
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
@@ -292,13 +293,14 @@ class ApiRef {
         return json;
     }
 
-    async getCrystal(url = '', planet) {
+    async getCrystal(url = '', planet, galaxy) {
         // const data = {};
         // data.level = level;
         // data.type = type;
         // console.log(planet);
         let formData = new FormData();
         formData.append("planet", planet);
+        formData.append("galaxy", galaxy);
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
@@ -321,7 +323,7 @@ class ApiRef {
         return json.data;
     }
 
-        async getInfosPlanet(url = '', planet, type) {
+        async getInfosPlanet(url = '', planet, galaxy, type) {
         // const data = {};
         // data.level = level;
         // data.type = type;
@@ -329,6 +331,7 @@ class ApiRef {
         let formData = new FormData();
         formData.append("planet", planet);
         formData.append("type", type);
+        formData.append("galaxy", galaxy);
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
@@ -351,13 +354,14 @@ class ApiRef {
         return json.data;
     }
 
-    async getLevelsPlanet(url = '', planet) {
+    async getLevelsPlanet(url = '', planet, galaxy) {
         // const data = {};
         // data.level = level;
         // data.type = type;
         // console.log(planet);
         let formData = new FormData();
         formData.append("planet", planet);
+        formData.append("galaxy", galaxy);
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
@@ -407,6 +411,35 @@ class ApiRef {
         // await console.log(json);
 
         return json;
+    }
+
+    async getGalaxyName(url = '', galaxy) {
+        // const data = {};
+        // data.level = level;
+        // data.type = type;
+        // console.log('test');
+        let formData = new FormData();
+        formData.append("galaxy", galaxy);
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+            // 'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            // body: JSON.stringify(data) // body data type must match "Content-Type" header
+            body: formData
+        });
+    //   return response.json(); // parses JSON response into native JavaScript objects
+        // console.log(await response.json());
+        const json = await response.json();
+        // await console.log(json);
+
+        return json.data;
     }
 
     async discardCrystal(url = ''/*, data = {}*/) {

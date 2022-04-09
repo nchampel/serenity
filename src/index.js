@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import SideBar from './component/SideBar';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 // const image = {
 //   'earth': '../assets/terre.jpg',

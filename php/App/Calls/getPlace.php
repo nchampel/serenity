@@ -15,8 +15,8 @@ header("Content-Type: text/html; charset=utf-8");
 // $Data = json_decode($request->body(), true);
 // $energy = filter_var($Data['energy'], FILTER_SANITIZE_STRING);
 try {
-    $ResourceModel = new PlayerModel();
-    $fetchPlace = $ResourceModel::fetchPlace();
+    $playerModel = new PlayerModel();
+    $fetchPlace = $playerModel::fetchPlace();
 
     if ($fetchPlace['status']) {
         $Response['status'] = 200;

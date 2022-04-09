@@ -21,4 +21,7 @@
 
 .loading {
     color: white;
+    text-align: center;
+    padding-top: 200px;
+    font-size: 24px;
 }

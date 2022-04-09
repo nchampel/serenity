@@ -167,3 +167,12 @@ ajout modale et datagrid
 08/04/2022
 
 remplissage données dans datagrid
+ALT+MAJ+F pour formater
+remplissage des données BDD des 500 planètes de la galaxie 1
+
+09/04/2022
+
+travail sur le design
+nettoyage du code
+arrêter serveur react : npx kill-port 3000
+implémentation de la galaxie dans les adresses. Quand on clique dans la datagrid sur la planète d'une autre galaxie, on va à l'adresse voulue et les infos de la planète sont affichées

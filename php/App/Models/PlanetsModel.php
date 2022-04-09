@@ -31,7 +31,7 @@ class PlanetsModel extends MySQL
 
     public static function getDataPlanetsGalaxy($galaxy)
     {
-        $rqt = "SELECT * FROM crystal_planets_levels WHERE player_id = 1 AND galaxy = :galaxy";
+        $rqt = "SELECT * FROM crystal_planets_levels WHERE galaxy = :galaxy";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {

@@ -14,15 +14,16 @@ header("Content-Type: text/html; charset=utf-8");
 // echo $test;
 // $Data = json_decode($request->body(), true);
 $place = filter_var($_POST['place'], FILTER_SANITIZE_STRING);
+$galaxy = filter_var($_POST['galaxy'], FILTER_SANITIZE_STRING);
 // print_r($place);
 // die();
 try {
     $PlayerModel = new PlayerModel();
-    $savePlace = $PlayerModel::savePlace($place);
+    $savePosition = $PlayerModel::savePosition($place, $galaxy);
 
-    if ($savePlace['status']) {
+    if ($savePosition['status']) {
         $Response['status'] = 200;
-        $Response['data'] = $savePlace['data'];
+        $Response['data'] = $savePosition['data'];
         $Response['message'] = 'Emplacement sauvegardé avec succès.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);

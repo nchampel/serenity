@@ -3,7 +3,6 @@
 namespace App\Calls;
 
 use App\Models\LevelsModel;
-use App\Models\ResourcesModel;
 
 include_once('../Models/LevelsModel.php');
 include_once('../Models/ResourcesModel.php');
@@ -13,10 +12,11 @@ header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Conte
 header("Content-Type: text/html; charset=utf-8");
 
 $planet = filter_var($_POST['planet'], FILTER_SANITIZE_STRING);
+$galaxy = filter_var($_POST['galaxy'], FILTER_SANITIZE_STRING);
 
 try {
     $levelsModel = new LevelsModel();
-    $fetchLevels = $levelsModel::fetchLevelsPlanet($planet);
+    $fetchLevels = $levelsModel::fetchLevelsPlanet($planet, $galaxy);
 
 
     if ($fetchLevels['status']) {

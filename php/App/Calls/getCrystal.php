@@ -17,10 +17,10 @@ header("Content-Type: text/html; charset=utf-8");
 // echo $test;
 // $Data = json_decode($request->body(), true);
 $planet = filter_var($_POST['planet'], FILTER_SANITIZE_STRING);
-// $energy = filter_var($_POST['energy'], FILTER_SANITIZE_STRING);
+$galaxy = filter_var($_POST['galaxy'], FILTER_SANITIZE_STRING);
 try {
     $ResourceModel = new ResourcesModel();
-    $fetchCrystal = $ResourceModel::fetchCrystalPlanet($planet);
+    $fetchCrystal = $ResourceModel::fetchCrystalPlanet($planet, $galaxy);
 
     if ($fetchCrystal['status']) {
         $Response['status'] = 200;

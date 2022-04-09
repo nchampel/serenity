@@ -24,6 +24,7 @@ header("Content-Type: text/html; charset=utf-8");
 // $energy = filter_var($Data['energy'], FILTER_SANITIZE_STRING);
 $planet = filter_var($_POST['planet'], FILTER_SANITIZE_STRING);
 $type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
+$galaxy = filter_var($_POST['galaxy'], FILTER_SANITIZE_STRING);
 try {
     switch ($type) {
 
@@ -35,7 +36,7 @@ try {
             break;
     }
     $levelsModel = new LevelsModel();
-    $fetchLevels = $levelsModel::fetchLevelsPlanet($planet);
+    $fetchLevels = $levelsModel::fetchLevelsPlanet($planet, $galaxy);
     $level = $fetchLevels['data'][$planetType];
     $PlanetModel = new PlanetsModel();
     $infos = $PlanetModel::fetchInfos($level + 1, $type);

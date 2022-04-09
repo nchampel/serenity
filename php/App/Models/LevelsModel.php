@@ -28,14 +28,21 @@ class LevelsModel extends MySQL
         ];
     }
 
-    public static function fetchLevelsPlanet($planet)
+    public static function fetchLevelsPlanet($planet, $galaxy)
     {
-        $rqt = "SELECT crystal_level, crystal_stockage_level FROM crystal_planets_levels WHERE player_id = 1 AND planet = :planet";
+        $rqt = "SELECT crystal_level, crystal_stockage_level FROM crystal_planets_levels WHERE player_id = :player AND planet = :planet";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {
+            if ($galaxy !== 0) {
+                $player = 0;
+            } else {
+                $player = 1;
+            }
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':planet', $planet);
+
+            $statement->bindParam(':player', $player);
             //On l'execute
             $statement->execute();
             $result = $statement->fetch(\PDO::FETCH_ASSOC);

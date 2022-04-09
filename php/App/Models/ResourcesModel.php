@@ -211,16 +211,22 @@ class ResourcesModel extends MySQL
         ];
     }
 
-    public static function fetchCrystalPlanet($planet)
+    public static function fetchCrystalPlanet($planet, $galaxy = 0)
     {
         // var_dump($travel);
         // die();
-        $rqt = "SELECT crystal, crystal_level, crystal_stockage_level FROM crystal_planets_levels WHERE planet = :planet AND player_id = 1";
+        if ($galaxy == 0) {
+            $player = 1;
+        } else {
+            $player = 0;
+        }
+        $rqt = "SELECT crystal, crystal_level, crystal_stockage_level FROM crystal_planets_levels WHERE planet = :planet AND player_id = :player";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':planet', $planet);
+            $statement->bindParam(':player', $player);
             //On l'execute
             $statement->execute();
             $result = $statement->fetch(\PDO::FETCH_ASSOC);
