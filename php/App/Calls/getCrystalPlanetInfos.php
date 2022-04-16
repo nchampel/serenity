@@ -37,7 +37,11 @@ try {
     }
     $levelsModel = new LevelsModel();
     $fetchLevels = $levelsModel::fetchLevelsPlanet($planet, $galaxy);
+    // var_dump($type);
     $level = $fetchLevels['data'][$planetType];
+    // var_dump($level);
+
+    // die();
     $PlanetModel = new PlanetsModel();
     $infos = $PlanetModel::fetchInfos($level, $type);
     // var_dump($infos);

@@ -14,7 +14,7 @@ $galaxy = filter_var($_POST['galaxy'], FILTER_SANITIZE_STRING);
 
 try {
     $galaxyModel = new GalaxyModel();
-    $fetchName = $galaxyModel::getGalaxyName($galaxy);
+    $fetchName = $galaxyModel::getGalaxyInfos($galaxy);
 
     if ($fetchName['status']) {
         $Response['status'] = 200;

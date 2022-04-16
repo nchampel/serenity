@@ -44,12 +44,15 @@ function SideBar(props) {
         galaxy,
         choiceGalaxy,
         setChoiceGalaxy,
+        setGalaxy,
     } = props;
     const navigate = useNavigate();
     const mounted = useMounted();
     const [energyTravel, setEnergyTravel] = useState(0);
     const [open, setOpen] = useState(false);
     const [infosPlanetsGalaxy, setInfosPlanetsGalaxy] = useState([]);
+    const [energyGalaxy, setEnergyGalaxy] = useState(0);
+    console.log(path.split("/")[1]);
     // let {isOnEarth, isOnMoon} = props;
     // console.log(isOnEarth);
     // const handleDisplayEarth = () => {
@@ -134,7 +137,7 @@ function SideBar(props) {
         } catch (err) {
             console.error(err);
         }
-    });
+    }, []);
 
     // useEffect(() => {
     //     getEnergy();
@@ -142,36 +145,73 @@ function SideBar(props) {
 
     // navigate("/terre", { replace: true });
 
-    const substractEnergyTravel = (departure, arrival) => {
-        const travel = departure + "-" + arrival;
-        getEnergyTravel(travel).then((energyTravelResponse) => {
-            // console.log(energyTravelResponse);
-            if (energyInfos.energy >= energyTravelResponse) {
+    const substractEnergyTravel = (galaxy, departure, arrival) => {
+        if (galaxy === "0") {
+            const travel = departure + "-" + arrival;
+            getEnergyTravel(travel).then((energyTravelResponse) => {
+                // console.log(energyTravelResponse);
+                if (energyInfos.energy >= energyTravelResponse) {
+                    // const energyUpdated = energy - energyTravel;
+                    // setEnergy(energyUpdated);
+                    // console.log(energy);
+
+                    const linkArrival = `/${galaxy}/` + arrival;
+                    saveEnergyAfterTravel(travel);
+                    // pour mettre à jour l'énergie, le setenergy ici ne fonctionne pas après le refresh de la page, mais les fois d'après oui
+                    getEnergy();
+                    navigate(linkArrival, { replace: true });
+                    // getData();
+                    setPlace(arrival);
+                    savePosition(arrival, 0);
+                    getCrystalInfos();
+                } else {
+                    const linkDeparture = "/0/" + departure;
+                    toast.error(
+                        "Pas assez d'énergie pour aller sur " +
+                            arrival[0].toUpperCase() +
+                            arrival.slice(1) +
+                            " (" +
+                            energyTravelResponse +
+                            " énergie nécessaire)",
+                        { duration: 10000 }
+                    );
+                    navigate(linkDeparture, { replace: true });
+                }
+            });
+        } else {
+            // récupérer l'énergie de changement de galaxie
+            // voir si assez d'énergie
+            // se caler sur en haut pour la suite
+            // const linkArrival = `/0/` + arrival;
+            // navigate(linkArrival, { replace: true });
+            if (true) {
                 // const energyUpdated = energy - energyTravel;
                 // setEnergy(energyUpdated);
                 // console.log(energy);
 
-                const linkArrival = `/${galaxy}/` + arrival;
-                saveEnergyAfterTravel(travel);
+                const linkArrival = `/0/` + arrival;
+                // 1 saveEnergyAfterTravel(travel);
                 // pour mettre à jour l'énergie, le setenergy ici ne fonctionne pas après le refresh de la page, mais les fois d'après oui
-                getEnergy();
+                // 1 getEnergy();
                 navigate(linkArrival, { replace: true });
                 // getData();
+                setPlace(arrival);
+                savePosition(arrival, 0);
                 getCrystalInfos();
             } else {
-                const linkDeparture = "/" + departure;
-                toast.error(
-                    "Pas assez d'énergie pour aller sur " +
-                        arrival[0].toUpperCase() +
-                        arrival.slice(1) +
-                        " (" +
-                        energyTravelResponse +
-                        " énergie nécessaire)",
-                    { duration: 10000 }
-                );
-                navigate(linkDeparture, { replace: true });
+                // const linkDeparture = "/0/" + departure;
+                // toast.error(
+                //     "Pas assez d'énergie pour aller sur " +
+                //         arrival[0].toUpperCase() +
+                //         arrival.slice(1) +
+                //         " (" +
+                //         energyTravelResponse +
+                //         " énergie nécessaire)",
+                //     { duration: 10000 }
+                // );
+                // navigate(linkDeparture, { replace: true });
             }
-        });
+        }
         // console.log(energytravel);
         // console.log(en);
         //         console.log(energy);
@@ -197,6 +237,46 @@ function SideBar(props) {
     const rows = [];
 
     infosPlanetsGalaxy.forEach((planet) => {
+        let energyTravel = 0;
+        // let realNumberPlanet = 1;
+        // if (parseInt(path.split("/")[2], 10) === 1) {
+        //     realNumberPlanet = 500;
+        // } else {
+        //     realNumberPlanet = parseInt(path.split("/")[2], 10);
+        // }
+        if (
+            parseInt(planet.planet, 10) > parseInt(path.split("/")[2], 10) /*&&
+            parseInt(planet.planet, 10) + parseInt(path.split("/")[2], 10) <=
+                250*/
+        ) {
+            // if (parseInt(planet.planet, 10) + parseInt(path.split("/")[2]) >= 250) {
+            //     energyTravel = Math.abs(
+            //         (500 -
+            //             parseInt(planet.planet, 10) -
+            //             parseInt(path.split("/")[2], 10)) *
+            //             50
+            //     );
+            // } else {
+            //     energyTravel =
+            //         (parseInt(planet.planet, 10) +
+            //             parseInt(path.split("/")[2], 10)) *
+            //         50;
+            // }
+            energyTravel =
+                (parseInt(planet.planet, 10) -
+                    parseInt(path.split("/")[2], 10)) *
+                50;
+        } else if (
+            parseInt(planet.planet, 10) < parseInt(path.split("/")[2], 10)
+        ) {
+            energyTravel = Math.abs(
+                (parseInt(planet.planet, 10) -
+                    parseInt(path.split("/")[2], 10)) *
+                    50
+            );
+        } else {
+            energyTravel = "-";
+        }
         rows.push({
             id: planet.id,
             numberPlanet: parseInt(planet.planet, 10),
@@ -205,6 +285,7 @@ function SideBar(props) {
             lastVisit: planet.last_visit,
             hasEnemy: planet.has_enemy,
             crystalLevel: planet.crystal_level,
+            energy: path.split("/")[1] === "0" ? energyGalaxy : energyTravel,
         });
     });
 
@@ -212,24 +293,21 @@ function SideBar(props) {
     //     console.log("réussi");
     // };
 
-    const savePosition = useCallback(
-        async (place, choiceGalaxy) => {
-            try {
-                // console.log(choiceGalaxy);
-                // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
-                await apiRef.savePosition(
-                    process.env.REACT_APP_URL + "App/Calls/savePosition.php",
-                    place,
-                    choiceGalaxy
-                );
-                getData();
-                getCrystalInfos();
-            } catch (err) {
-                console.error(err);
-            }
-        },
-        [galaxy]
-    );
+    const savePosition = useCallback(async (place, choiceGalaxy) => {
+        try {
+            // console.log(choiceGalaxy);
+            // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
+            await apiRef.savePosition(
+                process.env.REACT_APP_URL + "App/Calls/savePosition.php",
+                place,
+                choiceGalaxy
+            );
+            getData();
+            getCrystalInfos();
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
 
     const columns = [
         {
@@ -239,19 +317,25 @@ function SideBar(props) {
             renderCell: (cellValues) => (
                 <Link
                     to={`${choiceGalaxy}/${cellValues.row.numberPlanet}`}
+                    style={{
+                        color: "white",
+                        textDecoration: "none",
+                        fontWeight: "bold",
+                    }}
                     onClick={() => {
                         setOpen(false);
                         setPlace(cellValues.row.numberPlanet);
+                        setGalaxy(choiceGalaxy);
                         savePosition(cellValues.row.numberPlanet, choiceGalaxy);
                         // test();
-                        // console.log("june");
+                        // console.log(choiceGalaxy);
                     }}
                 >
                     {cellValues.row.numberPlanet}
                 </Link>
             ),
         },
-        { field: "col2", headerName: "Énergie nécessaire", width: 140 },
+        { field: "energy", headerName: "Énergie nécessaire", width: 140 },
         {
             field: "isDestroyed",
             headerName: "Détruite ?",
@@ -303,6 +387,31 @@ function SideBar(props) {
     useEffect(() => {
         // console.log(choiceGalaxy);
     }, [choiceGalaxy]);
+
+    function LoadingText() {
+        return (
+            <Box sx={{ textAlign: "center", mt: 40 }}>
+                Chargement des planètes
+            </Box>
+        );
+    }
+
+    const getGalaxyInfos = useCallback(async (galaxyNumber) => {
+        try {
+            const data = await apiRef.getGalaxyInfos(
+                process.env.REACT_APP_URL + "App/Calls/getGalaxyInfos.php",
+                galaxyNumber
+            );
+
+            if (mounted.current) {
+                // console.log(data.name);
+                setEnergyGalaxy(data.energy_travel);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
+
     return (
         <>
             <Dialog
@@ -313,11 +422,23 @@ function SideBar(props) {
                 aria-describedby="alert-dialog-slide-description"
                 fullWidth
                 maxWidth="xl"
+                PaperProps={{
+                    style: {
+                        backgroundColor: "#434A54",
+                        color: "white",
+                    },
+                }}
             >
                 <DialogTitle>Planètes</DialogTitle>
                 <DialogContent>
                     {/* <DialogContentText id="alert-dialog-slide-description"> */}
-                    <Box style={{ height: 700, width: "100%" }}>
+                    <Box
+                        style={{ height: 700, width: "100%" }}
+                        sx={{
+                            backgroundColor: "#434A54",
+                            color: "white",
+                        }}
+                    >
                         <DataGrid
                             height={300}
                             rows={rows}
@@ -328,6 +449,10 @@ function SideBar(props) {
                                 frFR.components.MuiDataGrid.defaultProps
                                     .localeText
                             }
+                            components={{
+                                NoRowsOverlay: LoadingText,
+                                // Pagination: { color: "white" },
+                            }}
                             initialState={{
                                 sorting: {
                                     sortModel: [
@@ -335,11 +460,25 @@ function SideBar(props) {
                                     ],
                                 },
                             }}
-                            //       componentsProps={{
+                            sx={{
+                                backgroundColor: "#434A54",
+                                color: "white",
+                            }}
+                            // componentsProps={{
+                            //     columnMenu: {
+                            //         background: "red",
+                            //     },
+                            // }}
+                            // componentsProps={{
                             //     pagination: {
-                            //       labelRowsPerPage: 'Résultats par page'
-                            //     }
-                            //   }}
+                            //         labelRowsPerPage: (
+                            //             <Box sx={{ color: "white" }}>
+                            //                 Lignes par page
+                            //             </Box>
+                            //         ),
+                            //         // Pagination: { color: "white" },
+                            //     },
+                            // }}
                             //   localeText={{columnMenuSortAsc: 'Tri croissant',
                             // footerTotalVisibleRows: (visibleCount, totalCount) =>
                             //     `${visibleCount.toLocaleString()} sur ${totalCount.toLocaleString()}`}}
@@ -348,7 +487,9 @@ function SideBar(props) {
                     {/* </DialogContentText> */}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>OK</Button>
+                    <Button onClick={handleClose} style={{ color: "white" }}>
+                        OK
+                    </Button>
                 </DialogActions>
             </Dialog>
             <nav>
@@ -357,9 +498,10 @@ function SideBar(props) {
                 {path !== "/0/terre" && (
                     <div
                         className="link"
-                        onClick={() =>
-                            substractEnergyTravel(place, "terre")
-                        } /*onClick={handleDisplayEarth}*/
+                        onClick={() => {
+                            substractEnergyTravel(galaxy, place, "terre");
+                            setGalaxy("0");
+                        }} /*onClick={handleDisplayEarth}*/
                     >
                         Terre
                     </div>
@@ -367,9 +509,10 @@ function SideBar(props) {
                 {path !== "/0/mars" && (
                     <div
                         className="link"
-                        onClick={() =>
-                            substractEnergyTravel(place, "mars")
-                        } /*onClick={handleDisplayMoon}*/
+                        onClick={() => {
+                            substractEnergyTravel(galaxy, place, "mars");
+                            setGalaxy("0");
+                        }} /*onClick={handleDisplayMoon}*/
                     >
                         Mars
                     </div>
@@ -377,7 +520,10 @@ function SideBar(props) {
                 {path !== "/0/jupiter" && (
                     <div
                         className="link"
-                        onClick={() => substractEnergyTravel(place, "jupiter")}
+                        onClick={() => {
+                            substractEnergyTravel(galaxy, place, "jupiter");
+                            setGalaxy("0");
+                        }}
                     >
                         Jupiter
                     </div>
@@ -385,7 +531,10 @@ function SideBar(props) {
                 {path !== "/0/saturne" && (
                     <div
                         className="link"
-                        onClick={() => substractEnergyTravel(place, "saturne")}
+                        onClick={() => {
+                            substractEnergyTravel(galaxy, place, "saturne");
+                            setGalaxy("0");
+                        }}
                     >
                         Saturne
                     </div>
@@ -393,7 +542,10 @@ function SideBar(props) {
                 {path !== "/0/uranus" && (
                     <div
                         className="link"
-                        onClick={() => substractEnergyTravel(place, "uranus")}
+                        onClick={() => {
+                            substractEnergyTravel(galaxy, place, "uranus");
+                            setGalaxy("0");
+                        }}
                     >
                         Uranus
                     </div>
@@ -401,7 +553,10 @@ function SideBar(props) {
                 {path !== "/0/neptune" && (
                     <div
                         className="link"
-                        onClick={() => substractEnergyTravel(place, "neptune")}
+                        onClick={() => {
+                            substractEnergyTravel(galaxy, place, "neptune");
+                            setGalaxy("0");
+                        }}
                     >
                         Neptune
                     </div>
@@ -416,9 +571,24 @@ function SideBar(props) {
                                 setOpen(true);
                                 setChoiceGalaxy(1);
                                 getDataPlanetsGalaxy(1);
+                                getGalaxyInfos(1);
                             }}
                         >
                             Andromède
+                        </div>
+                    </>
+                )}
+                {energyInfos.energy >= 800000 && (
+                    <>
+                        <div
+                            className="link"
+                            onClick={() => {
+                                setOpen(true);
+                                setChoiceGalaxy(2);
+                                getDataPlanetsGalaxy(2);
+                            }}
+                        >
+                            Roue de chariot
                         </div>
                     </>
                 )}

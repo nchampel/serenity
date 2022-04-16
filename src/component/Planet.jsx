@@ -31,11 +31,8 @@ function Planet(props) {
         setChoiceGalaxy,
     } = props;
 
-    const [galaxyName, setGalaxyName] = useState("");
-    const mounted = useMounted();
-
     // const { image } = props;
-    // const [energyLocal, setEnergy] = useState(energy);
+
     // console.log(typeof regeneration);
     // const [isLoading, setIsLoading] = useState(true);
     // console.log(place);
@@ -48,29 +45,37 @@ function Planet(props) {
     //     console.log(choiceGalaxy);
     // }, choiceGalaxy);
 
-    switch (place) {
-        case "terre":
-            url = require("../assets/terre1.jpg");
-            break;
-        case "mars":
-            url = require("../assets/mars.jpg");
-            break;
-        case "jupiter":
-            url = require("../assets/jupiter.jpg");
-            break;
-        case "saturne":
-            url = require("../assets/saturne.jpg");
-            break;
-        case "uranus":
-            url = require("../assets/uranus.png");
-            break;
-        case "neptune":
-            url = require("../assets/neptune.png");
-            break;
-        default:
-            url = require("../assets/terre1.jpg");
-            break;
+    // const test = "../assets/terre1.jpg";
+    const image = planet.image;
+    if (planet.image === "") {
+        url = require(`../assets/terre1.jpg`);
+    } else {
+        url = require(`../assets/${image}`);
     }
+
+    // switch (place) {
+    //     case "terre":
+    //         url = require(`../assets/${image}`);
+    //         break;
+    //     case "mars":
+    //         url = require("../assets/mars.jpg");
+    //         break;
+    //     case "jupiter":
+    //         url = require("../assets/jupiter.jpg");
+    //         break;
+    //     case "saturne":
+    //         url = require("../assets/saturne.jpg");
+    //         break;
+    //     case "uranus":
+    //         url = require("../assets/uranus.png");
+    //         break;
+    //     case "neptune":
+    //         url = require("../assets/neptune.png");
+    //         break;
+    //     default:
+    //         url = require("../assets/terre.jpg");
+    //         break;
+    // }
 
     // const handleEnergyAdding = (() => {
     //     // console.log(energy);
@@ -81,41 +86,25 @@ function Planet(props) {
     //     getData();
     // });
 
-    const getGalaxyName = useCallback(async () => {
-        try {
-            const data = await apiRef.getGalaxyName(
-                process.env.REACT_APP_URL + "App/Calls/getGalaxyName.php",
-                galaxy
-            );
-
-            if (mounted.current) {
-                // console.log(data.name);
-                setGalaxyName(data.name);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }, [mounted]);
-
     // useEffect(() => {
     // getData();
     // getCrystalInfos();
     // }, []);
 
-    useEffect(() => {
-        getGalaxyName();
-    }, [getGalaxyName]);
+    // useEffect(() => {
+    //     getGalaxyInfos();
+    // }, [getGalaxyInfos]);
 
     const savePosition = useCallback(
         async (place, choiceGalaxy) => {
             try {
-                console.log(galaxy);
+                // console.log(choiceGalaxy);
                 // console.log(place);
                 // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
                 await apiRef.savePosition(
                     process.env.REACT_APP_URL + "App/Calls/savePosition.php",
                     place,
-                    choiceGalaxy
+                    galaxy
                 );
             } catch (err) {
                 console.error(err);
@@ -124,15 +113,21 @@ function Planet(props) {
         [choiceGalaxy]
     );
     useEffect(() => {
-        // console.log(place);
         setGalaxy(galaxy);
         setPlace(place);
-        if (choiceGalaxy !== undefined) {
+        if (choiceGalaxy !== undefined && choiceGalaxy !== null) {
+            // console.log(choiceGalaxy);
             savePosition(place, choiceGalaxy);
         }
     }, [place, galaxy, choiceGalaxy]);
     // console.log(energy);
 
+    useEffect(() => {
+        // console.log(galaxy);
+    }, [galaxy]);
+    useEffect(() => {
+        // console.log(choiceGalaxy);
+    }, [choiceGalaxy]);
     // let name = '';
 
     // console.log(`url('${require('../assets/terre.jpg')}')`);
@@ -150,11 +145,12 @@ function Planet(props) {
                             textAlign: "center",
                         }}
                     >
-                        {galaxy === 0
-                            ? `${
-                                  place[0].toUpperCase() + place.slice(1)
-                              } (${galaxyName})`
-                            : `Planète ${place} (${galaxyName})`}
+                        {(choiceGalaxy === "0" || galaxy === "0") &&
+                        place.length > 0
+                            ? `${place[0].toUpperCase() + place.slice(1)} (${
+                                  planet.galaxyName
+                              })`
+                            : `Planète ${place} (${planet.galaxyName})`}
                     </Typography>
                     <Box
                         style={{
@@ -187,6 +183,7 @@ function Planet(props) {
                             starship={starship}
                             planet={planet}
                             choiceGalaxy={choiceGalaxy}
+                            galaxy={galaxy}
                             // style={{ display: 'inline' }}
                         />
 
@@ -211,6 +208,7 @@ function Planet(props) {
                             planet={planet}
                             setPlanet={setPlanet}
                             getData={getData}
+                            galaxy={galaxy}
                         />
                         {/* <button>Augmenter la génération d'énergie</button> */}
                         {/* </Box> */}

@@ -21,12 +21,13 @@ header("Content-Type: text/html; charset=utf-8");
 // echo $test;
 // $Data = json_decode($request->body(), true);
 $place = filter_var($_POST['place'], FILTER_SANITIZE_STRING);
+$galaxy = filter_var($_POST['galaxy'], FILTER_SANITIZE_STRING);
 // $energy = filter_var($_POST['energy'], FILTER_SANITIZE_STRING);
 try {
     $isTransferExecuted = false;
     // on récupère le cristal de la planète
     $ResourceModel = new ResourcesModel();
-    $fetchCrystalDB = $ResourceModel::fetchCrystalPlanet($place);
+    $fetchCrystalDB = $ResourceModel::fetchCrystalPlanet($place, $galaxy);
     $crystal = $fetchCrystalDB['data']['crystal'];
     // on récupère le cristal du vaisseau
     $fetchCrystalStarshipDB = $ResourceModel::fetchCrystalStarship();
@@ -43,7 +44,7 @@ try {
         // sauvegarder le cristal dans le vaisseau
         $updateStarship = $ResourceModel::updateCrystalStarship($updatedCrystal);
         // mettre le stock de cristal à zéro sur la planète
-        $updatePlanet = $ResourceModel::updateCrystalPlanet(0, $place);
+        $updatePlanet = $ResourceModel::updateCrystalPlanet(0, $place, $galaxy);
         $isTransferExecuted = true;
     }
     // print_r($updateStarship);

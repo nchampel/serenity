@@ -175,4 +175,27 @@ remplissage des données BDD des 500 planètes de la galaxie 1
 travail sur le design
 nettoyage du code
 arrêter serveur react : npx kill-port 3000
+arrêter serveur 8000 : netstat -ano | findstr 8000 puistaskkill /F /PID <nom de la tâche>
 implémentation de la galaxie dans les adresses. Quand on clique dans la datagrid sur la planète d'une autre galaxie, on va à l'adresse voulue et les infos de la planète sont affichées
+
+10/04/2022
+
+image d'arrière plan chargée dpeuis la BDD
+correction de divers bugs (suite à l'implémentation de la galaxie en BDD)
+ajout cristal sur toutes les planètes de toutes les galaxies par tâche cron fonctionnel (pas encore testé sur le serveur en ligne)
+
+11-12/04/2022
+
+pas travaillé sur le projet car j'ai le covid
+
+13/04/2022
+
+début soustraction énergie pour changer de galaxie => affichage de l'énergie nécessaire dans le datagrid
+
+14/04/2022
+
+finition affichage énergie dans le datagrid. J'ai abandonné l'idée de faire 500 planètes organisées en cercle (que l'énergie de 500 à 1 soit la même que de 1 à 2)
+
+16/04/2022
+
+travail sur le design datagrid

@@ -6,9 +6,9 @@ include_once('MySQL.php');
 
 class GalaxyModel extends MySQL
 {
-    public static function getGalaxyName($galaxy)
+    public static function getGalaxyInfos($galaxy)
     {
-        $rqt = "SELECT name FROM galaxies WHERE galaxy_number = :galaxy";
+        $rqt = "SELECT name, energy_travel FROM galaxies WHERE galaxy_number = :galaxy";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {

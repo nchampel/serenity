@@ -15,6 +15,7 @@ function Board(props) {
         setPlanet,
         getCrystalInfos,
         getData,
+        galaxy,
     } = props;
 
     const addLevelStarship = useCallback(async (type) => {
@@ -203,6 +204,9 @@ function Board(props) {
                                 );
                             }}
                             sx={{
+                                "&:hover": {
+                                    borderWidth: 2,
+                                },
                                 borderWidth: 2,
                                 color: "orange",
                                 display: "block",
@@ -233,6 +237,9 @@ function Board(props) {
                                 );
                             }}
                             sx={{
+                                "&:hover": {
+                                    borderWidth: 2,
+                                },
                                 borderWidth: 2,
                                 color: "orange",
                                 display: "block",
@@ -262,6 +269,9 @@ function Board(props) {
                                 handleAddingLevelStarship("weapon_level");
                             }}
                             sx={{
+                                "&:hover": {
+                                    borderWidth: 2,
+                                },
                                 borderWidth: 2,
                                 color: "orange",
                                 display: "block",
@@ -282,56 +292,68 @@ function Board(props) {
                         {/* <Button variant="outlined" onClick={handleAddingLevelRegenerationEnergy} sx={{ color: 'orange', display: 'block', margin: 'auto', marginBottom: '10px', width: '300px' }}>Augmenter la puissance des armes ({String(crystalEnergyRegeneration * 60).replace(/(.)(?=(\d{3})+$)/g,'$1 ')} cristaux)</Button> */}
                     </>
                 )}
-                {planet.generationCrystalLevel < 12 && place !== "terre" && (
-                    <Button
-                        variant="outlined"
-                        onClick={() => {
-                            handleAddingLevelPlanet("crystal_level");
-                        }}
-                        sx={{
-                            borderWidth: 2,
-                            color: "orange",
-                            display: "block",
-                            margin: "auto",
-                            marginBottom: "10px",
-                            width: "300px",
-                        }}
-                    >
-                        Augmenter la génération
-                        <br />
-                        de cristaux (
-                        {String(planet.generationCrystalNeeded).replace(
-                            /(.)(?=(\d{3})+$)/g,
-                            "$1 "
-                        )}{" "}
-                        cristaux)
-                    </Button>
-                )}
-                {planet.stockageCrystalPlanetLevel < 12 && place !== "terre" && (
-                    <Button
-                        variant="outlined"
-                        onClick={() => {
-                            handleAddingLevelPlanet("crystal_stockage_level");
-                        }}
-                        sx={{
-                            borderWidth: 2,
-                            color: "orange",
-                            display: "block",
-                            margin: "auto",
-                            marginBottom: "10px",
-                            width: "300px",
-                        }}
-                    >
-                        Augmenter le stockage
-                        <br />
-                        des cristaux (
-                        {String(planet.stockageCrystalNeeded).replace(
-                            /(.)(?=(\d{3})+$)/g,
-                            "$1 "
-                        )}{" "}
-                        cristaux)
-                    </Button>
-                )}
+                {planet.generationCrystalLevel < 12 &&
+                    place !== "terre" &&
+                    galaxy === "0" && (
+                        <Button
+                            variant="outlined"
+                            onClick={() => {
+                                handleAddingLevelPlanet("crystal_level");
+                            }}
+                            sx={{
+                                "&:hover": {
+                                    borderWidth: 2,
+                                },
+                                borderWidth: 2,
+                                color: "orange",
+                                display: "block",
+                                margin: "auto",
+                                marginBottom: "10px",
+                                width: "300px",
+                            }}
+                        >
+                            Augmenter la génération
+                            <br />
+                            de cristaux (
+                            {String(planet.generationCrystalNeeded).replace(
+                                /(.)(?=(\d{3})+$)/g,
+                                "$1 "
+                            )}{" "}
+                            cristaux)
+                        </Button>
+                    )}
+                {planet.stockageCrystalPlanetLevel < 12 &&
+                    place !== "terre" &&
+                    galaxy === "0" && (
+                        <Button
+                            variant="outlined"
+                            onClick={() => {
+                                handleAddingLevelPlanet(
+                                    "crystal_stockage_level"
+                                );
+                            }}
+                            sx={{
+                                "&:hover": {
+                                    borderWidth: 2,
+                                },
+                                borderWidth: 2,
+                                color: "orange",
+                                display: "block",
+                                margin: "auto",
+                                marginBottom: "10px",
+                                width: "300px",
+                            }}
+                        >
+                            Augmenter le stockage
+                            <br />
+                            des cristaux (
+                            {String(planet.stockageCrystalNeeded).replace(
+                                /(.)(?=(\d{3})+$)/g,
+                                "$1 "
+                            )}{" "}
+                            cristaux)
+                        </Button>
+                    )}
             </Box>
         </>
     );

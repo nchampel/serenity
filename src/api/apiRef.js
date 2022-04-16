@@ -384,13 +384,14 @@ class ApiRef {
         return json.data;
     }
 
-    async takeCrystal(url = '', place) {
+    async takeCrystal(url = '', place, galaxy) {
         // const data = {};
         // data.level = level;
         // data.type = type;
         // console.log('test');
         let formData = new FormData();
         formData.append("place", place);
+        formData.append("galaxy", galaxy);
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
@@ -413,7 +414,7 @@ class ApiRef {
         return json;
     }
 
-    async getGalaxyName(url = '', galaxy) {
+    async getGalaxyInfos(url = '', galaxy) {
         // const data = {};
         // data.level = level;
         // data.type = type;

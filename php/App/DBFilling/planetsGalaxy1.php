@@ -80,28 +80,37 @@ class MySQL
     }
 }
 
+$images = ['planet1.jpg', 'planet2.jpg', 'planet3.webp', 'planet4.jpg', 'planet5.jpg', 'planet6.jpg'];
+
 for ($i = 1; $i <= 500; $i++) {
-    $chanceHasEnemy = rand(1, 10);
+    $chanceHasHeadquarter = rand(1, 10);
+    $randomImage = rand(0, 5);
     $planet = [
         'player_id' => 0,
+        'planet_id' => 'g1p' . $i,
         'galaxy' => 1,
         'planet' => $i,
-        'crystal_level' => rand(1, 3),
+        'image' => $images[$randomImage],
+        'crystal_level' => rand(0, 3),
         'crystal_stockage_level' => rand(1, 3),
-        'has_enemy' => $chanceHasEnemy == 1 ? 1 : 0
+        'has_headquarter' => $chanceHasHeadquarter == 1 ? 1 : 0,
+        'has_enemy' => $chanceHasHeadquarter == 1 ? 1 : 0
     ];
     // $planets[] = $planet;
-    $rqt = "INSERT INTO crystal_planets_levels (player_id, galaxy, planet, crystal_level, crystal_stockage_level, has_enemy)
-VALUES (:player_id, :galaxy, :planet, :crystal_level, :crystal_stockage_level, :has_enemy)";
+    $rqt = "INSERT INTO crystal_planets_levels (player_id, planet_id, galaxy, planet, image, crystal_level, crystal_stockage_level, has_headquarter, has_enemy)
+VALUES (:player_id, :planet_id, :galaxy, :planet, :image, :crystal_level, :crystal_stockage_level, :has_headquarter, :has_enemy)";
 
     $MySQL = new MySQL();
 
     $statement = $MySQL::getInstance()->prepare($rqt);
     $statement->bindParam(':player_id', $planet['player_id']);
+    $statement->bindParam(':planet_id', $planet['planet_id']);
+    $statement->bindParam(':image', $planet['image']);
     $statement->bindParam(':galaxy', $planet['galaxy']);
     $statement->bindParam(':planet', $planet['planet']);
     $statement->bindParam(':crystal_level', $planet['crystal_level']);
     $statement->bindParam(':crystal_stockage_level', $planet['crystal_stockage_level']);
+    $statement->bindParam(':has_headquarter', $planet['has_headquarter']);
     $statement->bindParam(':has_enemy', $planet['has_enemy']);
     $statement->execute();
 }

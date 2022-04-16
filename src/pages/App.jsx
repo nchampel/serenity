@@ -41,7 +41,7 @@ function App() {
     const navigate = useNavigate();
     const path = useLocation();
     const [galaxy, setGalaxy] = useState(0);
-    const [choiceGalaxy, setChoiceGalaxy] = useState("");
+    const [choiceGalaxy, setChoiceGalaxy] = useState(null);
     const [energyInfos, setEnergyInfos] = useState({
         stockageEnergyLevel: 1,
         energy: 0,
@@ -73,6 +73,8 @@ function App() {
         generationCrystalNeeded: 0,
         stockageCrystalNeeded: 0,
         nextStockageCrystal: 0,
+        image: "",
+        galaxyName: "",
     });
     // const stockage = {
     //   'energy_capacity_level': {1: 200000, 2: 400000}
@@ -88,6 +90,32 @@ function App() {
     const [stockCrystalStarship, setStockCrystalStarship] = useState(0);
     const [crystalWeapon, setCrystalWeapon] = useState(0);
     const [crystalLifePoints, setCrystalLifePoints] = useState(0);
+    const [galaxyName, setGalaxyName] = useState("");
+
+    const getGalaxyInfos = useCallback(async () => {
+        try {
+            const data = await apiRef.getGalaxyInfos(
+                process.env.REACT_APP_URL + "App/Calls/getGalaxyInfos.php",
+                galaxy
+            );
+
+            if (mounted.current) {
+                // console.log(data.name);
+                setGalaxyName(data.name);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }, [mounted]);
+
+    // useEffect(() => {
+    // getData();
+    // getCrystalInfos();
+    // }, []);
+
+    // useEffect(() => {
+    //     getGalaxyInfos();
+    // }, [getGalaxyInfos]);
     // const [nextCrystalStockageStarship setNextCrystalStockageStarship] = useState(0);
 
     const getInfos = useCallback(
@@ -271,10 +299,12 @@ function App() {
                         case "neptune":
                             navigate(`/${galaxy}/neptune`, { replace: true });
                             break;
-                        // default:
-                        //     navigate("/", { replace: true });
-                        //     // setHome(null);
-                        //     break;
+                        default:
+                            navigate(`/${galaxy}/${dataPlace.place}`, {
+                                replace: true,
+                            });
+                            // setHome(null);
+                            break;
                     }
 
                     setIsLoading(false);
@@ -306,6 +336,7 @@ function App() {
     const getData = useCallback(
         async (energyInfos, starship) => {
             try {
+                setIsLoading(true);
                 // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
                 const dataPlace = await apiRef.getPlace(
                     process.env.REACT_APP_URL + "App/Calls/getPlace.php"
@@ -373,7 +404,15 @@ function App() {
                     dataPlace.galaxy,
                     "crystal_stockage"
                 );
-                // console.log(dataPlace);
+
+                const dataGalaxyInfos = await apiRef.getGalaxyInfos(
+                    process.env.REACT_APP_URL + "App/Calls/getGalaxyInfos.php",
+                    galaxy
+                );
+
+                setGalaxyName(dataGalaxyInfos.name);
+
+                // console.log(dataCrystalPlanet);
                 // if (mounted.current) {
                 // setEnergy(dataEnergy.energy);
                 // console.log(dataCrystalPlanet.crystal);
@@ -381,7 +420,7 @@ function App() {
                 setStockCrystalPlanet(dataCrystalPlanet.crystal);
                 setStockageCrystalPlanet(dataStockagePlanet.quantity);
                 setStockCrystalStarship(dataCrystalStarship.crystal);
-                // console.log(energyInfos);
+                console.log(dataGenerationCrystalPlanet);
                 setEnergyInfos({
                     ...energyInfos,
                     energy: parseInt(dataEnergy.energy, 10),
@@ -426,7 +465,10 @@ function App() {
                         dataStockageCrystalPlanet.crystal,
                         10
                     ),
+                    image: dataCrystalPlanet.image,
+                    galaxyName: dataGalaxyInfos.name,
                 });
+                setIsLoading(false);
                 // }
             } catch (err) {
                 console.error(err);
@@ -449,6 +491,7 @@ function App() {
 
     const getCrystalInfos = useCallback(async () => {
         try {
+            setIsLoading(true);
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             const dataPlace = await apiRef.getPlace(
                 process.env.REACT_APP_URL + "App/Calls/getPlace.php"
@@ -506,6 +549,7 @@ function App() {
                     10
                 ),
             });
+            setIsLoading(false);
         } catch (err) {
             console.error(err);
         }
@@ -623,6 +667,7 @@ function App() {
                         galaxy={galaxy}
                         choiceGalaxy={choiceGalaxy}
                         setChoiceGalaxy={setChoiceGalaxy}
+                        setGalaxy={setGalaxy}
                     />
                 )}
                 <div>

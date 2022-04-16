@@ -30,7 +30,16 @@ class PlayerModel extends MySQL
 
     public static function savePosition($place, $galaxy)
     {
-        // var_dump(empty($galaxy));
+        // var_dump($galaxy);
+        // die();
+        $result = false;
+        $galaxyNumber = (int) $galaxy;
+        $testEmptyGalaxy = null;
+        if ($galaxy == "0" || !empty($galaxy)) {
+            $testEmptyGalaxy = 'not null';
+        }
+        // var_dump($galaxy);
+        // var_dump(!empty($galaxy));
         // die();
         $rqt = "UPDATE player set place = :place, galaxy = :galaxy WHERE id = 1";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
@@ -39,20 +48,29 @@ class PlayerModel extends MySQL
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':place', $place);
 
-            $statement->bindParam(':galaxy', $galaxy);
+            $statement->bindParam(':galaxy', $galaxyNumber);
 
-            if (!empty($galaxy)) {
+            if (!empty($testEmptyGalaxy)) {
+                // print_r('test');
+                // die();
                 //On l'execute
-                $statement->execute();
+                $result = $statement->execute();
             }
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
         // var_dump($result);
         // die();
-        return [
-            'status' => '200',
-            'data' => 'Emplacement sauvegardé'
-        ];
+        if ($result) {
+            return [
+                'status' => '200',
+                'data' => 'Emplacement sauvegardé'
+            ];
+        } else {
+            return [
+                'status' => '201',
+                'data' => 'Emplacement non sauvegardé car galaxie non spécifiée'
+            ];
+        }
     }
 }

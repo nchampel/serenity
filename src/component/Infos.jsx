@@ -17,13 +17,14 @@ const Infos = (props) => {
         choiceGalaxy,
         galaxy,
     } = props;
-    const takeCrystalCallback = useCallback(async (place) => {
+    const takeCrystalCallback = useCallback(async (place, galaxy) => {
         try {
             // console.log(place);
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             const data = await apiRef.takeCrystal(
                 process.env.REACT_APP_URL + "App/Calls/takeCrystal.php",
-                place
+                place,
+                galaxy
             );
             if (data.status === 200) {
                 getData();
@@ -53,8 +54,8 @@ const Infos = (props) => {
             console.error(err);
         }
     }, []);
-    const takeCrystal = (place) => {
-        takeCrystalCallback(place);
+    const takeCrystal = (place, galaxy) => {
+        takeCrystalCallback(place, galaxy);
     };
     const discardCrystal = (place) => {
         discardCrystalCallback(place);
@@ -140,6 +141,9 @@ const Infos = (props) => {
                             variant="outlined"
                             onClick={() => discardCrystal()}
                             sx={{
+                                "&:hover": {
+                                    borderWidth: 2,
+                                },
                                 borderWidth: 2,
                                 color: "orange",
                                 display: "block",
@@ -189,8 +193,11 @@ const Infos = (props) => {
                         )}
                         <Button
                             variant="outlined"
-                            onClick={() => takeCrystal(place)}
+                            onClick={() => takeCrystal(place, galaxy)}
                             sx={{
+                                "&:hover": {
+                                    borderWidth: 2,
+                                },
                                 borderWidth: 2,
                                 color: "orange",
                                 display: "block",
@@ -205,7 +212,7 @@ const Infos = (props) => {
                 )}
                 <Button
                     variant="contained"
-                    onClick={() => takeCrystal(place)}
+                    onClick={() => takeCrystal(place, galaxy)}
                     sx={{
                         "&:hover": {
                             backgroundColor: "#ff781f",

@@ -34,7 +34,7 @@ class LevelsModel extends MySQL
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {
-            if ($galaxy !== 0) {
+            if ($galaxy !== "0") {
                 $player = 0;
             } else {
                 $player = 1;
@@ -72,28 +72,35 @@ class LevelsModel extends MySQL
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':type', $levelType);
             //On l'execute
-            $statement->execute();
+            $result = $statement->execute();
             // $result = $statement->fetch(\PDO::FETCH_ASSOC);
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
         // var_dump($result);
         // die();
-        return [
-            'status' => '200',
-            'data' => 'Niveau augmenté'
-        ];
+        if ($result) {
+            return [
+                'status' => '200',
+                'data' => 'Niveau augmenté'
+            ];
+        } else {
+            return [
+                'status' => '201',
+                'data' => 'Niveau non augmenté'
+            ];
+        }
     }
 
     public static function updateLevelPlanet($type, $planet)
     {
-        $levels = self::fetchLevelsPlanet($planet);
+        $levels = self::fetchLevelsPlanet($planet, 0);
 
         $levelType = $levels['data'][$type];
         // print_r($levelType);
         // die();
         $levelType++;
-        $rqt = "UPDATE crystal_planets_levels SET " . $type . " = :type WHERE player_id = 1 AND planet = :planet";
+        $rqt = "UPDATE crystal_planets_levels SET " . $type . " = :type WHERE player_id = 1 AND planet = :planet AND galaxy = 0";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {
@@ -101,29 +108,43 @@ class LevelsModel extends MySQL
             $statement->bindParam(':type', $levelType);
             $statement->bindParam(':planet', $planet);
             //On l'execute
-            $statement->execute();
+            $result = $statement->execute();
             // $result = $statement->fetch(\PDO::FETCH_ASSOC);
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
         // var_dump($result);
         // die();
-        return [
-            'status' => '200',
-            'data' => 'Niveau augmenté'
-        ];
+        if ($result) {
+            return [
+                'status' => '200',
+                'data' => 'Niveau augmenté'
+            ];
+        } else {
+            return [
+                'status' => '201',
+                'data' => 'Niveau non augmenté'
+            ];
+        }
     }
 
-    public static function fetchCrystalLevels($planet)
+    public static function fetchCrystalLevels($planet, $galaxy)
     {
         // print_r($levelType);
         // die();
-        $rqt = "SELECT crystal_level, crystal_stockage_level FROM crystal_planets_levels WHERE player_id = 1 AND planet = :planet";
+        if ($galaxy !== "0") {
+            $player = 0;
+        } else {
+            $player = 1;
+        }
+        $rqt = "SELECT crystal_level, crystal_stockage_level FROM crystal_planets_levels WHERE player_id = :player AND planet = :planet AND galaxy = :galaxy";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':planet', $planet);
+            $statement->bindParam(':galaxy', $galaxy);
+            $statement->bindParam(':player', $player);
             //On l'execute
             $statement->execute();
             $result = $statement->fetch(\PDO::FETCH_ASSOC);

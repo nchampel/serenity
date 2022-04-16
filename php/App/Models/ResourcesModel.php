@@ -39,17 +39,24 @@ class ResourcesModel extends MySQL
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':energy', $energy);
             //On l'execute
-            $statement->execute();
+            $result = $statement->execute();
             // $result = $statement->fetch(\PDO::FETCH_ASSOC);
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
         // var_dump($result);
         // die();
-        return [
-            'status' => '200',
-            'data' => 'Yahoo !'
-        ];
+        if ($result) {
+            return [
+                'status' => '200',
+                'data' => 'Yahoo !'
+            ];
+        } else {
+            return [
+                'status' => '201',
+                'data' => 'Energie non mise à jour'
+            ];
+        }
     }
 
     public static function saveEnergyAfterTravel($travel)
@@ -69,17 +76,24 @@ class ResourcesModel extends MySQL
                 $statement = Parent::getInstance()->prepare($rqt);
                 $statement->bindParam(':updatedEnergy', $updatedEnergy);
                 //On l'execute
-                $statement->execute();
+                $result = $statement->execute();
                 // $result = $statement->fetch(\PDO::FETCH_ASSOC);
             } catch (\Exception $exception) {
                 echo $exception->getMessage();
             }
             // var_dump($result);
             // die();
-            return [
-                'status' => '200',
-                'data' => 'Energie de voyage utilisée'
-            ];
+            if ($result) {
+                return [
+                    'status' => '200',
+                    'data' => 'Energie de voyage utilisée'
+                ];
+            } else {
+                return [
+                    'status' => '201',
+                    'data' => 'Energie de voyage non mise à jour'
+                ];
+            }
         }
     }
 
@@ -113,10 +127,15 @@ class ResourcesModel extends MySQL
         }
     }
 
-    public static function incrementCrystal($quantity, $limit, $planet)
+    public static function incrementCrystal($quantity, $limit, $planet, $galaxy)
     {
-        $crystalDB = self::fetchCrystalPlanet($planet);
+        $crystalDB = self::fetchCrystalPlanet($planet, $galaxy);
         $crystal = $crystalDB['data']['crystal'];
+        // var_dump($crystal);
+        // var_dump($quantity);
+        // var_dump($limit);
+        // var_dump($planet);
+        // die();
         // $levelModel = new LevelsModel();
         // $levels = $levelModel::fetchLevelsStarship();
         // $levelEnergyRegeneration = $levels['data']['energy_regeneration_level'];
@@ -135,7 +154,7 @@ class ResourcesModel extends MySQL
             }
             // var_dump((int) $updatedEnergy);
             // die();
-            return self::updateCrystalPlanet($updatedCrystal, $planet);
+            return self::updateCrystalPlanet($updatedCrystal, $planet, $galaxy);
         } else {
             return [
                 'status' => '201'
@@ -143,27 +162,45 @@ class ResourcesModel extends MySQL
         }
     }
 
-    public static function updateCrystalPlanet($crystal, $planet)
+    public static function updateCrystalPlanet($crystal, $planet, $galaxy)
     {
-        $rqt = "UPDATE crystal_planets_levels SET crystal = :crystal WHERE player_id = 1 AND planet = :planet";
+        if ($galaxy !== "0") {
+            $player = 0;
+        } else {
+            $player = 1;
+        }
+        // var_dump($crystal);
+        // var_dump($galaxy);
+        // var_dump($planet);
+        // die();
+        $rqt = "UPDATE crystal_planets_levels SET crystal = :crystal WHERE player_id = :player AND planet = :planet AND galaxy = :galaxy";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':crystal', $crystal);
             $statement->bindParam(':planet', $planet);
+            $statement->bindParam(':galaxy', $galaxy);
+            $statement->bindParam(':player', $player);
             //On l'execute
-            $statement->execute();
+            $result = $statement->execute();
             // $result = $statement->fetch(\PDO::FETCH_ASSOC);
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
         // var_dump($result);
         // die();
-        return [
-            'status' => '200',
-            'data' => 'Cristal mis à jour'
-        ];
+        if ($result) {
+            return [
+                'status' => '200',
+                'data' => 'Cristal mis à jour'
+            ];
+        } else {
+            return [
+                'status' => '201',
+                'data' => 'Cristal non mis à jour'
+            ];
+        }
     }
 
     public static function updateCrystalStarship($crystal)
@@ -174,17 +211,24 @@ class ResourcesModel extends MySQL
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':crystal', $crystal);
             //On l'execute
-            $statement->execute();
+            $result = $statement->execute();
             // $result = $statement->fetch(\PDO::FETCH_ASSOC);
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
         // var_dump($result);
         // die();
-        return [
-            'status' => '200',
-            'data' => 'Cristal mis à jour'
-        ];
+        if ($result) {
+            return [
+                'status' => '200',
+                'data' => 'Cristal mis à jour'
+            ];
+        } else {
+            return [
+                'status' => '201',
+                'data' => 'Cristal non mis à jour'
+            ];
+        }
     }
 
     public static function getEnergyTravel($travel)
@@ -220,12 +264,13 @@ class ResourcesModel extends MySQL
         } else {
             $player = 0;
         }
-        $rqt = "SELECT crystal, crystal_level, crystal_stockage_level FROM crystal_planets_levels WHERE planet = :planet AND player_id = :player";
+        $rqt = "SELECT crystal, crystal_level, crystal_stockage_level, image FROM crystal_planets_levels WHERE planet = :planet AND galaxy =:galaxy AND player_id = :player";
         //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
         //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
         try {
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':planet', $planet);
+            $statement->bindParam(':galaxy', $galaxy);
             $statement->bindParam(':player', $player);
             //On l'execute
             $statement->execute();
