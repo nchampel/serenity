@@ -39,7 +39,7 @@ try {
     $planetCrystal = $planetCrystalDB['data']['crystal'];
     // on détermine le cristal nécessaire pour le niveau suivant
     $LevelModel = new LevelsModel();
-    $levelCrystalDB = $LevelModel::fetchLevelsPlanet($planet, 0);
+    $levelCrystalDB = $LevelModel::fetchLevelsPlanet($planet, "0");
     $levelCrystal = $levelCrystalDB['data'][$type];
     $planetModel = new PlanetsModel();
     $crystalNeededDB = $planetModel::fetchInfos($levelCrystal, $planetType);
@@ -47,9 +47,12 @@ try {
     if ($planetCrystal >= $crystalNeeded) {
         // la fonction ajoute un niveau et met à jour le champ
         $updatedLevel = $LevelModel::updateLevelPlanet($type, $planet);
+        // print_r($updatedLevel);
         // on met à jour le cristal sur la planète
         $crystal = $planetCrystal - $crystalNeeded;
-        $data = $ResourceModel::updateCrystalPlanet($crystal, $planet);
+        // echo $crystal;
+        // die();
+        $data = $ResourceModel::updateCrystalPlanet($crystal, $planet, "0");
         // print_r($data);
         // die();
         $isEnoughCrystal = true;

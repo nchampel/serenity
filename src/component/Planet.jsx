@@ -138,7 +138,7 @@ function Planet(props) {
                 <div className="loading">Chargement</div>
             ) : (
                 <>
-                    <Typography
+                    <h3
                         style={{
                             fontSize: 36,
                             color: "white",
@@ -151,7 +151,7 @@ function Planet(props) {
                                   planet.galaxyName
                               })`
                             : `Planète ${place} (${planet.galaxyName})`}
-                    </Typography>
+                    </h3>
                     <Box
                         style={{
                             backgroundImage: `url('${url}')`,

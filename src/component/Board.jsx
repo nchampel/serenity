@@ -22,7 +22,8 @@ function Board(props) {
         try {
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             const data = await apiRef.addLevelStarship(
-                process.env.REACT_APP_URL + "App/Calls/addLevelStarship.php",
+                process.env.REACT_APP_URL +
+                    "App/CallsLevel/addLevelStarship.php",
                 type,
                 place
             );
@@ -45,16 +46,17 @@ function Board(props) {
         try {
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             const data = await apiRef.addLevelPlanet(
-                process.env.REACT_APP_URL + "App/Calls/addLevelPlanet.php",
+                process.env.REACT_APP_URL + "App/CallsLevel/addLevelPlanet.php",
                 type,
                 place
             );
             // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
-            console.log(data);
+            // console.log(data);
             if (data.status === 201) {
                 toast.error("Pas assez de cristaux");
             }
         } catch (err) {
+            // console.log(place);
             console.error(err);
         }
     }, []);
@@ -141,10 +143,10 @@ function Board(props) {
         switch (type) {
             case "crystal_level":
                 // console.log(stockCrystal);
-                console.log(
-                    parseInt(planet.stockCrystalPlanet, 10) >=
-                        parseInt(planet.generationCrystalNeeded, 10)
-                );
+                // console.log(
+                //     parseInt(planet.stockCrystalPlanet, 10) >=
+                //         parseInt(planet.generationCrystalNeeded, 10)
+                // );
                 if (
                     parseInt(planet.stockCrystalPlanet, 10) >=
                     parseInt(planet.generationCrystalNeeded, 10)
@@ -213,6 +215,7 @@ function Board(props) {
                                 margin: "auto",
                                 marginBottom: "10px",
                                 width: "300px",
+                                fontFamily: "Montserrat",
                             }}
                         >
                             Augmenter la régénération
@@ -246,6 +249,7 @@ function Board(props) {
                                 margin: "auto",
                                 marginBottom: "10px",
                                 width: "300px",
+                                fontFamily: "Montserrat",
                             }}
                         >
                             Augmenter le stockage
@@ -278,6 +282,7 @@ function Board(props) {
                                 margin: "auto",
                                 marginBottom: "10px",
                                 width: "300px",
+                                fontFamily: "Montserrat",
                             }}
                         >
                             Augmenter la puissance
@@ -310,6 +315,7 @@ function Board(props) {
                                 margin: "auto",
                                 marginBottom: "10px",
                                 width: "300px",
+                                fontFamily: "Montserrat",
                             }}
                         >
                             Augmenter la génération
@@ -342,6 +348,7 @@ function Board(props) {
                                 margin: "auto",
                                 marginBottom: "10px",
                                 width: "300px",
+                                fontFamily: "Montserrat",
                             }}
                         >
                             Augmenter le stockage

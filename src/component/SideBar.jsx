@@ -8,7 +8,7 @@ import {
     forwardRef,
 } from "react";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { apiRef } from "../api/apiRef";
 import useMounted from "react-use-mounted";
 import {
@@ -52,7 +52,7 @@ function SideBar(props) {
     const [open, setOpen] = useState(false);
     const [infosPlanetsGalaxy, setInfosPlanetsGalaxy] = useState([]);
     const [energyGalaxy, setEnergyGalaxy] = useState(0);
-    console.log(path.split("/")[1]);
+    // console.log(path.split("/")[1]);
     // let {isOnEarth, isOnMoon} = props;
     // console.log(isOnEarth);
     // const handleDisplayEarth = () => {
@@ -68,7 +68,7 @@ function SideBar(props) {
         try {
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             const dataEnergy = await apiRef.getData(
-                process.env.REACT_APP_URL + "App/Calls/getEnergy.php"
+                process.env.REACT_APP_URL + "App/CallsEnergy/getEnergy.php"
             );
             // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
             // console.log(typeof dataLevels.energy_regeneration_level);
@@ -89,7 +89,8 @@ function SideBar(props) {
             try {
                 // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
                 const data = await apiRef.getEnergyTravel(
-                    process.env.REACT_APP_URL + "App/Calls/getEnergyTravel.php",
+                    process.env.REACT_APP_URL +
+                        "App/CallsEnergy/getEnergyTravel.php",
                     travel
                 );
 
@@ -111,7 +112,7 @@ function SideBar(props) {
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             await apiRef.saveEnergyAfterTravel(
                 process.env.REACT_APP_URL +
-                    "App/Calls/saveEnergyAfterTravel.php",
+                    "App/CallsEnergy/saveEnergyAfterTravel.php",
                 travel
             );
             // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
@@ -146,7 +147,13 @@ function SideBar(props) {
     // navigate("/terre", { replace: true });
 
     const substractEnergyTravel = (galaxy, departure, arrival) => {
-        if (galaxy === "0") {
+        if (path === "/fight") {
+            // const linkArrival = `/${galaxy}/` + arrival;
+            // navigate(linkArrival, { replace: true });
+            // setPlace(arrival);
+            // savePosition(arrival, 0);
+            toast.error("Impossible de tricher !", { duration: 10000 });
+        } else if (galaxy === "0") {
             const travel = departure + "-" + arrival;
             getEnergyTravel(travel).then((energyTravelResponse) => {
                 // console.log(energyTravelResponse);

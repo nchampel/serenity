@@ -54,7 +54,7 @@ try {
             $updatedLevel = $LevelModel::updateLevelStarship($type);
             // on met à jour le cristal sur Terre
             $crystal = $crystalOnPlanet - $crystalNeeded;
-            $data = $ResourceModel::updateCrystalPlanet($crystal, $place);
+            $data = $ResourceModel::updateCrystalPlanet($crystal, $place, "0");
             // print_r($data);
             // die();
             $isEnoughCrystal = true;

@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import { useCallback } from "react";
 import { apiRef } from "../api/apiRef";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Infos = (props) => {
     const {
@@ -17,12 +18,13 @@ const Infos = (props) => {
         choiceGalaxy,
         galaxy,
     } = props;
+    const navigate = useNavigate();
     const takeCrystalCallback = useCallback(async (place, galaxy) => {
         try {
             // console.log(place);
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             const data = await apiRef.takeCrystal(
-                process.env.REACT_APP_URL + "App/Calls/takeCrystal.php",
+                process.env.REACT_APP_URL + "App/CallsCrystal/takeCrystal.php",
                 place,
                 galaxy
             );
@@ -43,7 +45,8 @@ const Infos = (props) => {
             // console.log(place);
             // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
             await apiRef.discardCrystal(
-                process.env.REACT_APP_URL + "App/Calls/discardCrystal.php"
+                process.env.REACT_APP_URL +
+                    "App/CallsCrystal/discardCrystal.php"
             );
 
             getData();
@@ -150,6 +153,7 @@ const Infos = (props) => {
                                 margin: "auto",
                                 marginTop: "10px",
                                 width: "230px",
+                                fontFamily: "Montserrat",
                             }}
                         >
                             Décharger le cristal
@@ -204,6 +208,7 @@ const Infos = (props) => {
                                 margin: "auto",
                                 marginTop: "10px",
                                 width: "230px",
+                                fontFamily: "Montserrat",
                             }}
                         >
                             Récupérer le cristal
@@ -211,22 +216,42 @@ const Infos = (props) => {
                     </>
                 )}
                 <Button
-                    variant="contained"
-                    onClick={() => takeCrystal(place, galaxy)}
+                    variant="outlined"
+                    onClick={() => navigate("/fight", { replace: true })}
                     sx={{
                         "&:hover": {
-                            backgroundColor: "#ff781f",
+                            borderWidth: 2,
                         },
                         borderWidth: 2,
-                        // backgroundColor: "#7Fff4C",
-                        // backgroundColor: "#55aaee",
-                        backgroundColor: "orange",
-                        // color: "#fd6c9e",
-                        color: "green",
+                        color: "orange",
                         display: "block",
                         margin: "auto",
                         marginTop: "10px",
                         width: "230px",
+                        fontFamily: "Montserrat",
+                    }}
+                >
+                    Combattre
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => takeCrystal(place, galaxy)}
+                    sx={{
+                        "&:hover": {
+                            backgroundColor: "#009944",
+                        },
+                        borderWidth: 2,
+                        // backgroundColor: "#7Fff4C",
+                        // backgroundColor: "#55aaee",
+                        backgroundColor: "#11aa55",
+                        // color: "#fd6c9e",
+                        color: "white",
+                        display: "block",
+                        margin: "auto",
+                        marginTop: "10px",
+                        width: "230px",
+                        fontFamily: "Montserrat",
+                        fontWeight: "bold",
                     }}
                     className="button"
                 >

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Calls;
+namespace App\Calls\Energy;
 
 use App\Models\ResourcesModel;
 

@@ -39,6 +39,8 @@ class LevelsModel extends MySQL
             } else {
                 $player = 1;
             }
+            // echo $player;
+            // die();
             $statement = Parent::getInstance()->prepare($rqt);
             $statement->bindParam(':planet', $planet);
 
@@ -94,10 +96,11 @@ class LevelsModel extends MySQL
 
     public static function updateLevelPlanet($type, $planet)
     {
-        $levels = self::fetchLevelsPlanet($planet, 0);
+        $levels = self::fetchLevelsPlanet($planet, "0");
 
         $levelType = $levels['data'][$type];
-        // print_r($levelType);
+        // var_dump($levels);
+        // die();
         // die();
         $levelType++;
         $rqt = "UPDATE crystal_planets_levels SET " . $type . " = :type WHERE player_id = 1 AND planet = :planet AND galaxy = 0";

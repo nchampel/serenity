@@ -199,3 +199,16 @@ finition affichage énergie dans le datagrid. J'ai abandonné l'idée de faire 5
 16/04/2022
 
 travail sur le design datagrid
+
+23/06/2022
+
+après longue absence, correction bug boutons planètes autre que Terre qui n'agissaient plus
+
+24/06/2022
+
+petit travail de design après avoir montré à Alexandre Lorenzo d'Apteed
+début implémentation combat contre PNJ
+
+25/06/2022
+
+ennemi présent au chargement de la page fight

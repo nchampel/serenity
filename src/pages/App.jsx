@@ -14,6 +14,10 @@ import { apiRef } from "../api/apiRef";
 import useMounted from "react-use-mounted";
 import Planet from "../component/Planet";
 import { Toaster } from "react-hot-toast";
+import Panel from "../screens/Panel";
+import SignIn from "../screens/SignIn";
+import PrivateRoute from "../components/PrivateRoute";
+import Fight from "../component/Fight";
 // import { Button } from "@mui/material";
 // import {useNavigation} from '@react-navigation/native';
 
@@ -113,9 +117,9 @@ function App() {
     // getCrystalInfos();
     // }, []);
 
-    // useEffect(() => {
-    //     getGalaxyInfos();
-    // }, [getGalaxyInfos]);
+    useEffect(() => {
+        getGalaxyInfos();
+    }, [getGalaxyInfos]);
     // const [nextCrystalStockageStarship setNextCrystalStockageStarship] = useState(0);
 
     const getInfos = useCallback(
@@ -125,13 +129,13 @@ function App() {
                 // isLoading = true;
                 // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
                 const dataEnergy = await apiRef.getData(
-                    process.env.REACT_APP_URL + "App/Calls/getEnergy.php"
+                    process.env.REACT_APP_URL + "App/CallsEnergy/getEnergy.php"
                 );
                 const dataPlace = await apiRef.getPlace(
                     process.env.REACT_APP_URL + "App/Calls/getPlace.php"
                 );
                 const dataLevels = await apiRef.getLevels(
-                    process.env.REACT_APP_URL + "App/Calls/getLevels.php"
+                    process.env.REACT_APP_URL + "App/CallsLevel/getLevels.php"
                 );
                 // const nextLevelEnergy = dataLevels.energy_regeneration_level + 1;
                 // console.log(nextLevelEnergy);
@@ -271,40 +275,52 @@ function App() {
                             10
                         ),
                     });
-
-                    switch (dataPlace.place) {
-                        case "terre":
-                            // setHome(<Earth energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
-                            navigate(`/${galaxy}/terre`, { replace: true });
-                            break;
-                        case "mars":
-                            navigate(`/${galaxy}/mars`, { replace: true });
-                            // setHome(<Moon
-                            //   energy={parseInt(dataEnergy.energy, 10)}
-                            //   stockage={stockageEnergy}
-                            //   isLoading={isLoading}
-                            //   regeneration={regenerationEnergy}
-                            //   generator={regenerationEnergyLevel}
-                            //   setEnergy={setEnergy}/>);
-                            break;
-                        case "jupiter":
-                            navigate(`/${galaxy}/jupiter`, { replace: true });
-                            break;
-                        case "saturne":
-                            navigate(`/${galaxy}/saturne`, { replace: true });
-                            break;
-                        case "uranus":
-                            navigate(`/${galaxy}/uranus`, { replace: true });
-                            break;
-                        case "neptune":
-                            navigate(`/${galaxy}/neptune`, { replace: true });
-                            break;
-                        default:
-                            navigate(`/${galaxy}/${dataPlace.place}`, {
-                                replace: true,
-                            });
-                            // setHome(null);
-                            break;
+                    if (path.pathname !== "/fight") {
+                        switch (dataPlace.place) {
+                            case "fight":
+                                navigate("/fight", { replace: true });
+                                break;
+                            case "terre":
+                                // setHome(<Earth energy={parseInt(dataEnergy.energy, 10)} stockage={stockageEnergy} isLoading={isLoading} regeneration={regenerationEnergy} generator={regenerationEnergyLevel} />);
+                                navigate(`/${galaxy}/terre`, { replace: true });
+                                break;
+                            case "mars":
+                                navigate(`/${galaxy}/mars`, { replace: true });
+                                // setHome(<Moon
+                                //   energy={parseInt(dataEnergy.energy, 10)}
+                                //   stockage={stockageEnergy}
+                                //   isLoading={isLoading}
+                                //   regeneration={regenerationEnergy}
+                                //   generator={regenerationEnergyLevel}
+                                //   setEnergy={setEnergy}/>);
+                                break;
+                            case "jupiter":
+                                navigate(`/${galaxy}/jupiter`, {
+                                    replace: true,
+                                });
+                                break;
+                            case "saturne":
+                                navigate(`/${galaxy}/saturne`, {
+                                    replace: true,
+                                });
+                                break;
+                            case "uranus":
+                                navigate(`/${galaxy}/uranus`, {
+                                    replace: true,
+                                });
+                                break;
+                            case "neptune":
+                                navigate(`/${galaxy}/neptune`, {
+                                    replace: true,
+                                });
+                                break;
+                            default:
+                                navigate(`/${galaxy}/${dataPlace.place}`, {
+                                    replace: true,
+                                });
+                                // setHome(null);
+                                break;
+                        }
                     }
 
                     setIsLoading(false);
@@ -319,20 +335,6 @@ function App() {
         ]
     );
 
-    //   const addLevelRegenerationEnergy = useCallback(async () => {
-    //     try {
-
-    //         // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
-    //         await apiRef.addLevelStarship(process.env.REACT_APP_URL + 'App/Calls/addLevelStarship.php', 'energy_regeneration_level');
-    //         // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
-    //         // console.log(typeof dataLevels.energy_regeneration_level);
-
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-
-    // }, []);
-
     const getData = useCallback(
         async (energyInfos, starship) => {
             try {
@@ -342,11 +344,12 @@ function App() {
                     process.env.REACT_APP_URL + "App/Calls/getPlace.php"
                 );
                 const dataEnergy = await apiRef.getData(
-                    process.env.REACT_APP_URL + "App/Calls/getEnergy.php"
+                    process.env.REACT_APP_URL + "App/CallsEnergy/getEnergy.php"
                 );
                 // // cristal sur Terre
                 const dataCrystal = await apiRef.getCrystal(
-                    process.env.REACT_APP_URL + "App/Calls/getCrystal.php",
+                    process.env.REACT_APP_URL +
+                        "App/CallsCrystal/getCrystal.php",
                     "terre"
                 );
                 // // cristal sur vaisseau
@@ -356,7 +359,8 @@ function App() {
                 );
                 // // cristal sur planète autre que Terre
                 const dataCrystalPlanet = await apiRef.getCrystal(
-                    process.env.REACT_APP_URL + "App/Calls/getCrystal.php",
+                    process.env.REACT_APP_URL +
+                        "App/CallsCrystal/getCrystal.php",
                     dataPlace.place,
                     dataPlace.galaxy
                 );
@@ -369,7 +373,8 @@ function App() {
                 );
 
                 const dataLevelsPlanet = await apiRef.getLevelsPlanet(
-                    process.env.REACT_APP_URL + "App/Calls/getLevelsPlanet.php",
+                    process.env.REACT_APP_URL +
+                        "App/CallsLevel/getLevelsPlanet.php",
                     dataPlace.place,
                     dataPlace.galaxy
                 );
@@ -420,7 +425,7 @@ function App() {
                 setStockCrystalPlanet(dataCrystalPlanet.crystal);
                 setStockageCrystalPlanet(dataStockagePlanet.quantity);
                 setStockCrystalStarship(dataCrystalStarship.crystal);
-                console.log(dataGenerationCrystalPlanet);
+                // console.log(dataGenerationCrystalPlanet);
                 setEnergyInfos({
                     ...energyInfos,
                     energy: parseInt(dataEnergy.energy, 10),
@@ -486,7 +491,7 @@ function App() {
     }, [starship]);
 
     useEffect(() => {
-        console.log(planet);
+        // console.log(planet);
     }, [planet]);
 
     const getCrystalInfos = useCallback(async () => {
@@ -496,13 +501,13 @@ function App() {
             const dataPlace = await apiRef.getPlace(
                 process.env.REACT_APP_URL + "App/Calls/getPlace.php"
             );
-            console.log(dataPlace);
+            // console.log(dataPlace);
             const dataEnergy = await apiRef.getData(
-                process.env.REACT_APP_URL + "App/Calls/getEnergy.php"
+                process.env.REACT_APP_URL + "App/CallsEnergy/getEnergy.php"
             );
             // cristal sur Terre
             const dataCrystal = await apiRef.getCrystal(
-                process.env.REACT_APP_URL + "App/Calls/getCrystal.php",
+                process.env.REACT_APP_URL + "App/CallsCrystal/getCrystal.php",
                 "terre",
                 0
             );
@@ -512,7 +517,7 @@ function App() {
             );
             // cristal sur planète autre que Terre
             const dataCrystalPlanet = await apiRef.getCrystal(
-                process.env.REACT_APP_URL + "App/Calls/getCrystal.php",
+                process.env.REACT_APP_URL + "App/CallsCrystal/getCrystal.php",
                 dataPlace.place,
                 dataPlace.galaxy
             );
@@ -575,7 +580,8 @@ function App() {
             //     setEnergy(updatedEnergy);
             // }
             getData(energyInfos);
-        }, 60000);
+        }, 600000);
+        // 60000 en temps normal
 
         return () => {
             // Each time a new useEffect is executed, the previous useEffect will be cleaned up
@@ -700,6 +706,18 @@ function App() {
                                 setEnergy={setEnergy}
                                 setPlace={setPlace}/>}
                             /> */}
+                            {/* <Route path="/sign-in" element={<SignIn />} />
+                            <PrivateRoute path="/" element={<Panel />} /> */}
+                            <Route
+                                path={"/fight"}
+                                key={"fight"}
+                                element={
+                                    <Fight
+                                        energyInfos={energyInfos}
+                                        setEnergyInfos={setEnergyInfos}
+                                    />
+                                }
+                            />
                             {planets.map((planetItem) => (
                                 <Route
                                     path={`/${galaxy}/${planetItem}`}
