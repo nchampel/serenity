@@ -47,7 +47,7 @@ function App() {
     const [galaxy, setGalaxy] = useState(0);
     const [choiceGalaxy, setChoiceGalaxy] = useState(null);
     const [energyInfos, setEnergyInfos] = useState({
-        stockageEnergyLevel: 1,
+        stockageEnergyLevel: 0,
         energy: 1,
         regenerationEnergyLevel: 1,
         stockageEnergy: 0,
@@ -549,7 +549,7 @@ function App() {
 
     useEffect(() => {
         getData(energyInfos);
-        if (path.pathname != "/fight") {
+        if (path.pathname !== "/fight") {
             const timer = setInterval(() => {
                 // console.log(energy);
                 // if (energy < stockage) {

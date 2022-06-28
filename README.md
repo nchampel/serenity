@@ -206,7 +206,7 @@ après longue absence, correction bug boutons planètes autre que Terre qui n'ag
 
 24/06/2022
 
-petit travail de design après avoir montré à Alexandre Lorenzo d'Apteed
+petit travail de design après avoir montré à Alex L. d'Apteed
 début implémentation combat contre PNJ
 
 25/06/2022
@@ -216,3 +216,12 @@ ennemi présent au chargement de la page fight
 26/06/2022
 
 il manque l'affichage dans la dialog de résultats des résultats, la redirection quand on perd et le bouton pour revenir sur la planète d'où on vient mais sinon le combat PNJ est fini !
+
+27/06/2022
+
+combat fini (première version) et mis en ligne. bug en ligne non présent en local
+
+28/06/2022
+
+correction du bug (il se servait des données d'ennemi du vaisseau suivant pour faire le combat et pas le vaisseau qu'on voulait combattre)
+je montre le projet demain à Apteed

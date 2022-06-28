@@ -108,6 +108,9 @@ function Fight(props) {
             const data = await apiRef.fight(
                 process.env.REACT_APP_URL + "App/CallsFight/fightNPC.php"
             );
+            await apiRef.setEnemyInfos(
+                process.env.REACT_APP_URL + "App/CallsEnemy/setEnemyInfos.php"
+            );
             // await apiRef.setFight(
             //     process.env.REACT_APP_URL + "App/CallsEnemy/setFight.php"
             // );
@@ -249,7 +252,6 @@ function Fight(props) {
                         onClick={() => {
                             substract1000Energy();
                             fight();
-                            nextEnemy();
                         }}
                         sx={{
                             "&:hover": {
