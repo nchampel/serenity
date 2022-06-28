@@ -2,17 +2,21 @@
 
 namespace App\Calls;
 
-use App\Models\LevelsModel;
-use App\Models\PlanetsModel;
-use App\Models\ResourcesModel;
-use App\Models\EquipmentModel;
-use App\Models\PlayerModel;
+// use App\Models\PlanetsModel;
+// use App\Models\ResourcesModel;
+// use APP\Functions\Functions;
+// use App\Models\EquipmentModel;
+// use App\Models\PlayerModel;
+// use App\Models\LevelsModel;
+use App\Models\FightModel;
 
-include_once('../Models/LevelsModel.php');
-include_once('../Models/EquipmentModel.php');
-include_once('../Models/PlayerModel.php');
+// include_once('../Models/LevelsModel.php');
+// include_once('../Models/EquipmentModel.php');
+// include_once('../Models/PlayerModel.php');
+include_once('../Models/FightModel.php');
 // include_once('../Models/ResourcesModel.php');
 // include_once('../Models/PlanetsModel.php');
+// include_once('../Functions/Functions.php');
 
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Authorization, Accept, Access-Control-Request-Method");
@@ -29,16 +33,13 @@ header("Content-Type: text/html; charset=utf-8");
 // $planet = filter_var($_POST['planet'], FILTER_SANITIZE_STRING);
 try {
 
-    $aleaWeapon = rand(0, 3);
-    $aleaLifePoints = rand(0, 3);
+    $fightModel = new FightModel();
+    $result = $fightModel::saveWinner('Player');
 
-    $playerModel = new PlayerModel();
-    $updateWeapon = $playerModel::updateDataEnemy($aleaWeapon, "weapon_level_NPC");
-    $updateLifePoints = $playerModel::updateDataEnemy($aleaLifePoints, "life_points_level_NPC");
 
-    if ($updateWeapon['status'] && $updateLifePoints['status']) {
+    if ($result['status']) {
         $Response['status'] = 200;
-        $Response['data'] = ['data' => ['life_points_level' => $aleaLifePoints, 'power_level' => $aleaWeapon]];
+        $Response['data'] = ['data' => ['rounds' => $rounds, 'winner' => $winner, 'life_points_starship' => $quantityLifePoints, 'life_points_enemy' => $quantityLifePointsEnemy]];
         $Response['message'] = 'Infos du vaisseau récupérées avec succès.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);

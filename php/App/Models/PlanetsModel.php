@@ -50,4 +50,26 @@ class PlanetsModel extends MySQL
             'data' => $result
         ];
     }
+
+    public static function getEarthCrystal()
+    {
+        $rqt = "SELECT crystal FROM crystal_planets_levels WHERE galaxy = 0 AND player_id = 1";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            $statement->bindParam(':galaxy', $galaxy);
+            //On l'execute
+            $statement->execute();
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        return [
+            'status' => '200',
+            'data' => $result
+        ];
+    }
 }

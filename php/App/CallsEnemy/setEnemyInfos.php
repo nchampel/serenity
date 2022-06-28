@@ -29,54 +29,32 @@ header("Content-Type: text/html; charset=utf-8");
 // $planet = filter_var($_POST['planet'], FILTER_SANITIZE_STRING);
 try {
 
-    // on récupère les niveaux du vaisseau
-    $LevelModel = new LevelsModel();
-    $levelInfosDB = $LevelModel::fetchLevelsStarship();
-    $levelWeapon = $levelInfosDB['data']['weapon_level'];
-    $levelLifePoints = $levelInfosDB['data']['life_points_level'];
+    $aleaWeapon = rand(0, 3);
+    $aleaLifePoints = rand(0, 3);
+    $aleaCrystal = rand(1, 100);
 
-    $equipmentModel = new EquipmentModel();
-    $quantityWeaponDB = $equipmentModel::fetchEquipment($levelWeapon, "weapon_power");
-    $quantityWeapon = $quantityWeaponDB['data']['quantity'];
-    $quantityLifePointsDB = $equipmentModel::fetchEquipment($levelLifePoints, "life_points");
-    $quantityLifePoints = $quantityLifePointsDB['data']['quantity'];
-
-    // on récupère les niveaux PNJ (NPC)
+    if ($aleaCrystal == 1) {
+        $crystal = 10000;
+    } else if ($aleaCrystal > 1 && $aleaCrystal <= 25) {
+        $crystal = 25000;
+    } else if ($aleaCrystal > 25 && $aleaCrystal <= 50) {
+        $crystal = 50000;
+    } else if ($aleaCrystal > 50 && $aleaCrystal <= 75) {
+        $crystal = 75000;
+    } else if ($aleaCrystal > 75 && $aleaCrystal <= 99) {
+        $crystal = 100000;
+    } else if ($aleaCrystal == 100) {
+        $crystal = 1000000;
+    }
 
     $playerModel = new PlayerModel();
-    $dataEnemy = $playerModel::fetchEnemyInfos();
+    $updateWeapon = $playerModel::updateDataEnemy($aleaWeapon, "weapon_level_NPC");
+    $updateLifePoints = $playerModel::updateDataEnemy($aleaLifePoints, "life_points_level_NPC");
+    $updateCrystal = $playerModel::updateDataEnemy($crystal, "crystal_NPC");
 
-    $aleaWeapon = $dataEnemy['data']['weapon_level_NPC'];
-    $aleaLifePoints = $dataEnemy['data']['life_points_level_NPC'];
-
-    switch ($aleaWeapon) {
-        case 0:
-            $quantityWeaponEnemy = 0.9 * $quantityWeapon;
-            break;
-        case 1:
-        case 2:
-            $quantityWeaponEnemy = $quantityWeapon;
-            break;
-        case 3:
-            $quantityWeaponEnemy = 1.1 * $quantityWeapon;
-            break;
-    }
-    switch ($aleaLifePoints) {
-        case 0:
-            $quantityLifePointsEnemy = 0.9 * $quantityLifePoints;
-            break;
-        case 1:
-        case 2:
-            $quantityLifePointsEnemy = $quantityLifePoints;
-            break;
-        case 3:
-            $quantityLifePointsEnemy = 1.1 * $quantityLifePoints;
-            break;
-    }
-
-    if ($quantityWeaponDB['status'] && $quantityLifePointsDB['status']) {
+    if ($updateWeapon['status'] && $updateLifePoints['status'] && $updateCrystal['status']) {
         $Response['status'] = 200;
-        $Response['data'] = ['data' => ['life_points' => $quantityLifePointsEnemy, 'power' => $quantityWeaponEnemy]];
+        $Response['data'] = ['data' => ['life_points_level' => $aleaLifePoints, 'power_level' => $aleaWeapon]];
         $Response['message'] = 'Infos du vaisseau récupérées avec succès.';
         echo (json_encode($Response));
         // $response->code(200)->json($Response);

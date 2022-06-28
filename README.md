@@ -212,3 +212,7 @@ début implémentation combat contre PNJ
 25/06/2022
 
 ennemi présent au chargement de la page fight
+
+26/06/2022
+
+il manque l'affichage dans la dialog de résultats des résultats, la redirection quand on perd et le bouton pour revenir sur la planète d'où on vient mais sinon le combat PNJ est fini !

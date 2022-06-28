@@ -48,7 +48,7 @@ function App() {
     const [choiceGalaxy, setChoiceGalaxy] = useState(null);
     const [energyInfos, setEnergyInfos] = useState({
         stockageEnergyLevel: 1,
-        energy: 0,
+        energy: 1,
         regenerationEnergyLevel: 1,
         stockageEnergy: 0,
         nextStockageEnergy: 0,
@@ -137,8 +137,6 @@ function App() {
                 const dataLevels = await apiRef.getLevels(
                     process.env.REACT_APP_URL + "App/CallsLevel/getLevels.php"
                 );
-                // const nextLevelEnergy = dataLevels.energy_regeneration_level + 1;
-                // console.log(nextLevelEnergy);
                 const dataEnergyRegeneration = await apiRef.getEquipment(
                     process.env.REACT_APP_URL + "App/Calls/getEquipment.php",
                     dataLevels.energy_regeneration_level,
@@ -190,27 +188,15 @@ function App() {
                 // const dataEquipment = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, dataLevels.energy_regeneration_level);
 
                 if (mounted.current) {
-                    // isLoading = false;
-                    // setEnergy(parseInt(dataEnergy.energy, 10));
-                    // setStockageEnergyLevel(parseInt(dataLevels.energy_capacity_level, 10));
-                    // setRegenerationEnergyLevel(parseInt(dataLevels.energy_regeneration_level, 10));
                     setWeaponLevel(parseInt(dataLevels.weapon_level, 10));
                     setLifePointsLevel(
                         parseInt(dataLevels.life_points_level, 10)
                     );
-                    // regenerationEnergyLevel = parseInt(dataLevels.energy_regeneration_level, 10);
-                    // setStockageEnergy(parseInt(dataEnergyCapacity.quantity));
-                    // setCrystalStockageEnergy(parseInt(dataEnergyCapacity.crystal));
                     setStockageCrystal(
                         parseInt(dataCrystalCapacity.quantity, 10)
                     );
-                    // setRegenerationEnergy(parseInt(dataEnergyRegeneration.quantity));
-                    // setNextRegenerationEnergy(dataNextEnergyRegeneration.quantity);
-                    // setCrystalEnergyRegeneration(dataEnergyRegeneration.crystal);
                     setCrystalWeapon(dataWeaponCrystal.crystal);
                     setCrystalLifePoints(dataLifePointsCrystal.crystal);
-                    // regenerationEnergy = parseInt(dataEnergyRegeneration.data.quantity, 10);
-                    // stockageEnergy = parseInt(dataEnergyCapacity.data.quantity, 10);
                     setPlace(dataPlace.place);
                     setGalaxy(dataPlace.galaxy);
                     setEnergyInfos({
@@ -286,13 +272,6 @@ function App() {
                                 break;
                             case "mars":
                                 navigate(`/${galaxy}/mars`, { replace: true });
-                                // setHome(<Moon
-                                //   energy={parseInt(dataEnergy.energy, 10)}
-                                //   stockage={stockageEnergy}
-                                //   isLoading={isLoading}
-                                //   regeneration={regenerationEnergy}
-                                //   generator={regenerationEnergyLevel}
-                                //   setEnergy={setEnergy}/>);
                                 break;
                             case "jupiter":
                                 navigate(`/${galaxy}/jupiter`, {
@@ -570,24 +549,25 @@ function App() {
 
     useEffect(() => {
         getData(energyInfos);
-        const timer = setInterval(() => {
-            // console.log(energy);
-            // if (energy < stockage) {
-            //     let updatedEnergy = parseInt(energy, 10) + regeneration;
-            //     if (updatedEnergy > stockage){
-            //         updatedEnergy = stockage;
-            //     }
-            //     setEnergy(updatedEnergy);
-            // }
-            getData(energyInfos);
-        }, 600000);
-        // 60000 en temps normal
-
-        return () => {
-            // Each time a new useEffect is executed, the previous useEffect will be cleaned up
-            // This function will be called to clear the previous setInterval timer
-            clearInterval(timer);
-        };
+        if (path.pathname != "/fight") {
+            const timer = setInterval(() => {
+                // console.log(energy);
+                // if (energy < stockage) {
+                //     let updatedEnergy = parseInt(energy, 10) + regeneration;
+                //     if (updatedEnergy > stockage){
+                //         updatedEnergy = stockage;
+                //     }
+                //     setEnergy(updatedEnergy);
+                // }
+                getData(energyInfos);
+            }, 600000);
+            // 60000 en temps normal
+            return () => {
+                // Each time a new useEffect is executed, the previous useEffect will be cleaned up
+                // This function will be called to clear the previous setInterval timer
+                clearInterval(timer);
+            };
+        }
     }, [energyInfos.energy]);
 
     // useEffect(() => {

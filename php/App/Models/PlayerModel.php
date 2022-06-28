@@ -124,4 +124,50 @@ class PlayerModel extends MySQL
             'data' => $result
         ];
     }
+
+    public static function setNotFight()
+    {
+        $rqt = "UPDATE player SET has_fight = 0 WHERE id = 1";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            // $statement->bindParam(':id', $id);
+            //On l'execute
+            $result = $statement->execute();
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        if ($result) {
+            return [
+                'status' => '200',
+                'data' => $result
+            ];
+        }
+    }
+
+    public static function setFight()
+    {
+        $rqt = "UPDATE player SET has_fight = 1 WHERE id = 1";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            // $statement->bindParam(':id', $id);
+            //On l'execute
+            $result = $statement->execute();
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        if ($result) {
+            return [
+                'status' => '200',
+                'data' => $result
+            ];
+        }
+    }
 }

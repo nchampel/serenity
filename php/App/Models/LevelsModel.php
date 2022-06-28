@@ -94,6 +94,35 @@ class LevelsModel extends MySQL
         }
     }
 
+    public static function updateLevelStarshipDestroyed($type)
+    {
+
+        $rqt = "UPDATE equipment_levels SET " . $type . " = 1 WHERE player_id = 1";
+        //$rqt = "insert into player (pseudo, town_food) values (:pseudo, '100')";
+        //On prépare notre requête. ça nous renvoie un objet qui est notre requête préparée prête à être executée
+        try {
+            $statement = Parent::getInstance()->prepare($rqt);
+            //On l'execute
+            $result = $statement->execute();
+            // $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
+        // var_dump($result);
+        // die();
+        if ($result) {
+            return [
+                'status' => '200',
+                'data' => 'Niveau augmenté'
+            ];
+        } else {
+            return [
+                'status' => '201',
+                'data' => 'Niveau non augmenté'
+            ];
+        }
+    }
+
     public static function updateLevelPlanet($type, $planet)
     {
         $levels = self::fetchLevelsPlanet($planet, "0");

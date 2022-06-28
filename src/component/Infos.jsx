@@ -63,6 +63,17 @@ const Infos = (props) => {
     const discardCrystal = (place) => {
         discardCrystalCallback(place);
     };
+
+    const handleStarshipDestroyed = useCallback(async () => {
+        try {
+            await apiRef.handleStarshipDestroyed(
+                process.env.REACT_APP_URL +
+                    "App/Calls/handleStarshipDestroyed.php"
+            );
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
     // console.log(energyInfos);
     return (
         <Box>
@@ -217,7 +228,10 @@ const Infos = (props) => {
                 )}
                 <Button
                     variant="outlined"
-                    onClick={() => navigate("/fight", { replace: true })}
+                    onClick={() => {
+                        handleStarshipDestroyed();
+                        navigate("/fight", { replace: true });
+                    }}
                     sx={{
                         "&:hover": {
                             borderWidth: 2,
