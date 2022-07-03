@@ -229,7 +229,7 @@ const Infos = (props) => {
                 <Button
                     variant="outlined"
                     onClick={() => {
-                        handleStarshipDestroyed();
+                        // handleStarshipDestroyed();
                         navigate("/fight", { replace: true });
                     }}
                     sx={{

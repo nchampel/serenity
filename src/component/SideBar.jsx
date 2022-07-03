@@ -21,6 +21,7 @@ import {
     DialogTitle,
     Slide,
     stepLabelClasses,
+    Tooltip,
 } from "@mui/material";
 import { DataGrid, frFR } from "@mui/x-data-grid";
 
@@ -45,13 +46,18 @@ function SideBar(props) {
         choiceGalaxy,
         setChoiceGalaxy,
         setGalaxy,
+        setIsLoading,
     } = props;
     const navigate = useNavigate();
     const mounted = useMounted();
     const [energyTravel, setEnergyTravel] = useState(0);
     const [open, setOpen] = useState(false);
     const [infosPlanetsGalaxy, setInfosPlanetsGalaxy] = useState([]);
+    const [infosPlanetsGalaxyTooltip, setInfosPlanetsGalaxyTooltip] = useState(
+        []
+    );
     const [energyGalaxy, setEnergyGalaxy] = useState(0);
+    const [isLoadingTooltip, setIsLoadingTooltip] = useState(true);
     // console.log(path.split("/")[1]);
     // let {isOnEarth, isOnMoon} = props;
     // console.log(isOnEarth);
@@ -93,9 +99,15 @@ function SideBar(props) {
                         "App/CallsEnergy/getEnergyTravel.php",
                     travel
                 );
-
+                const dataITooltipPlanets =
+                    await apiRef.getPlanetsInfosForSidebar(
+                        process.env.REACT_APP_URL +
+                            "App/Calls/getPlanetsInfosForSidebar.php"
+                    );
+                console.log(dataITooltipPlanets);
                 if (mounted.current) {
                     // console.log(data.transport_energy);
+                    setInfosPlanetsGalaxyTooltip(dataITooltipPlanets);
                     setEnergyTravel(parseInt(data.transport_energy, 10));
                     return parseInt(data.transport_energy, 10);
                 }
@@ -105,6 +117,30 @@ function SideBar(props) {
         },
         [mounted]
     );
+
+    const getTooltipInfos = useCallback(
+        async (travel) => {
+            try {
+                const dataITooltipPlanets =
+                    await apiRef.getPlanetsInfosForSidebar(
+                        process.env.REACT_APP_URL +
+                            "App/Calls/getPlanetsInfosForSidebar.php"
+                    );
+                // console.log(dataITooltipPlanets);
+                if (mounted.current) {
+                    // console.log(data.transport_energy);
+                    setInfosPlanetsGalaxyTooltip(dataITooltipPlanets);
+                    setIsLoadingTooltip(false);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        },
+        [mounted]
+    );
+    useEffect(() => {
+        getTooltipInfos();
+    }, [getTooltipInfos]);
 
     const saveEnergyAfterTravel = useCallback(async (travel) => {
         try {
@@ -132,6 +168,7 @@ function SideBar(props) {
                     "App/Calls/getDataPlanetsGalaxy.php",
                 choiceGalaxy
             );
+
             // const dataEnergyCapacity = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, 'energy_capacity');
             // console.log(data);
             setInfosPlanetsGalaxy(data);
@@ -147,7 +184,7 @@ function SideBar(props) {
     // navigate("/terre", { replace: true });
 
     const substractEnergyTravel = (galaxy, departure, arrival) => {
-        if (path === "/fight") {
+        if (path === "/fight" || path === "/fight/details") {
             // const linkArrival = `/${galaxy}/` + arrival;
             // navigate(linkArrival, { replace: true });
             // setPlace(arrival);
@@ -166,11 +203,12 @@ function SideBar(props) {
                     saveEnergyAfterTravel(travel);
                     // pour mettre à jour l'énergie, le setenergy ici ne fonctionne pas après le refresh de la page, mais les fois d'après oui
                     getEnergy();
-                    navigate(linkArrival, { replace: true });
+                    getCrystalInfos();
+
                     // getData();
                     setPlace(arrival);
                     savePosition(arrival, 0);
-                    getCrystalInfos();
+                    navigate(linkArrival, { replace: true });
                 } else {
                     const linkDeparture = "/0/" + departure;
                     toast.error(
@@ -236,39 +274,12 @@ function SideBar(props) {
         return <Slide direction="down" ref={ref} {...props} />;
     });
 
-    // const rows = [
-    //   { id: 1, col1: 'Hello', col2: 'World' },
-    //   { id: 2, col1: 'DataGridPro', col2: 'is Awesome' },
-    //   { id: 3, col1: 'MUI', col2: 'is Amazing' },
-    // ];
     const rows = [];
 
     infosPlanetsGalaxy.forEach((planet) => {
         let energyTravel = 0;
-        // let realNumberPlanet = 1;
-        // if (parseInt(path.split("/")[2], 10) === 1) {
-        //     realNumberPlanet = 500;
-        // } else {
-        //     realNumberPlanet = parseInt(path.split("/")[2], 10);
-        // }
-        if (
-            parseInt(planet.planet, 10) > parseInt(path.split("/")[2], 10) /*&&
-            parseInt(planet.planet, 10) + parseInt(path.split("/")[2], 10) <=
-                250*/
-        ) {
-            // if (parseInt(planet.planet, 10) + parseInt(path.split("/")[2]) >= 250) {
-            //     energyTravel = Math.abs(
-            //         (500 -
-            //             parseInt(planet.planet, 10) -
-            //             parseInt(path.split("/")[2], 10)) *
-            //             50
-            //     );
-            // } else {
-            //     energyTravel =
-            //         (parseInt(planet.planet, 10) +
-            //             parseInt(path.split("/")[2], 10)) *
-            //         50;
-            // }
+
+        if (parseInt(planet.planet, 10) > parseInt(path.split("/")[2], 10)) {
             energyTravel =
                 (parseInt(planet.planet, 10) -
                     parseInt(path.split("/")[2], 10)) *
@@ -499,107 +510,217 @@ function SideBar(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <nav>
-                {/* <Link className="link" to="/">Accueil</Link> */}
-                <h3 style={{ color: "#11aa55" }}>Système solaire</h3>
-                {path !== "/0/terre" && (
-                    <div
-                        className="link"
-                        onClick={() => {
-                            substractEnergyTravel(galaxy, place, "terre");
-                            setGalaxy("0");
-                        }} /*onClick={handleDisplayEarth}*/
-                    >
-                        Terre
-                    </div>
-                )}
-                {path !== "/0/mars" && (
-                    <div
-                        className="link"
-                        onClick={() => {
-                            substractEnergyTravel(galaxy, place, "mars");
-                            setGalaxy("0");
-                        }} /*onClick={handleDisplayMoon}*/
-                    >
-                        Mars
-                    </div>
-                )}
-                {path !== "/0/jupiter" && (
-                    <div
-                        className="link"
-                        onClick={() => {
-                            substractEnergyTravel(galaxy, place, "jupiter");
-                            setGalaxy("0");
-                        }}
-                    >
-                        Jupiter
-                    </div>
-                )}
-                {path !== "/0/saturne" && (
-                    <div
-                        className="link"
-                        onClick={() => {
-                            substractEnergyTravel(galaxy, place, "saturne");
-                            setGalaxy("0");
-                        }}
-                    >
-                        Saturne
-                    </div>
-                )}
-                {path !== "/0/uranus" && (
-                    <div
-                        className="link"
-                        onClick={() => {
-                            substractEnergyTravel(galaxy, place, "uranus");
-                            setGalaxy("0");
-                        }}
-                    >
-                        Uranus
-                    </div>
-                )}
-                {path !== "/0/neptune" && (
-                    <div
-                        className="link"
-                        onClick={() => {
-                            substractEnergyTravel(galaxy, place, "neptune");
-                            setGalaxy("0");
-                        }}
-                    >
-                        Neptune
-                    </div>
-                )}
-                {energyInfos.energy >= 800000 && (
-                    <>
-                        <div style={{ height: "20px" }}></div>
-                        <h3 style={{ color: "#11aa55" }}>Galaxies</h3>
+            {!isLoadingTooltip && (
+                <nav>
+                    {/* <Link className="link" to="/">Accueil</Link> */}
+                    <h3 style={{ color: "#11aa55" }}>Système solaire</h3>
+                    {path !== "/0/terre" ? (
                         <div
                             className="link"
                             onClick={() => {
-                                setOpen(true);
-                                setChoiceGalaxy(1);
-                                getDataPlanetsGalaxy(1);
-                                getGalaxyInfos(1);
-                            }}
+                                setIsLoading(true);
+                                substractEnergyTravel(galaxy, place, "terre");
+                                setGalaxy("0");
+                            }} /*onClick={handleDisplayEarth}*/
                         >
-                            Andromède
+                            Terre
                         </div>
-                    </>
-                )}
-                {energyInfos.energy >= 800000 && (
-                    <>
-                        <div
-                            className="link"
-                            onClick={() => {
-                                setOpen(true);
-                                setChoiceGalaxy(2);
-                                getDataPlanetsGalaxy(2);
-                            }}
-                        >
-                            Roue de chariot
-                        </div>
-                    </>
-                )}
-            </nav>
+                    ) : (
+                        <div className="linkDesactived">Terre</div>
+                    )}
+                    <Tooltip
+                        title={`Cristaux : + 
+                        ${String(
+                            infosPlanetsGalaxyTooltip.mars.regeneration * 60
+                        ).replace(
+                            /(.)(?=(\d{3})+$)/g,
+                            "$1 "
+                        )}/h Stock : ${String(
+                            infosPlanetsGalaxyTooltip.mars.stockage
+                        ).replace(/(.)(?=(\d{3})+$)/g, "$1 ")}`}
+                        // title="test"
+                        placement="right"
+                    >
+                        {path !== "/0/mars" ? (
+                            <div
+                                className="link"
+                                onClick={() => {
+                                    setIsLoading(true);
+                                    substractEnergyTravel(
+                                        galaxy,
+                                        place,
+                                        "mars"
+                                    );
+                                    setGalaxy("0");
+                                }} /*onClick={handleDisplayMoon}*/
+                            >
+                                Mars
+                            </div>
+                        ) : (
+                            <div className="linkDesactived">Mars</div>
+                        )}
+                    </Tooltip>
+                    <Tooltip
+                        title={`Cristaux : + 
+                        ${String(
+                            infosPlanetsGalaxyTooltip.jupiter.regeneration * 60
+                        ).replace(
+                            /(.)(?=(\d{3})+$)/g,
+                            "$1 "
+                        )}/h Stock : ${String(
+                            infosPlanetsGalaxyTooltip.jupiter.stockage
+                        ).replace(/(.)(?=(\d{3})+$)/g, "$1 ")}`}
+                        // title="test"
+                        placement="right"
+                    >
+                        {path !== "/0/jupiter" ? (
+                            <div
+                                className="link"
+                                onClick={() => {
+                                    setIsLoading(true);
+                                    substractEnergyTravel(
+                                        galaxy,
+                                        place,
+                                        "jupiter"
+                                    );
+                                    setGalaxy("0");
+                                }}
+                            >
+                                Jupiter
+                            </div>
+                        ) : (
+                            <div className="linkDesactived">Jupiter</div>
+                        )}
+                    </Tooltip>
+                    <Tooltip
+                        title={`Cristaux : + 
+                        ${String(
+                            infosPlanetsGalaxyTooltip.saturne.regeneration * 60
+                        ).replace(
+                            /(.)(?=(\d{3})+$)/g,
+                            "$1 "
+                        )}/h Stock : ${String(
+                            infosPlanetsGalaxyTooltip.saturne.stockage
+                        ).replace(/(.)(?=(\d{3})+$)/g, "$1 ")}`}
+                        // title="test"
+                        placement="right"
+                    >
+                        {path !== "/0/saturne" ? (
+                            <div
+                                className="link"
+                                onClick={() => {
+                                    setIsLoading(true);
+                                    substractEnergyTravel(
+                                        galaxy,
+                                        place,
+                                        "saturne"
+                                    );
+                                    setGalaxy("0");
+                                }}
+                            >
+                                Saturne
+                            </div>
+                        ) : (
+                            <div className="linkDesactived">Saturne</div>
+                        )}
+                    </Tooltip>
+                    <Tooltip
+                        title={`Cristaux : + 
+                        ${String(
+                            infosPlanetsGalaxyTooltip.uranus.regeneration * 60
+                        ).replace(
+                            /(.)(?=(\d{3})+$)/g,
+                            "$1 "
+                        )}/h Stock : ${String(
+                            infosPlanetsGalaxyTooltip.uranus.stockage
+                        ).replace(/(.)(?=(\d{3})+$)/g, "$1 ")}`}
+                        // title="test"
+                        placement="right"
+                    >
+                        {path !== "/0/uranus" ? (
+                            <div
+                                className="link"
+                                onClick={() => {
+                                    setIsLoading(true);
+                                    substractEnergyTravel(
+                                        galaxy,
+                                        place,
+                                        "uranus"
+                                    );
+                                    setGalaxy("0");
+                                }}
+                            >
+                                Uranus
+                            </div>
+                        ) : (
+                            <div className="linkDesactived">Uranus</div>
+                        )}
+                    </Tooltip>
+                    <Tooltip
+                        title={`Cristaux : + 
+                        ${String(
+                            infosPlanetsGalaxyTooltip.neptune.regeneration * 60
+                        ).replace(
+                            /(.)(?=(\d{3})+$)/g,
+                            "$1 "
+                        )}/h Stock : ${String(
+                            infosPlanetsGalaxyTooltip.neptune.stockage
+                        ).replace(/(.)(?=(\d{3})+$)/g, "$1 ")}`}
+                        // title="test"
+                        placement="right"
+                    >
+                        {path !== "/0/neptune" ? (
+                            <div
+                                className="link"
+                                onClick={() => {
+                                    setIsLoading(true);
+                                    substractEnergyTravel(
+                                        galaxy,
+                                        place,
+                                        "neptune"
+                                    );
+                                    setGalaxy("0");
+                                }}
+                            >
+                                Neptune
+                            </div>
+                        ) : (
+                            <div className="linkDesactived">Neptune</div>
+                        )}
+                    </Tooltip>
+                    {energyInfos.energy >= 800000 && (
+                        <>
+                            <div style={{ height: "20px" }}></div>
+                            <h3 style={{ color: "#11aa55" }}>Galaxies</h3>
+                            <div
+                                className="link"
+                                onClick={() => {
+                                    setOpen(true);
+                                    setChoiceGalaxy(1);
+                                    getDataPlanetsGalaxy(1);
+                                    getGalaxyInfos(1);
+                                }}
+                            >
+                                Andromède
+                            </div>
+                        </>
+                    )}
+                    {energyInfos.energy >= 800000 && (
+                        <>
+                            <div
+                                className="link"
+                                onClick={() => {
+                                    setOpen(true);
+                                    setChoiceGalaxy(2);
+                                    getDataPlanetsGalaxy(2);
+                                }}
+                            >
+                                Roue de chariot
+                            </div>
+                        </>
+                    )}
+                </nav>
+            )}
         </>
     );
 }

@@ -225,3 +225,16 @@ combat fini (première version) et mis en ligne. bug en ligne non présent en lo
 
 correction du bug (il se servait des données d'ennemi du vaisseau suivant pour faire le combat et pas le vaisseau qu'on voulait combattre)
 je montre le projet demain à Apteed
+
+29/06/2022
+
+finalement que Labigna l'a vu. il m'a donné des conseils
+
+30/06 1-2/07
+
+Système de combat PNJ fini
+correction bug d'affichage des ressources, il en reste toujours
+
+03/07/2022
+
+mise en place de tooltip sur le menu des planètes

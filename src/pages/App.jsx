@@ -18,6 +18,7 @@ import Panel from "../screens/Panel";
 import SignIn from "../screens/SignIn";
 import PrivateRoute from "../components/PrivateRoute";
 import Fight from "../component/Fight";
+// import FightDetails from "../../test_and_old/FightDetails";
 // import { Button } from "@mui/material";
 // import {useNavigation} from '@react-navigation/native';
 
@@ -47,8 +48,8 @@ function App() {
     const [galaxy, setGalaxy] = useState(0);
     const [choiceGalaxy, setChoiceGalaxy] = useState(null);
     const [energyInfos, setEnergyInfos] = useState({
-        stockageEnergyLevel: 0,
-        energy: 1,
+        stockageEnergyLevel: 1,
+        energy: 0,
         regenerationEnergyLevel: 1,
         stockageEnergy: 0,
         nextStockageEnergy: 0,
@@ -96,38 +97,54 @@ function App() {
     const [crystalLifePoints, setCrystalLifePoints] = useState(0);
     const [galaxyName, setGalaxyName] = useState("");
 
-    const getGalaxyInfos = useCallback(async () => {
-        try {
-            const data = await apiRef.getGalaxyInfos(
-                process.env.REACT_APP_URL + "App/Calls/getGalaxyInfos.php",
-                galaxy
-            );
+    // const getGalaxyInfos = useCallback(async () => {
+    //     try {
+    //         const data = await apiRef.getGalaxyInfos(
+    //             process.env.REACT_APP_URL + "App/Calls/getGalaxyInfos.php",
+    //             galaxy
+    //         );
+    //         // // cristal sur Terre
+    //         const dataCrystal = await apiRef.getCrystal(
+    //             process.env.REACT_APP_URL + "App/CallsCrystal/getCrystal.php",
+    //             "terre"
+    //         );
+    //         const dataPlace = await apiRef.getPlace(
+    //             process.env.REACT_APP_URL + "App/Calls/getPlace.php"
+    //         );
 
-            if (mounted.current) {
-                // console.log(data.name);
-                setGalaxyName(data.name);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }, [mounted]);
+    //         if (mounted.current) {
+    //             // console.log(data.name);
+    //             setGalaxyName(data.name);
+    //             setStockCrystal(parseInt(dataCrystal.crystal, 10));
+    //             setPlace(dataPlace.place);
+    //             setGalaxy(dataPlace.galaxy);
+    //         }
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // }, [mounted]);
 
     // useEffect(() => {
     // getData();
     // getCrystalInfos();
     // }, []);
 
-    useEffect(() => {
-        getGalaxyInfos();
-    }, [getGalaxyInfos]);
+    // useEffect(() => {
+    //     getGalaxyInfos();
+    // }, [getGalaxyInfos]);
     // const [nextCrystalStockageStarship setNextCrystalStockageStarship] = useState(0);
 
     const getInfos = useCallback(
         async (/*isLoading, regenerationEnergyLevel, regenerationEnergy, stockageEnergy*/) => {
             try {
-                setIsLoading(true);
+                // setIsLoading(true);
                 // isLoading = true;
                 // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
+                setIsLoading(true);
+                const data = await apiRef.getGalaxyInfos(
+                    process.env.REACT_APP_URL + "App/Calls/getGalaxyInfos.php",
+                    galaxy
+                );
                 const dataEnergy = await apiRef.getData(
                     process.env.REACT_APP_URL + "App/CallsEnergy/getEnergy.php"
                 );
@@ -182,12 +199,72 @@ function App() {
                     process.env.REACT_APP_URL +
                         "App/Calls/getCrystalStarship.php"
                 );
+                // cristal sur Terre
+                const dataCrystal = await apiRef.getCrystal(
+                    process.env.REACT_APP_URL +
+                        "App/CallsCrystal/getCrystal.php",
+                    "terre"
+                );
+                const dataCrystalPlanet = await apiRef.getCrystal(
+                    process.env.REACT_APP_URL +
+                        "App/CallsCrystal/getCrystal.php",
+                    dataPlace.place,
+                    dataPlace.galaxy
+                );
+                const dataStockagePlanet = await apiRef.getCrystal(
+                    process.env.REACT_APP_URL +
+                        "App/Calls/getCrystalStockagePlanet.php",
+                    dataPlace.place,
+                    dataPlace.galaxy
+                );
+                const dataLevelsPlanet = await apiRef.getLevelsPlanet(
+                    process.env.REACT_APP_URL +
+                        "App/CallsLevel/getLevelsPlanet.php",
+                    dataPlace.place,
+                    dataPlace.galaxy
+                );
+                const dataGenerationCrystalPlanet = await apiRef.getInfosPlanet(
+                    process.env.REACT_APP_URL +
+                        "App/Calls/getCrystalPlanetInfos.php",
+                    dataPlace.place,
+                    dataPlace.galaxy,
+                    "crystal_generation"
+                );
+                const dataNextGenerationCrystalPlanet =
+                    await apiRef.getInfosPlanet(
+                        process.env.REACT_APP_URL +
+                            "App/Calls/getNextCrystalPlanetInfos.php",
+                        dataPlace.place,
+                        dataPlace.galaxy,
+                        "crystal_generation"
+                    );
+                const dataNextStockageCrystalPlanet =
+                    await apiRef.getInfosPlanet(
+                        process.env.REACT_APP_URL +
+                            "App/Calls/getNextCrystalPlanetInfos.php",
+                        dataPlace.place,
+                        dataPlace.galaxy,
+                        "crystal_stockage"
+                    );
+                const dataStockageCrystalPlanet = await apiRef.getInfosPlanet(
+                    process.env.REACT_APP_URL +
+                        "App/Calls/getCrystalPlanetInfos.php",
+                    dataPlace.place,
+                    dataPlace.galaxy,
+                    "crystal_stockage"
+                );
+                const dataGalaxyInfos = await apiRef.getGalaxyInfos(
+                    process.env.REACT_APP_URL + "App/Calls/getGalaxyInfos.php",
+                    galaxy
+                );
                 // console.log(dataEnergyCapacity);
 
                 // console.log(dataNextCrystalCapacity);
                 // const dataEquipment = await apiRef.getEquipment(process.env.REACT_APP_URL + 'App/Calls/getEquipment.php', dataLevels.energy_capacity_level, dataLevels.energy_regeneration_level);
 
                 if (mounted.current) {
+                    setStockCrystal(parseInt(dataCrystal.crystal, 10));
+                    setGalaxyName(data.name);
                     setWeaponLevel(parseInt(dataLevels.weapon_level, 10));
                     setLifePointsLevel(
                         parseInt(dataLevels.life_points_level, 10)
@@ -261,7 +338,51 @@ function App() {
                             10
                         ),
                     });
-                    if (path.pathname !== "/fight") {
+                    setPlanet({
+                        ...planet,
+                        stockCrystalPlanet: parseInt(
+                            dataCrystalPlanet.crystal,
+                            10
+                        ),
+                        stockageCrystalPlanet: parseInt(
+                            dataStockagePlanet.quantity,
+                            10
+                        ),
+                        stockageCrystalPlanetLevel: parseInt(
+                            dataLevelsPlanet.crystal_stockage_level,
+                            10
+                        ),
+                        generationCrystalLevel: parseInt(
+                            dataLevelsPlanet.crystal_level,
+                            10
+                        ),
+                        generationCrystal: parseInt(
+                            dataGenerationCrystalPlanet.quantity,
+                            10
+                        ),
+                        nextGenerationCrystal: parseInt(
+                            dataNextGenerationCrystalPlanet.quantity,
+                            10
+                        ),
+                        generationCrystalNeeded: parseInt(
+                            dataGenerationCrystalPlanet.crystal,
+                            10
+                        ),
+                        nextStockageCrystal: parseInt(
+                            dataNextStockageCrystalPlanet.quantity,
+                            10
+                        ),
+                        stockageCrystalNeeded: parseInt(
+                            dataStockageCrystalPlanet.crystal,
+                            10
+                        ),
+                        image: dataCrystalPlanet.image,
+                        galaxyName: dataGalaxyInfos.name,
+                    });
+                    if (
+                        path.pathname !== "/fight" ||
+                        path.pathname !== "/fight/details"
+                    ) {
                         switch (dataPlace.place) {
                             case "fight":
                                 navigate("/fight", { replace: true });
@@ -309,13 +430,18 @@ function App() {
             }
         },
         [
-            mounted,
-            energyInfos.regenerationEnergyLevel /*, weaponLevel, stockageEnergyLevel,energyInfos.stockageEnergyLevel, lifePointsLevel, */,
+            mounted /*, weaponLevel, stockageEnergyLevel,energyInfos.stockageEnergyLevel, lifePointsLevel, */,
+            /*energyInfos.regenerationEnergyLevel*/
+            ,
         ]
     );
 
+    useEffect(() => {
+        getInfos();
+    }, [getInfos]);
+
     const getData = useCallback(
-        async (energyInfos, starship) => {
+        async (energyInfos) => {
             try {
                 setIsLoading(true);
                 // const data = await apiRef.getData(process.env.REACT_APP_URL + 'resources/energy');
@@ -490,6 +616,11 @@ function App() {
                 "terre",
                 0
             );
+            const dataImage = await apiRef.getCrystal(
+                process.env.REACT_APP_URL + "App/CallsCrystal/getCrystal.php",
+                dataPlace.place,
+                dataPlace.galaxy
+            );
             // cristal sur vaisseau
             const dataCrystalStarship = await apiRef.getData(
                 process.env.REACT_APP_URL + "App/Calls/getCrystalStarship.php"
@@ -532,6 +663,7 @@ function App() {
                     dataStockagePlanet.crystal_stockage,
                     10
                 ),
+                image: dataImage.image,
             });
             setIsLoading(false);
         } catch (err) {
@@ -539,17 +671,206 @@ function App() {
         }
     }, [place]);
 
-    useEffect(() => {
-        getInfos();
-    }, [getInfos]);
-
     //     useEffect(() => {
     //     getCrystalInfos();
     // }, [energyInfos.regenerationEnergyLevel]);
 
+    const getRerenderInfos = useCallback(async (energyInfos) => {
+        try {
+            setIsLoading(true);
+            const dataEnergy = await apiRef.getData(
+                process.env.REACT_APP_URL + "App/CallsEnergy/getEnergy.php"
+            );
+            const dataLevels = await apiRef.getLevels(
+                process.env.REACT_APP_URL + "App/CallsLevel/getLevels.php"
+            );
+            const dataEnergyCapacity = await apiRef.getEquipment(
+                process.env.REACT_APP_URL + "App/Calls/getEquipment.php",
+                dataLevels.energy_capacity_level,
+                "energy_capacity"
+            );
+            const dataEnergyRegeneration = await apiRef.getEquipment(
+                process.env.REACT_APP_URL + "App/Calls/getEquipment.php",
+                dataLevels.energy_regeneration_level,
+                "energy_regeneration"
+            );
+            const dataNextEnergyRegeneration = await apiRef.getEquipment(
+                process.env.REACT_APP_URL + "App/Calls/getEquipment.php",
+                parseInt(dataLevels.energy_regeneration_level, 10) + 1,
+                "energy_regeneration"
+            );
+            const dataNextEnergyStockage = await apiRef.getEquipment(
+                process.env.REACT_APP_URL + "App/Calls/getEquipment.php",
+                parseInt(dataLevels.energy_capacity_level, 10) + 1,
+                "energy_capacity"
+            );
+            const dataLifePointsCrystal = await apiRef.getEquipment(
+                process.env.REACT_APP_URL + "App/Calls/getEquipment.php",
+                dataLevels.life_points_level,
+                "life_points"
+            );
+            const dataWeaponCrystal = await apiRef.getEquipment(
+                process.env.REACT_APP_URL + "App/Calls/getEquipment.php",
+                dataLevels.weapon_level,
+                "weapon_power"
+            );
+            const dataCrystalCapacity = await apiRef.getEquipment(
+                process.env.REACT_APP_URL + "App/Calls/getEquipment.php",
+                dataLevels.crystal_capacity_level,
+                "crystal_capacity"
+            );
+            const dataPlace = await apiRef.getPlace(
+                process.env.REACT_APP_URL + "App/Calls/getPlace.php"
+            );
+            const dataNextCrystalCapacity = await apiRef.getEquipment(
+                process.env.REACT_APP_URL + "App/Calls/getEquipment.php",
+                parseInt(dataLevels.crystal_capacity_level, 10) + 1,
+                "crystal_capacity"
+            );
+            // cristal sur vaisseau
+            const dataCrystalStarship = await apiRef.getData(
+                process.env.REACT_APP_URL + "App/Calls/getCrystalStarship.php"
+            );
+            const dataCrystalPlanet = await apiRef.getCrystal(
+                process.env.REACT_APP_URL + "App/CallsCrystal/getCrystal.php",
+                dataPlace.place,
+                dataPlace.galaxy
+            );
+            const dataStockagePlanet = await apiRef.getCrystal(
+                process.env.REACT_APP_URL +
+                    "App/Calls/getCrystalStockagePlanet.php",
+                dataPlace.place,
+                dataPlace.galaxy
+            );
+            const dataLevelsPlanet = await apiRef.getLevelsPlanet(
+                process.env.REACT_APP_URL +
+                    "App/CallsLevel/getLevelsPlanet.php",
+                dataPlace.place,
+                dataPlace.galaxy
+            );
+            const dataGenerationCrystalPlanet = await apiRef.getInfosPlanet(
+                process.env.REACT_APP_URL +
+                    "App/Calls/getCrystalPlanetInfos.php",
+                dataPlace.place,
+                dataPlace.galaxy,
+                "crystal_generation"
+            );
+            const dataNextGenerationCrystalPlanet = await apiRef.getInfosPlanet(
+                process.env.REACT_APP_URL +
+                    "App/Calls/getNextCrystalPlanetInfos.php",
+                dataPlace.place,
+                dataPlace.galaxy,
+                "crystal_generation"
+            );
+            const dataNextStockageCrystalPlanet = await apiRef.getInfosPlanet(
+                process.env.REACT_APP_URL +
+                    "App/Calls/getNextCrystalPlanetInfos.php",
+                dataPlace.place,
+                dataPlace.galaxy,
+                "crystal_stockage"
+            );
+            const dataStockageCrystalPlanet = await apiRef.getInfosPlanet(
+                process.env.REACT_APP_URL +
+                    "App/Calls/getCrystalPlanetInfos.php",
+                dataPlace.place,
+                dataPlace.galaxy,
+                "crystal_stockage"
+            );
+            const dataGalaxyInfos = await apiRef.getGalaxyInfos(
+                process.env.REACT_APP_URL + "App/Calls/getGalaxyInfos.php",
+                galaxy
+            );
+            setPlanet({
+                ...planet,
+                stockCrystalPlanet: parseInt(dataCrystalPlanet.crystal, 10),
+                stockageCrystalPlanet: parseInt(
+                    dataStockagePlanet.quantity,
+                    10
+                ),
+                stockageCrystalPlanetLevel: parseInt(
+                    dataLevelsPlanet.crystal_stockage_level,
+                    10
+                ),
+                generationCrystalLevel: parseInt(
+                    dataLevelsPlanet.crystal_level,
+                    10
+                ),
+                generationCrystal: parseInt(
+                    dataGenerationCrystalPlanet.quantity,
+                    10
+                ),
+                nextGenerationCrystal: parseInt(
+                    dataNextGenerationCrystalPlanet.quantity,
+                    10
+                ),
+                generationCrystalNeeded: parseInt(
+                    dataGenerationCrystalPlanet.crystal,
+                    10
+                ),
+                nextStockageCrystal: parseInt(
+                    dataNextStockageCrystalPlanet.quantity,
+                    10
+                ),
+                stockageCrystalNeeded: parseInt(
+                    dataStockageCrystalPlanet.crystal,
+                    10
+                ),
+                image: dataCrystalPlanet.image,
+                galaxyName: dataGalaxyInfos.name,
+            });
+            setStarship({
+                ...starship,
+                weaponLevel: parseInt(dataLevels.weapon_level, 10),
+                lifePointsLevel: parseInt(dataLevels.life_points_level, 10),
+                crystalLifePoints: parseInt(dataLifePointsCrystal.crystal, 10),
+                crystalWeapon: parseInt(dataWeaponCrystal.crystal, 10),
+                stockageCrystal: parseInt(dataCrystalCapacity.quantity, 10),
+                place: dataPlace.place,
+                nextStockageCrystalStarship: parseInt(
+                    dataNextCrystalCapacity.quantity,
+                    10
+                ),
+                stockCrystalStarship: parseInt(dataCrystalStarship.crystal, 10),
+            });
+            setEnergyInfos({
+                ...energyInfos,
+                stockageEnergyLevel: parseInt(
+                    dataLevels.energy_capacity_level,
+                    10
+                ),
+                energy: parseInt(dataEnergy.energy, 10),
+                regenerationEnergyLevel: parseInt(
+                    dataLevels.energy_regeneration_level,
+                    10
+                ),
+                stockageEnergy: parseInt(dataEnergyCapacity.quantity, 10),
+                crystalStockageEnergy: parseInt(dataEnergyCapacity.crystal, 10),
+                regenerationEnergy: parseInt(
+                    dataEnergyRegeneration.quantity,
+                    10
+                ),
+                nextRegenerationEnergy: parseInt(
+                    dataNextEnergyRegeneration.quantity,
+                    10
+                ),
+                crystalEnergyRegeneration: parseInt(
+                    dataEnergyRegeneration.crystal,
+                    10
+                ),
+                nextStockageEnergy: parseInt(
+                    dataNextEnergyStockage.quantity,
+                    10
+                ),
+            });
+            setIsLoading(false);
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
+
     useEffect(() => {
-        getData(energyInfos);
-        if (path.pathname !== "/fight") {
+        // getData(energyInfos);
+        if (path.pathname !== "/fight" || path.pathname !== "/fight/details") {
             const timer = setInterval(() => {
                 // console.log(energy);
                 // if (energy < stockage) {
@@ -559,8 +880,8 @@ function App() {
                 //     }
                 //     setEnergy(updatedEnergy);
                 // }
-                getData(energyInfos);
-            }, 600000);
+                getRerenderInfos(energyInfos);
+            }, 60000);
             // 60000 en temps normal
             return () => {
                 // Each time a new useEffect is executed, the previous useEffect will be cleaned up
@@ -639,23 +960,24 @@ function App() {
         <>
             <Toaster />
             <div style={{ display: "flex" }}>
-                {isLoading ? (
+                {/*{isLoading ? (
                     ""
-                ) : (
-                    <SideBar
-                        path={path.pathname}
-                        place={place}
-                        setPlace={setPlace}
-                        getData={getData}
-                        getCrystalInfos={getCrystalInfos}
-                        energyInfos={energyInfos}
-                        setEnergyInfos={setEnergyInfos}
-                        galaxy={galaxy}
-                        choiceGalaxy={choiceGalaxy}
-                        setChoiceGalaxy={setChoiceGalaxy}
-                        setGalaxy={setGalaxy}
-                    />
-                )}
+                ) : ( */}
+                <SideBar
+                    path={path.pathname}
+                    place={place}
+                    setPlace={setPlace}
+                    getData={getData}
+                    getCrystalInfos={getCrystalInfos}
+                    energyInfos={energyInfos}
+                    setEnergyInfos={setEnergyInfos}
+                    galaxy={galaxy}
+                    choiceGalaxy={choiceGalaxy}
+                    setChoiceGalaxy={setChoiceGalaxy}
+                    setGalaxy={setGalaxy}
+                    setIsLoading={setIsLoading}
+                />
+                {/* )} */}
                 <div>
                     <div className="App">
                         <header className="App-header">
@@ -672,12 +994,12 @@ function App() {
                             Bienvenue sur le jeu d'exploration spatiale !
                         </header>
                     </div>
-                    {isLoading ? (
+                    {/* {isLoading ? (
                         <div className="loading">Chargement</div>
-                    ) : (
-                        <Routes>
-                            {/* <Route path="/" element={home} /> */}
-                            {/* <Route path="/lune" element={<Moon
+                    ) : ( */}
+                    <Routes>
+                        {/* <Route path="/" element={home} /> */}
+                        {/* <Route path="/lune" element={<Moon
                                 energy={parseInt(energy, 10)}
                                 stockage={stockageEnergy}
                                 isLoading={isLoading}
@@ -686,68 +1008,79 @@ function App() {
                                 setEnergy={setEnergy}
                                 setPlace={setPlace}/>}
                             /> */}
-                            {/* <Route path="/sign-in" element={<SignIn />} />
+                        {/* <Route path="/sign-in" element={<SignIn />} />
                             <PrivateRoute path="/" element={<Panel />} /> */}
+                        {/* <Route
+                            path={"/fight/details"}
+                            key={"fightDetails"}
+                            element={
+                                <FightDetails
+                                    energyInfos={energyInfos}
+                                    setEnergyInfos={setEnergyInfos}
+                                />
+                            }
+                        /> */}
+                        <Route
+                            path={"/fight"}
+                            key={"fight"}
+                            element={
+                                <Fight
+                                    energyInfos={energyInfos}
+                                    setEnergyInfos={setEnergyInfos}
+                                    stockCrystal={stockCrystal}
+                                />
+                            }
+                        />
+                        {planets.map((planetItem) => (
                             <Route
-                                path={"/fight"}
-                                key={"fight"}
+                                path={`/${galaxy}/${planetItem}`}
+                                key={planetItem}
                                 element={
-                                    <Fight
+                                    <Planet
+                                        isLoading={isLoading}
+                                        setPlace={setPlace}
+                                        stockCrystal={stockCrystal}
+                                        getCrystalInfos={getCrystalInfos}
+                                        getData={getData}
+                                        place={planetItem}
                                         energyInfos={energyInfos}
                                         setEnergyInfos={setEnergyInfos}
+                                        starship={starship}
+                                        setStarship={setStarship}
+                                        planet={planet}
+                                        setPlanet={setPlanet}
+                                        galaxy={galaxy}
+                                        setGalaxy={setGalaxy}
                                     />
                                 }
                             />
-                            {planets.map((planetItem) => (
-                                <Route
-                                    path={`/${galaxy}/${planetItem}`}
-                                    key={planetItem}
-                                    element={
-                                        <Planet
-                                            isLoading={isLoading}
-                                            setPlace={setPlace}
-                                            stockCrystal={stockCrystal}
-                                            getCrystalInfos={getCrystalInfos}
-                                            getData={getData}
-                                            place={planetItem}
-                                            energyInfos={energyInfos}
-                                            setEnergyInfos={setEnergyInfos}
-                                            starship={starship}
-                                            setStarship={setStarship}
-                                            planet={planet}
-                                            setPlanet={setPlanet}
-                                            galaxy={galaxy}
-                                            setGalaxy={setGalaxy}
-                                        />
-                                    }
-                                />
-                            ))}
-                            {planetNumbers.map((number) => (
-                                <Route
-                                    path={`/1/${number}`}
-                                    key={number}
-                                    element={
-                                        <Planet
-                                            isLoading={isLoading}
-                                            setPlace={setPlace}
-                                            stockCrystal={stockCrystal}
-                                            getCrystalInfos={getCrystalInfos}
-                                            getData={getData}
-                                            place={number}
-                                            energyInfos={energyInfos}
-                                            setEnergyInfos={setEnergyInfos}
-                                            starship={starship}
-                                            setStarship={setStarship}
-                                            planet={planet}
-                                            setPlanet={setPlanet}
-                                            galaxy={galaxy}
-                                            setGalaxy={setGalaxy}
-                                            choiceGalaxy={choiceGalaxy}
-                                        />
-                                    }
-                                />
-                            ))}
-                            {/* <Route path="/mars" element={<Planet
+                        ))}
+                        {planetNumbers.map((number) => (
+                            <Route
+                                path={`/1/${number}`}
+                                key={number}
+                                element={
+                                    <Planet
+                                        isLoading={isLoading}
+                                        setPlace={setPlace}
+                                        stockCrystal={stockCrystal}
+                                        getCrystalInfos={getCrystalInfos}
+                                        getData={getData}
+                                        place={number}
+                                        energyInfos={energyInfos}
+                                        setEnergyInfos={setEnergyInfos}
+                                        starship={starship}
+                                        setStarship={setStarship}
+                                        planet={planet}
+                                        setPlanet={setPlanet}
+                                        galaxy={galaxy}
+                                        setGalaxy={setGalaxy}
+                                        choiceGalaxy={choiceGalaxy}
+                                    />
+                                }
+                            />
+                        ))}
+                        {/* <Route path="/mars" element={<Planet
                             energy={parseInt(energy, 10)}
                             stockage={stockageEnergy}
                             isLoading={isLoading}
@@ -769,8 +1102,8 @@ function App() {
                             setStockageEnergyLevel={setStockageEnergyLevel}
                             place='mars' />}
                             /> */}
-                        </Routes>
-                    )}
+                    </Routes>
+                    {/* )} */}
                 </div>
             </div>
         </>

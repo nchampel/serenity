@@ -45,55 +45,16 @@ function Planet(props) {
     //     console.log(choiceGalaxy);
     // }, choiceGalaxy);
 
-    // const test = "../assets/terre1.jpg";
-    const image = planet.image;
-    if (planet.image === "") {
-        url = require(`../assets/terre1.jpg`);
-    } else {
-        url = require(`../assets/${image}`);
-    }
-
-    // switch (place) {
-    //     case "terre":
-    //         url = require(`../assets/${image}`);
-    //         break;
-    //     case "mars":
-    //         url = require("../assets/mars.jpg");
-    //         break;
-    //     case "jupiter":
-    //         url = require("../assets/jupiter.jpg");
-    //         break;
-    //     case "saturne":
-    //         url = require("../assets/saturne.jpg");
-    //         break;
-    //     case "uranus":
-    //         url = require("../assets/uranus.png");
-    //         break;
-    //     case "neptune":
-    //         url = require("../assets/neptune.png");
-    //         break;
-    //     default:
-    //         url = require("../assets/terre.jpg");
-    //         break;
+    // const image = planet.image;
+    // if (planet.image === "") {
+    //     url = require(`../assets/terre1.jpg`);
+    // } else {
+    //     url = require(`../assets/${image}`);
     // }
 
-    // const handleEnergyAdding = (() => {
-    //     // console.log(energy);
-    //     setIsLoading(true);
-    //     const updatedEnergy = parseInt(energy, 10) + 100;
-    //     // apiRef.updateEnergy(process.env.REACT_APP_URL + 'resources/updateEnergy', updatedEnergy);
-    //     apiRef.updateEnergy(process.env.REACT_APP_URL + 'App/Calls/updateEnergy.php', updatedEnergy);
-    //     getData();
-    // });
-
-    // useEffect(() => {
-    // getData();
-    // getCrystalInfos();
-    // }, []);
-
-    // useEffect(() => {
-    //     getGalaxyInfos();
-    // }, [getGalaxyInfos]);
+    if (!isLoading) {
+        url = require(`../assets/${planet.image}`);
+    }
 
     const savePosition = useCallback(
         async (place, choiceGalaxy) => {
@@ -134,24 +95,25 @@ function Planet(props) {
 
     return (
         <Box>
-            {isLoading ? (
+            {/* {isLoading ? (
                 <div className="loading">Chargement</div>
-            ) : (
-                <>
-                    <h3
-                        style={{
-                            fontSize: 36,
-                            color: "white",
-                            textAlign: "center",
-                        }}
-                    >
-                        {(choiceGalaxy === "0" || galaxy === "0") &&
-                        place.length > 0
-                            ? `${place[0].toUpperCase() + place.slice(1)} (${
-                                  planet.galaxyName
-                              })`
-                            : `Planète ${place} (${planet.galaxyName})`}
-                    </h3>
+            ) : ( */}
+            <>
+                <h3
+                    style={{
+                        fontSize: 36,
+                        color: "white",
+                        textAlign: "center",
+                    }}
+                >
+                    {(choiceGalaxy === "0" || galaxy === "0") &&
+                    place.length > 0
+                        ? `${place[0].toUpperCase() + place.slice(1)} (${
+                              planet.galaxyName
+                          })`
+                        : `Planète ${place} (${planet.galaxyName})`}
+                </h3>
+                {!isLoading && (
                     <Box
                         style={{
                             backgroundImage: `url('${url}')`,
@@ -213,8 +175,9 @@ function Planet(props) {
                         {/* <button>Augmenter la génération d'énergie</button> */}
                         {/* </Box> */}
                     </Box>
-                </>
-            )}
+                )}
+            </>
+            {/* )} */}
         </Box>
     );
 }
